@@ -1,0 +1,44 @@
+#wrapper{
+    width:800;
+    margin:0 auto;
+}
+
+#header{
+    position: relative;
+    height: 75px;
+    margin-top:35px;
+}
+
+
+
+#title{
+    margin:center;
+    color:#3465a4;
+}
+
+#logo img{ 
+   float:left;
+   width: 100px; 
+}
+
+hr{
+    color: #3465a4;
+    height:5px;
+    background:#3465a4
+}
+
+h1 {
+    font-size:1.9em;
+	color: #3465a4;
+    text-align: center;
+}
+
+h3 {
+    font-size:1.5em;
+    color: #3465a4;
+}
+
+#bottom-quote{
+    font-style:italic;
+    color: #3465a4;
+}
