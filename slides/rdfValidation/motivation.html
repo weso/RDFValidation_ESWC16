@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-US">
+  <head>
+    <title>Motivation and Previous work</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="copyright" content=
+	  "Copyright &#169; 2005-2010 W3C (MIT, ERCIM, Keio)" />
+    <meta name="duration" content="5" />
+    <meta name="font-size-adjustment" content="-2" />
+    <link rel="stylesheet" href="../../Slidy2/styles/slidy.css" type="text/css" />
+    <link rel="stylesheet" href="../../Slidy2/styles/w3c-blue.css" type="text/css" />
+    <script src="../../Slidy2/scripts/slidy.js" charset="utf-8" type="text/javascript">
+    </script>
+    <script src="../../scripts/jquery.min.js" type= "text/javascript"></script>
+<!--  <link rel="stylesheet" type="text/css" href="local.css"/ -->
+  <style type="text/css">
+/*<![CDATA[*/
+.todo { border: medium solid red; }
+table { border-collapse: collapse }
+table, td, th { border: 1px solid black; }
+tbody tr:nth-child(odd)		{ background-color:#eee; }
+tbody tr:nth-child(even)		{ background-color:#fff; }
+
+.underlined {text-decoration:underline}
+.old {color: #333;}
+.new {color: #181;}
+.bold { font-size: 1.5em; font-weight:bold; }
+.bad { color: #700; }
+
+body { font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: #000000;  }
+span.default   { font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: #000000;  }
+span.default a { font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: #000000;  background: #ffffff; text-decoration: underline; }
+span.function-name   { color: #0000ff;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  }
+span.function-name a { color: #0000ff;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  background: #ffffff; text-decoration: underline; }
+span.keyword   { color: #a020f0;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  }
+span.keyword a { color: #a020f0;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  background: #ffffff; text-decoration: underline; }
+span.string   { color: #8b2252;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  }
+span.string a { color: #8b2252;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  background: #ffffff; text-decoration: underline; }
+span.constant   { color: #008b8b;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  }
+span.constant a { color: #008b8b;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  background: #ffffff; text-decoration: underline; }
+span.type   { color: #228b22;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  }
+span.type a { color: #228b22;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  background: #ffffff; text-decoration: underline; }
+span.comment   { color: #b22222;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  }
+span.comment a { color: #b22222;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  background: #ffffff; text-decoration: underline; }
+
+.sparql { color:#58a; }
+.js { color:#5a8; }
+.genr { color:#a28; }
+
+.error { background-color: #f77; }
+
+.plus         { color: #171;  }
+.minus        { color: #711;  }
+.plus:before  { content: "+" }
+.minus:before { content: "-" }
+
+.highlight1    { border: 5px solid #bb0; font-weight: bold; }
+.lowlight1     { border: 5px solid transparent; font-weight: normal; }
+.highlight2    { color: #b00; border: 5px solid #f00; font-weight: bold; }
+.lowlight2     { border: 5px solid transparent; font-weight: normal; }
+.highlightBG1   { /* border: 5px solid transparent; */ background-color: #bb0; font-weight: bold; }
+.lowlightBG1    { /* border: 5px solid transparent; */ font-weight: normal; }
+.highlightBG2   { /* border: 5px solid transparent; */ background-color: #b00; font-weight: bold; }
+.lowlightBG2    { /* border: 5px solid transparent; */ font-weight: normal; }
+
+.errorHint.lowlightBG2    { background-color: #f4d5d7 }
+.errorHint.highlightBG2    { color: #000; }
+
+.retext       { float:left; border: thin solid #95D0AB; padding-left: .2em; padding-right: .2em; margin-left: .2em; margin-right: .2em; }
+
+.leftPack     { float:left; margin: .1em; border-left-width: thin; }
+
+/*]]>
+*/</style>
+
+    <script type="text/javascript"><!--
+function prepareHighlight (highlightables, onClass, offClass, slide) {
+  if (slide === undefined)
+    slide = $("body").find("> div").last();
+  $.each( highlightables, function( index, value ){
+    var elts = slide.find( "."+value );
+    elts
+  	.mouseenter(function() {
+  	    elts.removeClass(offClass).addClass(onClass);
+  	})
+  	.mouseleave(function() {
+  	    elts.removeClass(onClass).addClass(offClass);
+  	})
+    .addClass(offClass);
+  })
+}
+--> </script>
+  </head>
+  <body>
+    <!--<div class="background"><img alt="" id="head-icon"
+    src="../../Slidy2/graphics/icon-blue.png" /><object id="head-logo"
+    data="../../Slidy2/graphics/w3c-logo-white.svg" type="image/svg+xml"
+    title="W3C logo"><a href="http://www.w3.org/"><img
+    alt="W3C logo" id="head-logo-fallback"
+    src="../../Slidy2/graphics/w3c-logo-white.gif" /></a></object></div> -->
+
+<div class="background">
+      <!--Labra: remove w3c logo <img src="../../Slidy2/graphics/w3c-logo-slanted.jpg" alt="slanted W3C logo" />-->
+      <!-- hidden style graphics to ensure they are saved with other content -->
+      <img class="hidden" src="../../Slidy2/graphics/bullet.png" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/fold.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/unfold.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/fold-dim.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/nofold-dim.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/unfold-dim.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/bullet-fold.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/bullet-unfold.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/bullet-fold-dim.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/bullet-nofold-dim.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/bullet-unfold-dim.gif" alt="" />
+</div>
+    
+<div class="slide cover">
+<div class="header">
+ <h1>Motivation and previous work</h1>
+ <p>Slides: <a href="http://weso.github.io/RDFValidation_ESWC16/slides/rdfValidation">http://weso.github.io/RDFValidation_ESWC16/slides/rdfValidation</a></p> 
+      <ul>
+	      <li>
+	        <a href="http://di002.edv.uniovi.es/~labra/">Jose Emilio Labra Gayo</a>, <a href="http://www.uniovi.es">University of Oviedo</a>
+	      </li>
+	      <li>
+	        <a href="http://www.w3.org/People/Eric/">Eric Prud'hommeaux</a>, W3C
+	      </li>
+	      <li>
+	        <a href="http://www.mayo.edu/research/faculty/solbrig-harold-r-m-s/bio-20022700">Harold Solbrig</a>, Mayo Clinic, USA
+	      </li>
+	      <li>
+	        <a href="http://www.lifl.fr/~boneva/">Iovka Boneva</a>, Associate Professor at University of Lille, France
+	      </li>
+      </ul>
+</div>
+</div>
+
+   <div class="slide">
+      <h1>Problem Statement</h1>
+    <div style="float:left; width:39%;">
+      <p>Useful data needs consistent structure:</p>
+      <ul>
+        <li>
+          Advertise value
+          <ul>
+            <li>What's there?</li>
+            <li>How's it spelled?</li>
+            <li>How's it linked?</li>
+          </ul>
+        </li>
+        <li>Generate interfaces</li>
+        <li>Direct query generation</li>
+        <li>Direct query optimization</li>
+      </ul>
+      <p>Detect and correct errors:</p>
+      <ul>
+        <li>missing properties,</li>
+        <li>missing/bad type arcs,</li>
+        <li>missing referents,</li>
+        <li>inconsistent state (e.g. dates),</li>
+        <li>value set violations.</li>
+      </ul>
+    </div>
+    <div style="float:left; width:60%">
+      <pre class="turtle">@prefix : &lt;http://www.w3.org/2012/12/rdf-val/SOTA-ex#&gt; .
+@prefix foaf: &lt;http://xmlns.com/foaf/0.1/'&gt; .
+@prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt; .
+
+&lt;issue7&gt; a :Issue , :SecurityIssue ;
+    :state :unassigned ;
+    :reportedBy &lt;user6&gt; , <span id="one_reportedBy" class="error">&lt;user2&gt;</span> ; <span class="comment"># cardinality 1</span>
+    :reportedOn "2012-12-31T23:57:00"^^xsd:dateTime ;
+    :assignedTo &lt;user2&gt;, &lt;user1&gt; ;
+    :assignedOn "<span class="error">2012-11-31T23:57:00</span>"^^xsd:dateTime ;
+                       <span class="comment"># reproduced before being reported</span>
+    :related &lt;issue4&gt;, <span class="error">&lt;issue3&gt;</span>, <span class="error">&lt;issue2&gt;</span> .
+                       <span id="missing_issue2" class="comment"># referenced issues not included</span>
+
+&lt;issue4&gt; <span class="comment"># a <span class="error">???</span>         missing type arc</span>
+    :state <span id="unknown_unsinged" class="error">:unsinged</span> ; <span class="comment"># misspelled</span>
+    <span id="missing_reportedBy" class="comment"># :reportedBy <span class="error">???</span> -  missing</span>
+    :reportedOn "2012-12-31T23:57:00"^^xsd:dateTime .
+
+&lt;user2&gt; a foaf:Person ;
+    foaf:givenName "Alice" ;
+    foaf:familyName "Smith" ;
+    foaf:phone &lt;tel:+1.555.222.2222&gt; ;
+    foaf:mbox &lt;mailto:alice@example.com&gt; .
+
+&lt;user6&gt; a foaf:<span id="missing_Agent" class="error">Agent</span> ; <span class="comment"># should be foaf:Person</span>
+    foaf:givenName "Bob" ; <span id="missing_familyName" class="comment"># foaf:familyName "<span class="error">???</span>" - missing</span>
+    foaf:phone &lt;tel:+<span class="error">.</span>555.222.2222&gt; ; <span class="comment"># malformed tel: URL</span>
+    foaf:mbox &lt;mailto:alice@example.com&gt; .</pre>
+    </div>
+  </div>
+
+
+    <div class="slide">
+      <h1>Expectations</h1>
+          <p>What do users get elsewhere?</p>
+	<table>
+        <thead><tr><th></th><th>SQL</th><th>XML</th></tr></thead>
+        <tbody>
+          <tr><th>missing properties</th><td>reportedBy UNSIGNED INT NOT NULL</td><td>element reportedBy { User },</td></tr>
+          <tr><th>missing/bad type arcs</th><td>N/A</td><td>N/A</td></tr>
+          <tr><th>missing referents</th><td>FOREIGN KEY (reportedBy)<br/>  REFERENCES Users(ID)</td><td>&lt;keyref refer="UserID"&gt;</td></tr>
+          <tr><th>inconsistent state</th><td>CHECK(assignedOn&gt;reportedOn)</td><td>[schematron]</td></tr>
+          <tr><th>value set violations</th><td>ENUM('unasigned', 'assigned')</td><td>attribute state<br/>{ "unassigned" | "assigned" }</td></tr>
+        </tbody>
+	</table>
+    </div>
+
+    <div class="slide">
+      <h1>Existing data</h1>
+      <ul>
+        <li>Ontology separate from constraints separate from instance
+          <ul>
+            <li>instance and ontology routinely separate.</li>
+            <li>constraints tied to OSLC services, not to instance data.</li>
+        </ul></li>
+        <li>One type used for multiple purposes.<br/>
+        (Data not annotated with fully-discriminating types.)
+          <ul>
+            <li>foaf:Person could be a friend, invitee, patient</li>
+        </ul></li>
+        <li>One type arc used through different states.
+          <ul>
+            <li>e.g. schema for interface A for yet unassigned issues<br/>
+            vs. schema interface B for resolved issues..</li>
+        </ul></li>
+        <li>Objects sometimes strings, sometimes objects.
+          <ul>
+            <li>dc:creator a string or a foaf:Person in the same data.</li>
+            <li>likewise wikipathways:complex or metacyc:…</li>
+        </ul></li>
+        <li>Value set inclusion rules vary:
+          <ul>
+            <li>enumerated set</li>
+            <li>dereferenced enumerated set</li>
+            <li>too large to dereference</li>
+            <li>inclusion by lexical constraints (e.g. IRI stem)</li>
+            <li>product of OWL union/intersection</li>
+        </ul></li>
+        <li>schema.org:
+          <ul>
+            <li>{domain,range}Includes</li>
+            <li>ObjectProperties can be literals</li>
+            <li>datatype "equivalences": "schema/true", "true"^^xsd:boolean, "True"</li>
+            <li><a href="http://schema.org/Role">Role</a> member rules</li>
+        </ul></li>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <h1>Technologies</h1>
+      <div style="float:left; width:60%;">
+        <p>in order of specificity:</p>
+	    <ul>
+	      <li>SPARQL</li>
+	      <li>path-indexed ASK</li>
+	      <li>SPARQL as SPIN</li>
+	      <li>OWL/ICV</li>
+	      <li>Resource Shapes/<br/>
+          Description Set Profiles/<br/>
+          TQ schema</li>
+	      <li>Shape Expressions</li>
+	    </ul>
+      </div>
+      <img style="float:right; width: 39%" src="http://2.bp.blogspot.com/-q-9K0mtCr6U/T6oLHZzmgJI/AAAAAAAAAyw/V2ovH_f4om4/s1600/VALIDATE.png" alt="Keep calm and validate."/>
+    </div>
+
+    <div id="SPARQL" class="slide">
+      <h1>SPARQL</h1>
+      <div style="float:left; width:50%;">
+        <ul>
+          <li>targeted "point" tests (like schematron).</li>
+          <li>can be compiled.</li>
+          <li class="plus">expressive.</li>
+          <li class="plus">ubiquitous.</li>
+          <li class="minus">expressive.</li>
+          <li class="minus">idomatic -- many ways to code some constraint.</li>
+        </ul>
+      </div>
+      <div style="float:left; width:50%;">
+        <pre>ASK {
+    { SELECT ?S (COUNT(*) AS ?S_c0) {
+      ?S <span class="type">foaf:</span><span class="constant">givenName</span> ?o .
+    } GROUP BY ?S}
+    { SELECT ?S (COUNT(*) AS ?S_c1) {
+      ?S <span class="type">foaf:</span><span class="constant">givenName</span> ?o .
+    } GROUP BY ?S}
+    FILTER (?S_c0 = ?S_c1 &amp;&amp;
+            ?S_c0 = 1)
+    { SELECT ?S (COUNT(*) AS ?S_c2) {
+      ?S <span class="type">ex:</span><span class="constant">state</span> ?o .
+    } GROUP BY ?S HAVING (COUNT(*)=1)}
+    { SELECT ?S (COUNT(*) AS ?S_c3) {
+      ?S <span class="type">ex:</span><span class="constant">state</span> ?o .
+      FILTER ((?o = <span class="type">ex:</span><span class="constant">unassigned</span> ||
+               ?o = <span class="type">ex:</span><span class="constant">assigned</span>))
+    } GROUP BY ?S HAVING (COUNT(*)=1)}
+    FILTER (?S_c2 = ?S_c3 &amp;&amp;
+            (?S_c0 = 0 || ?S_c0 = 1))
+}</pre>
+      </div>
+      <div style="clear:both;"> </div>
+    </div>
+
+    <div id="Path-indexedASK" class="slide">
+      <h1>Path-indexed ASK</h1>
+      <div style="float:left; width:50%;">
+        <p> per <a href="http://www.w3.org/2001/sw/wiki/images/0/00/SimpleApplication-SpecificConstraintsforRDFModels.pdf">Simister, Brickley</a></p>
+          <ul>
+            <li>separate the selector.</li>
+            <li class="plus">imposes more "parsability" on the SPARQL.</li>
+            <li>used to break up the structure of a SPARQL query.</li>
+          </ul>
+      </div>
+      <div style="float:left; width:50%;">
+        <pre>{
+  "@context": { … },
+  "constraints": [{
+    "context": "ex:status",
+    "constraint": "ASK { ?s ex:assignee ?o }",
+    "severity": "warning",
+    "message": "a status of assigned requires an assignee"
+  }]
+}</pre>
+      </div>
+      <div style="clear:both;"> </div>
+    </div>
+
+    <div id="SPARQLSPIN" class="slide">
+      <h1>SPARQL as SPIN</h1>
+      <div style="float:left; width:50%;">
+        <ul>
+          <li>Similar to SPARQL but written in RDF.</li>
+          <li>Associated with RDF term or type.</li>
+          <li class="plus">powerful.</li>
+          <li class="minus">complex@@.</li>
+        </ul>
+      </div>
+      <div style="float:left; width:50%;">
+        <pre>ASK {
+    { SELECT ?this (COUNT(*) AS ?this_c0) {
+      ?this <span class="type">foaf:</span><span class="constant">givenName</span> ?o .
+    } GROUP BY ?this}
+    { SELECT ?this (COUNT(*) AS ?this_c1) {
+      ?this <span class="type">foaf:</span><span class="constant">givenName</span> ?o .
+    } GROUP BY ?this}
+    FILTER (?this_c0 = ?this_c1 &amp;&amp;
+            ?this_c0 = 1)
+    { SELECT ?this (COUNT(*) AS ?this_c2) {
+      ?this <span class="type">ex:</span><span class="constant">state</span> ?o .
+    } GROUP BY ?this HAVING (COUNT(*)=1)}
+    { SELECT ?this (COUNT(*) AS ?this_c3) {
+      ?this <span class="type">ex:</span><span class="constant">state</span> ?o .
+      FILTER ((?o = <span class="type">ex:</span><span class="constant">unassigned</span> ||
+               ?o = <span class="type">ex:</span><span class="constant">assigned</span>))
+    } GROUP BY ?this HAVING (COUNT(*)=1)}
+    FILTER (?this_c2 = ?this_c3 &amp;&amp;
+            (?this_c0 = 0 || ?this_c0 = 1))
+}</pre>
+      </div>
+      <div style="clear:both;"> </div>
+    </div>
+
+    <div id="SPINastemplates" class="slide">
+      <h1>SPIN as templates</h1>
+      <div style="float:left; width:50%;">
+        <ul>
+          <li>Vocabulary associated with user-defined functions defined in SPARQL or javascript.</li>
+          <li>Syntax like Resource Shapes/Description Set Profiles (described later).</li>
+          <li class="plus">SPARQL or JS as extensibility mechansim.</li>
+        </ul>
+      </div>
+      <div style="float:left; width:50%;">
+        <pre><span class="type">:</span><span class="constant">Issue</span> <span class="keyword">a</span> <span class="type">owl:</span><span class="constant">Class</span> ;
+  <span class="type">rdfs:</span><span class="constant">subClassOf</span> <span class="type">owl:</span><span class="constant">Thing</span> ;
+  <span class="type">spin:</span><span class="constant">constraint</span> [
+      <span class="keyword">a</span> <span class="type">spl:</span><span class="constant">ObjectCountPropertyConstraint</span> ;
+      <span class="type">arg:</span><span class="constant">property</span> <span class="type">ex:</span><span class="constant">name</span> ;
+      <span class="type">arg:</span><span class="constant">minCount</span> 1 ;
+      <span class="type">arg:</span><span class="constant">maxCount</span> 1 ;
+    ] ;
+  <span class="type">spin:</span><span class="constant">constraint</span> [
+      <span class="keyword">a</span> <span class="type">spl:</span><span class="constant">ObjectCountPropertyConstraint</span> ;
+      <span class="type">arg:</span><span class="constant">property</span> <span class="type">ex:</span><span class="constant">state</span> ;
+      <span class="type">arg:</span><span class="constant">minCount</span> 0 ;
+      <span class="type">arg:</span><span class="constant">maxCount</span> 1 ;
+    ] ;
+  <span class="type">spin:</span><span class="constant">constraint</span> [
+      <span class="keyword">a</span> <span class="type">spl:</span><span class="constant">UntypedObjectPropertyConstraint</span> ;
+      <span class="type">arg:</span><span class="constant">property</span> <span class="type">ex:</span><span class="constant">state</span> ;
+    ] <span class="type">.
+
+ex:</span><span class="constant">name</span> <span class="keyword">a</span> <span class="type">owl:</span><span class="constant">DatatypeProperty</span> ;
+  <span class="type">rdfs:</span><span class="constant">domain</span> <span class="type">my:</span><span class="constant">name-status</span> ;
+  <span class="type">rdfs:</span><span class="constant">range</span> <span class="type">xsd:</span><span class="constant">string</span> <span class="type">.
+
+:</span><span class="constant">ValidState</span> <span class="keyword">a</span> <span class="type">owl:</span><span class="constant">Class</span> ;
+  <span class="type">rdfs:</span><span class="constant">label</span> <span class="string">"Valid state"</span> ;
+  <span class="type">rdfs:</span><span class="constant">subClassOf</span> <span class="type">owl:</span><span class="constant">Thing</span> <span class="type">;
+.
+:</span><span class="constant">state</span> <span class="keyword">a</span> <span class="type">owl:</span><span class="constant">ObjectProperty</span> ;
+  <span class="type">rdfs:</span><span class="constant">domain</span> <span class="type">my:</span><span class="constant">name-status</span> ;
+  <span class="type">rdfs:</span><span class="constant">range</span> <span class="type">ex:</span><span class="constant">ValidState</span> <span class="type">.
+:</span><span class="constant">unassigned</span> <span class="keyword">a</span> <span class="type">ex:</span><span class="constant">ValidState</span> <span class="type">.
+:</span><span class="constant">assigned</span> <span class="keyword">a</span> <span class="type">ex:</span><span class="constant">ValidState</span> .</pre>
+      </div>
+      <div style="clear:both;"> </div>
+    </div>
+
+    <div id="OWL" class="slide">
+      <h1>OWL</h1>
+      <p>Combine OWL with a premise type associated with data.</p>
+      <div style="float:left; width:50%;">
+        <ul>
+          <li class="plus">sound, standard logic</li>
+          <li class="minus">no e.g. minimum cardinality</li>
+          <li class="minus">no defined extensibility route</li>
+        </ul>
+      </div>
+      <div style="float:left; width:50%;">
+        <pre><span class="type">Datatype:</span><span class="constant"> rdfs:Literal</span> <span class="type">
+DataProperty:</span><span class="constant"> ex:name</span> <span class="type">
+ObjectProperty:</span><span class="constant"> ex:status</span> 
+    
+<span class="type">Class:</span><span class="constant"> ex:name-status</span> 
+    <span class="type">SubClassOf:</span> 
+        <span class="type">ex:</span><span class="constant">name</span> exactly 1 <span class="type">rdfs:</span><span class="constant">Literal</span> ,
+        <span class="type">ex:</span><span class="constant">status</span> max 1 ({ <span class="type">ex:</span><span class="constant">assigned</span> , <span class="type">ex:</span><span class="constant">unassigned</span> }) ,
+        <span class="type">ex:</span><span class="constant">status</span> min 0 <span class="type">owl:</span><span class="constant">Thing</span> 
+    <span class="type">
+Individual:</span><span class="constant"> ex:assigned</span> <span class="type">
+Individual:</span><span class="constant"> ex:unassigned</span> </pre>
+      </div>
+      <div style="clear:both;"> </div>
+      <p>Not a real proposal; instead used with a different interpretation…</p>
+    </div>
+
+    <div id="OWLICV" class="slide">
+      <h1>OWL/ICV</h1>
+      <p>OWL with unique name assumption and closed world</p>
+      <div style="float:left; width:50%;">
+        <ul>
+          <li class="plus">realizes common user expectations</li>
+          <li class="plus">terse syntax (Manchester)</li>
+          <li class="minus">no particular extensibility mechanism</li>
+        </ul>
+      </div>
+      <div style="float:left; width:50%;">
+        <pre><span class="type">Datatype:</span><span class="constant"> rdfs:Literal</span> <span class="type">
+DataProperty:</span><span class="constant"> ex:name</span> <span class="type">
+ObjectProperty:</span><span class="constant"> ex:status</span> 
+    
+<span class="type">Class:</span><span class="constant"> ex:name-status</span> 
+    <span class="type">SubClassOf:</span> 
+        <span class="type">ex:</span><span class="constant">name</span> exactly 1 <span class="type">rdfs:</span><span class="constant">Literal</span> ,
+        <span class="type">ex:</span><span class="constant">status</span> max 1 ({ <span class="type">ex:</span><span class="constant">assigned</span> , <span class="type">ex:</span><span class="constant">unassigned</span> }) ,
+        <span class="type">ex:</span><span class="constant">status</span> min 0 <span class="type">owl:</span><span class="constant">Thing</span> 
+    <span class="type">
+Individual:</span><span class="constant"> ex:assigned</span> <span class="type">
+Individual:</span><span class="constant"> ex:unassigned</span> </pre>
+      </div>
+      <div style="clear:both;"> </div>
+    </div>
+
+    <div id="ResourceShapes" class="slide">
+      <h1>Resource Shapes/Description Set Profiles/TQ schema</h1>
+      <div style="float:left; width:50%;">
+        <ul>
+          <li>specs: vocab and use cases</li>
+          <li class="minus">no particular extensibility mechanism</li>
+        </ul>
+      </div>
+      <div style="float:left; width:50%;">
+        <pre><span class="type">my:</span><span class="constant">name-status</span> <span class="keyword">a</span> <span class="type">rs:</span><span class="constant">ResourceShape</span> ;
+    <span class="type">rs:</span><span class="constant">property</span> [
+        <span class="type">rs:</span><span class="constant">name</span> <span class="string">"name"</span> ;
+        <span class="type">rs:</span><span class="constant">propertyDefinition</span> <span class="type">foaf:</span><span class="constant">name</span> ;
+        <span class="type">rs:</span><span class="constant">valueType</span> <span class="type">xsd:</span><span class="constant">string</span> ;
+        <span class="type">rs:</span><span class="constant">occurs</span> <span class="type">rs:</span><span class="constant">Exactly-one</span> ;
+    ] ;
+    <span class="type">rs:</span><span class="constant">property</span> [
+        <span class="type">rs:</span><span class="constant">name</span> <span class="string">"state"</span> ;
+        <span class="type">rs:</span><span class="constant">propertyDefinition</span> <span class="type">ex:</span><span class="constant">state</span> ;
+        <span class="type">rs:</span><span class="constant">allowedValue</span> <span class="type">ex:</span><span class="constant">unassigned&gt;</span> , <span class="type">ex:</span><span class="constant">assigned</span> ;
+        <span class="type">rs:</span><span class="constant">occurs</span> <span class="type">rs:</span><span class="constant">Zero-or-one</span> ;
+    ] .</pre>
+      </div>
+      <div style="clear:both;"> </div>
+    </div>
+
+</body>
+</html>

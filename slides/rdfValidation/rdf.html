@@ -282,8 +282,8 @@ function prepareHighlight (highlightables, onClass, offClass, slide) {
 <div class="slide">
 <h1>RDF/XML</h1>
 <ul>
-<li>Example in RDF/XML</li>
-    <pre>
+<li>Example in RDF/XML
+<pre>
 <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-prefix">rdf</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">RDF</span>
   <span class="nxml-namespace-attribute-xmlns">xmlns</span><span class="nxml-namespace-attribute-colon">:</span><span class="nxml-namespace-attribute-prefix">rdf</span>=<span class="nxml-namespace-attribute-value-delimiter">"</span><span class="nxml-namespace-attribute-value">http://www.w3.org/1999/02/22-rdf-syntax-ns#</span><span class="nxml-namespace-attribute-value-delimiter">"</span>
   <span class="nxml-namespace-attribute-xmlns">xmlns</span>=<span class="nxml-namespace-attribute-value-delimiter">"</span><span class="nxml-namespace-attribute-value">http://example.org/</span><span class="nxml-namespace-attribute-value-delimiter">"</span>
@@ -319,8 +319,34 @@ function prepareHighlight (highlightables, onClass, offClass, slide) {
  <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-prefix">rdf</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">Description</span><span class="nxml-tag-delimiter">&gt;</span>
 <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-prefix">rdf</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">RDF</span><span class="nxml-tag-delimiter">&gt;</span>
 </pre>
+</li>
 </ul>
 </div>
 
+<div class="slide">
+<h1>N-Triples</h1>
+<p>Represents a plain list of triples</p>
+<p>Example:</p>
+<pre>
+<span class="function-name">&lt;http://example.org/carol&gt;</span> <span class="function-name">&lt;http://xmlns.com/foaf/0.1/knows&gt;</span>        <span class="function-name">&lt;http://example.org/alice&gt;</span> <span class="keyword">.</span>
+<span class="function-name">&lt;http://example.org/carol&gt;</span> <span class="function-name">&lt;http://dbpedia.org/ontology/birthPlace&gt;</span> <span class="function-name">&lt;http://dbpedia.org/resource/Oviedo&gt;</span> <span class="keyword">.</span>
+<span class="function-name">&lt;http://example.org/alice&gt;</span> <span class="function-name">&lt;http://xmlns.com/foaf/0.1/knows&gt;</span>        <span class="function-name">&lt;http://example.org/bob&gt;</span> <span class="keyword">.</span>
+<span class="function-name">&lt;http://example.org/alice&gt;</span> <span class="function-name">&lt;http://dbpedia.org/ontology/birthPlace&gt;</span> <span class="function-name">&lt;http://dbpedia.org/resource/Oviedo&gt;</span> <span class="keyword">.</span>
+<span class="function-name">&lt;http://example.org/bob&gt;</span>   <span class="function-name">&lt;http://dbpedia.org/ontology/birthDate&gt;</span>  <span class="string">"1990-02-03"</span>^^<span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#date&gt;</span><span class="comment"> </span><span class="keyword">.</span><span class="comment">
+</span><span class="function-name">&lt;http://example.org/bob&gt;</span>   <span class="function-name">&lt;http://xmlns.com/foaf/0.1/name&gt;</span>         <span class="string">"Robert"</span> <span class="keyword">.</span>
+<span class="function-name">&lt;http://example.org/bob&gt;</span>   <span class="function-name">&lt;http://xmlns.com/foaf/0.1/age&gt;</span>          <span class="string">"25"</span>^^<span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#integer&gt;</span><span class="comment"> </span><span class="keyword">.</span><span class="comment">
+</span><span class="function-name">&lt;http://example.org/bob&gt;</span>   <span class="function-name">&lt;http://xmlns.com/foaf/0.1/knows&gt;</span>        <span class="function-name">_:B1</span> <span class="keyword">.</span>
+<span class="function-name">&lt;http://example.org/bob&gt;</span>   <span class="function-name">&lt;http://xmlns.com/foaf/0.1/knows&gt;</span>        <span class="function-name">&lt;http://example.org/carol&gt;</span> <span class="keyword">.</span>
+<span class="function-name">_:B1</span>                       <span class="function-name">&lt;http://xmlns.com/foaf/0.1/age&gt;</span>          <span class="string">"34"</span>^^<span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#integer&gt;</span><span class="comment"> </span><span class="keyword">.</span><span class="comment">
+</span>
+</pre>
+</div>
+
+<div class="slide">
+<h1>Exercise</h1>
+<p>Represent the following information in RDF</p>
+<img src="images/exercise1.png" alt="Graph with information to be represented in RDF" />
+<p><a href="http://rdfshape.weso.es">RDFShape</a> can be used to check RDF syntax and to convert between different syntaxes</p>
+</div>
 </body>
 </html>
