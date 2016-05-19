@@ -1,0 +1,2245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-US">
+  <head>
+    <meta name="generator" content=
+	  "HTML Tidy for Linux/x86 (vers 1st November 2003), see www.w3.org" />
+    <title>ShEx By Example — Validation and Transformation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="copyright" content=
+	  "Copyright &#169; 2005-2010 W3C (MIT, ERCIM, Keio)" />
+    <meta name="duration" content="5" />
+    <meta name="font-size-adjustment" content="-2" />
+    <link rel="stylesheet" href="../../Slidy2/styles/slidy.css" type="text/css" />
+    <link rel="stylesheet" href="../../Slidy2/styles/w3c-blue.css" type="text/css" />
+    <script src="../../Slidy2/scripts/slidy.js" charset="utf-8" type="text/javascript">
+    </script>
+    <script src="http://www.w3.org/2013/ShEx/demobits/jquery.min.js" type= "text/javascript"></script>
+  <!-- link rel="stylesheet" type="text/css" href="local.css"/ -->
+  <style type="text/css">
+/*<![CDATA[*/
+.todo { border: medium solid red; }
+table { border-collapse: collapse }
+table, td, th { border: 1px solid black; }
+tbody tr:nth-child(odd)		{ background-color:#eee; }
+tbody tr:nth-child(even)		{ background-color:#fff; }
+
+.underlined {text-decoration:underline}
+.old {color: #333;}
+.new {color: #181;}
+.bold { font-size: 1.5em; font-weight:bold; }
+.bad { color: #700; }
+
+body { font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: #000000;  }
+span.default   { font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: #000000;  }
+span.default a { font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: #000000;  background: #ffffff; text-decoration: underline; }
+span.function-name   { color: #0000ff;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  }
+span.function-name a { color: #0000ff;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  background: #ffffff; text-decoration: underline; }
+span.keyword   { color: #a020f0;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  }
+span.keyword a { color: #a020f0;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  background: #ffffff; text-decoration: underline; }
+span.string   { color: #8b2252;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  }
+span.string a { color: #8b2252;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  background: #ffffff; text-decoration: underline; }
+span.constant   { color: #008b8b;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  }
+span.constant a { color: #008b8b;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  background: #ffffff; text-decoration: underline; }
+span.type   { color: #228b22;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  }
+span.type a { color: #228b22;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  background: #ffffff; text-decoration: underline; }
+span.comment   { color: #b22222;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  }
+span.comment a { color: #b22222;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  background: #ffffff; text-decoration: underline; }
+
+.sparql { color:#58a; }
+.js { color:#5a8; }
+.genr { color:#a28; }
+
+.error { background-color: #f77; }
+
+.plus         { color: #171;  }
+.minus        { color: #711;  }
+.plus:before  { content: "+" }
+.minus:before { content: "-" }
+
+.highlight1    { border: 5px solid #bb0; font-weight: bold; }
+.lowlight1     { border: 5px solid transparent; font-weight: normal; }
+.highlight2    { color: #b00; border: 5px solid #f00; font-weight: bold; }
+.lowlight2     { border: 5px solid transparent; font-weight: normal; }
+.highlightBG1   { /* border: 5px solid transparent; */ background-color: #bb0; font-weight: bold; }
+.lowlightBG1    { /* border: 5px solid transparent; */ font-weight: normal; }
+.highlightBG2   { /* border: 5px solid transparent; */ background-color: #b00; font-weight: bold; }
+.lowlightBG2    { /* border: 5px solid transparent; */ font-weight: normal; }
+
+.errorHint.lowlightBG2    { background-color: #f4d5d7 }
+.errorHint.highlightBG2    { color: #000; }
+
+.retext       { float:left; border: thin solid #95D0AB; padding-left: .2em; padding-right: .2em; margin-left: .2em; margin-right: .2em; }
+
+.leftPack     { float:left; margin: .1em; border-left-width: thin; }
+
+/*]]>
+*/</style>
+
+    <script type="text/javascript"><!--
+function prepareHighlight (highlightables, onClass, offClass, slide) {
+  if (slide === undefined)
+    slide = $("body").find("> div").last();
+  $.each( highlightables, function( index, value ){
+    var elts = slide.find( "."+value );
+    elts
+  	.mouseenter(function() {
+  	    elts.removeClass(offClass).addClass(onClass);
+  	})
+  	.mouseleave(function() {
+  	    elts.removeClass(onClass).addClass(offClass);
+  	})
+    .addClass(offClass);
+  })
+}
+--> </script>
+  </head>
+  <body>
+    <div class="background"><img alt="" id="head-icon"
+    src="../../Slidy2/graphics/icon-blue.png" /><object id="head-logo"
+    data="../../Slidy2/graphics/w3c-logo-white.svg" type="image/svg+xml"
+    title="W3C logo"><a href="http://www.w3.org/"><img
+    alt="W3C logo" id="head-logo-fallback"
+    src="../../Slidy2/graphics/w3c-logo-white.gif" /></a></object></div>
+
+    <div class="background slanty">
+      <img src="../../Slidy2/graphics/w3c-logo-slanted.jpg" alt="slanted W3C logo" />
+    </div>
+    <div class="slide cover title">
+      <!-- hidden style graphics to ensure they are saved with other content -->
+      <img class="hidden" src="../../Slidy2/graphics/bullet.png" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/fold.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/unfold.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/fold-dim.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/nofold-dim.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/unfold-dim.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/bullet-fold.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/bullet-unfold.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/bullet-fold-dim.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/bullet-nofold-dim.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/bullet-unfold-dim.gif" alt="" />
+
+      <img src="../../Slidy2/graphics/keys2.jpg" alt="Cover page images (keys)"
+	   class="cover" />
+      <h1>ShEx by Example</h1>
+      <h2>Validation and Transformation</h2>
+      <h2>SWAT⁴LS<br/>08 December, 2014</h2>
+      <h2><a class="todo" href="http://www.w3.org/2014/Talks/1209-shex-egp/">http://www.w3.org/2014/Talks/1209-shex-egp/</a> or <a href="http://w3.org/brief/NDI0">http://w3.org/brief/NDI0</a></h2>
+      <p><a href="http://piratepad.net/M90gsDLblg">pirate pad for collaboration</a></p>
+
+      <ul>
+	      <li>
+	        <a href="http://di002.edv.uniovi.es/~labra/">Jose Emilio Labra Gayo</a>, &lt;<a href="mailto:jelabra@gmail.com">jelabra@gmail.com</a>&gt;
+	        <ul>
+	          <li>Associate Professor, <a href="http://www.uniovi.es">University of Oviedo</a></li>
+	        </ul>
+	      </li>
+	      <li>
+	        <a href="http://www.w3.org/People/Eric/">Eric Prud'hommeaux</a>, &lt;<a href="mailto:eric@w3.org">eric@w3.org</a>&gt;
+	        <ul>
+	          <li>Sanitation Engineer, W3C</li>
+	        </ul>
+	      </li>
+      </ul>
+    </div>
+
+   <div class="slide">
+      <h1>Problem Statement</h1>
+    <div style="float:left; width:39%;">
+      <p>Useful data needs consistent structure:</p>
+      <ul>
+        <li>
+          Advertise value
+          <ul>
+            <li>What's there?</li>
+            <li>How's it spelled?</li>
+            <li>How's it linked?</li>
+          </ul>
+        </li>
+        <li>Generate interfaces</li>
+        <li>Direct query generation</li>
+        <li>Direct query optimization</li>
+      </ul>
+      <p>Detect and correct errors:</p>
+      <ul>
+        <li>missing properties,</li>
+        <li>missing/bad type arcs,</li>
+        <li>missing referents,</li>
+        <li>inconsistent state (e.g. dates),</li>
+        <li>value set violations.</li>
+      </ul>
+    </div>
+    <div style="float:left; width:60%">
+      <pre class="turtle">@prefix : &lt;http://www.w3.org/2012/12/rdf-val/SOTA-ex#&gt; .
+@prefix foaf: &lt;http://xmlns.com/foaf/0.1/'&gt; .
+@prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt; .
+
+&lt;issue7&gt; a :Issue , :SecurityIssue ;
+    :state :unassigned ;
+    :reportedBy &lt;user6&gt; , <span id="one_reportedBy" class="error">&lt;user2&gt;</span> ; <span class="comment"># cardinality 1</span>
+    :reportedOn "2012-12-31T23:57:00"^^xsd:dateTime ;
+    :assignedTo &lt;user2&gt;, &lt;user1&gt; ;
+    :assignedOn "<span class="error">2012-11-31T23:57:00</span>"^^xsd:dateTime ;
+                       <span class="comment"># reproduced before being reported</span>
+    :related &lt;issue4&gt;, <span class="error">&lt;issue3&gt;</span>, <span class="error">&lt;issue2&gt;</span> .
+                       <span id="missing_issue2" class="comment"># referenced issues not included</span>
+
+&lt;issue4&gt; <span class="comment"># a <span class="error">???</span>         missing type arc</span>
+    :state <span id="unknown_unsinged" class="error">:unsinged</span> ; <span class="comment"># misspelled</span>
+    <span id="missing_reportedBy" class="comment"># :reportedBy <span class="error">???</span> -  missing</span>
+    :reportedOn "2012-12-31T23:57:00"^^xsd:dateTime .
+
+&lt;user2&gt; a foaf:Person ;
+    foaf:givenName "Alice" ;
+    foaf:familyName "Smith" ;
+    foaf:phone &lt;tel:+1.555.222.2222&gt; ;
+    foaf:mbox &lt;mailto:alice@example.com&gt; .
+
+&lt;user6&gt; a foaf:<span id="missing_Agent" class="error">Agent</span> ; <span class="comment"># should be foaf:Person</span>
+    foaf:givenName "Bob" ; <span id="missing_familyName" class="comment"># foaf:familyName "<span class="error">???</span>" - missing</span>
+    foaf:phone &lt;tel:+<span class="error">.</span>555.222.2222&gt; ; <span class="comment"># malformed tel: URL</span>
+    foaf:mbox &lt;mailto:alice@example.com&gt; .</pre>
+    </div>
+  </div>
+
+
+    <div class="slide">
+      <h1>Expectations</h1>
+          <p>What do users get elsewhere?</p>
+	<table>
+        <thead><tr><th></th><th>SQL</th><th>XML</th></tr></thead>
+        <tbody>
+          <tr><th>missing properties</th><td>reportedBy UNSIGNED INT NOT NULL</td><td>element reportedBy { User },</td></tr>
+          <tr><th>missing/bad type arcs</th><td>N/A</td><td>N/A</td></tr>
+          <tr><th>missing referents</th><td>FOREIGN KEY (reportedBy)<br/>  REFERENCES Users(ID)</td><td>&lt;keyref refer="UserID"&gt;</td></tr>
+          <tr><th>inconsistent state</th><td>CHECK(assignedOn&gt;reportedOn)</td><td>[schematron]</td></tr>
+          <tr><th>value set violations</th><td>ENUM('unasigned', 'assigned')</td><td>attribute state<br/>{ "unassigned" | "assigned" }</td></tr>
+        </tbody>
+	</table>
+    </div>
+
+    <div class="slide">
+      <h1>Existing data</h1>
+      <ul>
+        <li>Ontology separate from constraints separate from instance
+          <ul>
+            <li>instance and ontology routinely separate.</li>
+            <li>constraints tied to OSLC services, not to instance data.</li>
+        </ul></li>
+        <li>One type used for multiple purposes.<br/>
+        (Data not annotated with fully-discriminating types.)
+          <ul>
+            <li>foaf:Person could be a friend, invitee, patient</li>
+        </ul></li>
+        <li>One type arc used through different states.
+          <ul>
+            <li>e.g. schema for interface A for yet unassigned issues<br/>
+            vs. schema interface B for resolved issues..</li>
+        </ul></li>
+        <li>Objects sometimes strings, sometimes objects.
+          <ul>
+            <li>dc:creator a string or a foaf:Person in the same data.</li>
+            <li>likewise wikipathways:complex or metacyc:…</li>
+        </ul></li>
+        <li>Value set inclusion rules vary:
+          <ul>
+            <li>enumerated set</li>
+            <li>dereferenced enumerated set</li>
+            <li>too large to dereference</li>
+            <li>inclusion by lexical constraints (e.g. IRI stem)</li>
+            <li>product of OWL union/intersection</li>
+        </ul></li>
+        <li>schema.org:
+          <ul>
+            <li>{domain,range}Includes</li>
+            <li>ObjectProperties can be literals</li>
+            <li>datatype "equivalences": "schema/true", "true"^^xsd:boolean, "True"</li>
+            <li><a href="http://schema.org/Role">Role</a> member rules</li>
+        </ul></li>
+      </ul>
+    </div>
+
+    <div class="slide">
+      <h1>Technologies</h1>
+      <div style="float:left; width:60%;">
+        <p>in order of specificity:</p>
+	    <ul>
+	      <li>SPARQL</li>
+	      <li>path-indexed ASK</li>
+	      <li>SPARQL as SPIN</li>
+	      <li>OWL/ICV</li>
+	      <li>Resource Shapes/<br/>
+          Description Set Profiles/<br/>
+          TQ schema</li>
+	      <li>Shape Expressions</li>
+	    </ul>
+      </div>
+      <img style="float:right; width: 39%" src="http://2.bp.blogspot.com/-q-9K0mtCr6U/T6oLHZzmgJI/AAAAAAAAAyw/V2ovH_f4om4/s1600/VALIDATE.png" alt="Keep calm and validate."/>
+    </div>
+
+    <div id="SPARQL" class="slide">
+      <h1>SPARQL</h1>
+      <div style="float:left; width:50%;">
+        <ul>
+          <li>targeted "point" tests (like schematron).</li>
+          <li>can be compiled.</li>
+          <li class="plus">expressive.</li>
+          <li class="plus">ubiquitous.</li>
+          <li class="minus">expressive.</li>
+          <li class="minus">idomatic -- many ways to code some constraint.</li>
+        </ul>
+      </div>
+      <div style="float:left; width:50%;">
+        <pre>ASK {
+    { SELECT ?S (COUNT(*) AS ?S_c0) {
+      ?S <span class="type">foaf:</span><span class="constant">givenName</span> ?o .
+    } GROUP BY ?S}
+    { SELECT ?S (COUNT(*) AS ?S_c1) {
+      ?S <span class="type">foaf:</span><span class="constant">givenName</span> ?o .
+    } GROUP BY ?S}
+    FILTER (?S_c0 = ?S_c1 &amp;&amp;
+            ?S_c0 = 1)
+    { SELECT ?S (COUNT(*) AS ?S_c2) {
+      ?S <span class="type">ex:</span><span class="constant">state</span> ?o .
+    } GROUP BY ?S HAVING (COUNT(*)=1)}
+    { SELECT ?S (COUNT(*) AS ?S_c3) {
+      ?S <span class="type">ex:</span><span class="constant">state</span> ?o .
+      FILTER ((?o = <span class="type">ex:</span><span class="constant">unassigned</span> ||
+               ?o = <span class="type">ex:</span><span class="constant">assigned</span>))
+    } GROUP BY ?S HAVING (COUNT(*)=1)}
+    FILTER (?S_c2 = ?S_c3 &amp;&amp;
+            (?S_c0 = 0 || ?S_c0 = 1))
+}</pre>
+      </div>
+      <div style="clear:both;"> </div>
+    </div>
+
+    <div id="Path-indexedASK" class="slide">
+      <h1>Path-indexed ASK</h1>
+      <div style="float:left; width:50%;">
+        <p> per <a href="http://www.w3.org/2001/sw/wiki/images/0/00/SimpleApplication-SpecificConstraintsforRDFModels.pdf">Simister, Brickley</a></p>
+          <ul>
+            <li>separate the selector.</li>
+            <li class="plus">imposes more "parsability" on the SPARQL.</li>
+            <li>used to break up the structure of a SPARQL query.</li>
+          </ul>
+      </div>
+      <div style="float:left; width:50%;">
+        <pre>{
+  "@context": { … },
+  "constraints": [{
+    "context": "ex:status",
+    "constraint": "ASK { ?s ex:assignee ?o }",
+    "severity": "warning",
+    "message": "a status of assigned requires an assignee"
+  }]
+}</pre>
+      </div>
+      <div style="clear:both;"> </div>
+    </div>
+
+    <div id="SPARQLSPIN" class="slide">
+      <h1>SPARQL as SPIN</h1>
+      <div style="float:left; width:50%;">
+        <ul>
+          <li>Similar to SPARQL but written in RDF.</li>
+          <li>Associated with RDF term or type.</li>
+          <li class="plus">powerful.</li>
+          <li class="minus">complex@@.</li>
+        </ul>
+      </div>
+      <div style="float:left; width:50%;">
+        <pre>ASK {
+    { SELECT ?this (COUNT(*) AS ?this_c0) {
+      ?this <span class="type">foaf:</span><span class="constant">givenName</span> ?o .
+    } GROUP BY ?this}
+    { SELECT ?this (COUNT(*) AS ?this_c1) {
+      ?this <span class="type">foaf:</span><span class="constant">givenName</span> ?o .
+    } GROUP BY ?this}
+    FILTER (?this_c0 = ?this_c1 &amp;&amp;
+            ?this_c0 = 1)
+    { SELECT ?this (COUNT(*) AS ?this_c2) {
+      ?this <span class="type">ex:</span><span class="constant">state</span> ?o .
+    } GROUP BY ?this HAVING (COUNT(*)=1)}
+    { SELECT ?this (COUNT(*) AS ?this_c3) {
+      ?this <span class="type">ex:</span><span class="constant">state</span> ?o .
+      FILTER ((?o = <span class="type">ex:</span><span class="constant">unassigned</span> ||
+               ?o = <span class="type">ex:</span><span class="constant">assigned</span>))
+    } GROUP BY ?this HAVING (COUNT(*)=1)}
+    FILTER (?this_c2 = ?this_c3 &amp;&amp;
+            (?this_c0 = 0 || ?this_c0 = 1))
+}</pre>
+      </div>
+      <div style="clear:both;"> </div>
+    </div>
+
+    <div id="SPINastemplates" class="slide">
+      <h1>SPIN as templates</h1>
+      <div style="float:left; width:50%;">
+        <ul>
+          <li>Vocabulary associated with user-defined functions defined in SPARQL or javascript.</li>
+          <li>Syntax like Resource Shapes/Description Set Profiles (described later).</li>
+          <li class="plus">SPARQL or JS as extensibility mechansim.</li>
+        </ul>
+      </div>
+      <div style="float:left; width:50%;">
+        <pre><span class="type">:</span><span class="constant">Issue</span> <span class="keyword">a</span> <span class="type">owl:</span><span class="constant">Class</span> ;
+  <span class="type">rdfs:</span><span class="constant">subClassOf</span> <span class="type">owl:</span><span class="constant">Thing</span> ;
+  <span class="type">spin:</span><span class="constant">constraint</span> [
+      <span class="keyword">a</span> <span class="type">spl:</span><span class="constant">ObjectCountPropertyConstraint</span> ;
+      <span class="type">arg:</span><span class="constant">property</span> <span class="type">ex:</span><span class="constant">name</span> ;
+      <span class="type">arg:</span><span class="constant">minCount</span> 1 ;
+      <span class="type">arg:</span><span class="constant">maxCount</span> 1 ;
+    ] ;
+  <span class="type">spin:</span><span class="constant">constraint</span> [
+      <span class="keyword">a</span> <span class="type">spl:</span><span class="constant">ObjectCountPropertyConstraint</span> ;
+      <span class="type">arg:</span><span class="constant">property</span> <span class="type">ex:</span><span class="constant">state</span> ;
+      <span class="type">arg:</span><span class="constant">minCount</span> 0 ;
+      <span class="type">arg:</span><span class="constant">maxCount</span> 1 ;
+    ] ;
+  <span class="type">spin:</span><span class="constant">constraint</span> [
+      <span class="keyword">a</span> <span class="type">spl:</span><span class="constant">UntypedObjectPropertyConstraint</span> ;
+      <span class="type">arg:</span><span class="constant">property</span> <span class="type">ex:</span><span class="constant">state</span> ;
+    ] <span class="type">.
+
+ex:</span><span class="constant">name</span> <span class="keyword">a</span> <span class="type">owl:</span><span class="constant">DatatypeProperty</span> ;
+  <span class="type">rdfs:</span><span class="constant">domain</span> <span class="type">my:</span><span class="constant">name-status</span> ;
+  <span class="type">rdfs:</span><span class="constant">range</span> <span class="type">xsd:</span><span class="constant">string</span> <span class="type">.
+
+:</span><span class="constant">ValidState</span> <span class="keyword">a</span> <span class="type">owl:</span><span class="constant">Class</span> ;
+  <span class="type">rdfs:</span><span class="constant">label</span> <span class="string">"Valid state"</span> ;
+  <span class="type">rdfs:</span><span class="constant">subClassOf</span> <span class="type">owl:</span><span class="constant">Thing</span> <span class="type">;
+.
+:</span><span class="constant">state</span> <span class="keyword">a</span> <span class="type">owl:</span><span class="constant">ObjectProperty</span> ;
+  <span class="type">rdfs:</span><span class="constant">domain</span> <span class="type">my:</span><span class="constant">name-status</span> ;
+  <span class="type">rdfs:</span><span class="constant">range</span> <span class="type">ex:</span><span class="constant">ValidState</span> <span class="type">.
+:</span><span class="constant">unassigned</span> <span class="keyword">a</span> <span class="type">ex:</span><span class="constant">ValidState</span> <span class="type">.
+:</span><span class="constant">assigned</span> <span class="keyword">a</span> <span class="type">ex:</span><span class="constant">ValidState</span> .</pre>
+      </div>
+      <div style="clear:both;"> </div>
+    </div>
+
+    <div id="OWL" class="slide">
+      <h1>OWL</h1>
+      <p>Combine OWL with a premise type associated with data.</p>
+      <div style="float:left; width:50%;">
+        <ul>
+          <li class="plus">sound, standard logic</li>
+          <li class="minus">no e.g. minimum cardinality</li>
+          <li class="minus">no defined extensibility route</li>
+        </ul>
+      </div>
+      <div style="float:left; width:50%;">
+        <pre><span class="type">Datatype:</span><span class="constant"> rdfs:Literal</span> <span class="type">
+DataProperty:</span><span class="constant"> ex:name</span> <span class="type">
+ObjectProperty:</span><span class="constant"> ex:status</span> 
+    
+<span class="type">Class:</span><span class="constant"> ex:name-status</span> 
+    <span class="type">SubClassOf:</span> 
+        <span class="type">ex:</span><span class="constant">name</span> exactly 1 <span class="type">rdfs:</span><span class="constant">Literal</span> ,
+        <span class="type">ex:</span><span class="constant">status</span> max 1 ({ <span class="type">ex:</span><span class="constant">assigned</span> , <span class="type">ex:</span><span class="constant">unassigned</span> }) ,
+        <span class="type">ex:</span><span class="constant">status</span> min 0 <span class="type">owl:</span><span class="constant">Thing</span> 
+    <span class="type">
+Individual:</span><span class="constant"> ex:assigned</span> <span class="type">
+Individual:</span><span class="constant"> ex:unassigned</span> </pre>
+      </div>
+      <div style="clear:both;"> </div>
+      <p>Not a real proposal; instead used with a different interpretation…</p>
+    </div>
+
+    <div id="OWLICV" class="slide">
+      <h1>OWL/ICV</h1>
+      <p>OWL with unique name assumption and closed world</p>
+      <div style="float:left; width:50%;">
+        <ul>
+          <li class="plus">realizes common user expectations</li>
+          <li class="plus">terse syntax (Manchester)</li>
+          <li class="minus">no particular extensibility mechanism</li>
+        </ul>
+      </div>
+      <div style="float:left; width:50%;">
+        <pre><span class="type">Datatype:</span><span class="constant"> rdfs:Literal</span> <span class="type">
+DataProperty:</span><span class="constant"> ex:name</span> <span class="type">
+ObjectProperty:</span><span class="constant"> ex:status</span> 
+    
+<span class="type">Class:</span><span class="constant"> ex:name-status</span> 
+    <span class="type">SubClassOf:</span> 
+        <span class="type">ex:</span><span class="constant">name</span> exactly 1 <span class="type">rdfs:</span><span class="constant">Literal</span> ,
+        <span class="type">ex:</span><span class="constant">status</span> max 1 ({ <span class="type">ex:</span><span class="constant">assigned</span> , <span class="type">ex:</span><span class="constant">unassigned</span> }) ,
+        <span class="type">ex:</span><span class="constant">status</span> min 0 <span class="type">owl:</span><span class="constant">Thing</span> 
+    <span class="type">
+Individual:</span><span class="constant"> ex:assigned</span> <span class="type">
+Individual:</span><span class="constant"> ex:unassigned</span> </pre>
+      </div>
+      <div style="clear:both;"> </div>
+    </div>
+
+    <div id="ResourceShapes" class="slide">
+      <h1>Resource Shapes/Description Set Profiles/TQ schema</h1>
+      <div style="float:left; width:50%;">
+        <ul>
+          <li>specs: vocab and use cases</li>
+          <li class="minus">no particular extensibility mechanism</li>
+        </ul>
+      </div>
+      <div style="float:left; width:50%;">
+        <pre><span class="type">my:</span><span class="constant">name-status</span> <span class="keyword">a</span> <span class="type">rs:</span><span class="constant">ResourceShape</span> ;
+    <span class="type">rs:</span><span class="constant">property</span> [
+        <span class="type">rs:</span><span class="constant">name</span> <span class="string">"name"</span> ;
+        <span class="type">rs:</span><span class="constant">propertyDefinition</span> <span class="type">foaf:</span><span class="constant">name</span> ;
+        <span class="type">rs:</span><span class="constant">valueType</span> <span class="type">xsd:</span><span class="constant">string</span> ;
+        <span class="type">rs:</span><span class="constant">occurs</span> <span class="type">rs:</span><span class="constant">Exactly-one</span> ;
+    ] ;
+    <span class="type">rs:</span><span class="constant">property</span> [
+        <span class="type">rs:</span><span class="constant">name</span> <span class="string">"state"</span> ;
+        <span class="type">rs:</span><span class="constant">propertyDefinition</span> <span class="type">ex:</span><span class="constant">state</span> ;
+        <span class="type">rs:</span><span class="constant">allowedValue</span> <span class="type">ex:</span><span class="constant">unassigned&gt;</span> , <span class="type">ex:</span><span class="constant">assigned</span> ;
+        <span class="type">rs:</span><span class="constant">occurs</span> <span class="type">rs:</span><span class="constant">Zero-or-one</span> ;
+    ] .</pre>
+      </div>
+      <div style="clear:both;"> </div>
+    </div>
+
+    <div id="ShapeExpressions" class="slide">
+      <h1>Shape Expressions</h1>
+      <div style="float:left; width:50%;">
+        <ul>
+          <li>specs: semantics and compact syntax</li>
+          <li>provides apparent semantics for Resource Shapes (plus OR and semantic actions)</li>
+          <li class="plus">purpose-built user syntax</li>
+          <li class="minus">no commercial support</li>
+          <li class="plus">defined extensibility mechanism</li>
+        </ul>
+      </div>
+      <div style="float:left; width:50%;">
+        <pre><span class="type">my:</span><span class="constant">name-status</span> {
+  <span class="type">ex:</span><span class="constant">name</span> <span class="type">xsd:</span><span class="constant">string</span> ,
+  <span class="type">ex:</span><span class="constant">status</span> ( <span class="type">ex:</span><span class="constant">unassigned</span> <span class="type">ex:</span><span class="constant">assigned</span> )?
+}</pre>
+      </div>
+      <div style="clear:both;"> </div>
+    </div>
+
+    <div class="slide">
+      <h1>Issues:</h1>
+      <ul>
+        <li>Interaction with reasoning:
+        <ul>
+          <li>Frequently bad if ontology "instantiates" items that should be flagged as missing.</li>
+          <li>Can be useful post-unification/discrimination:
+          <pre><span class="function-name">&lt;Foo&gt;</span> { <span class="type">foaf:</span><span class="constant">parent</span> NONLITERAL{2} }</pre>
+          <pre><span class="function-name">&lt;X&gt;</span> <span class="type">foaf:</span><span class="constant">parent</span> [ <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:a&#64;example.com&gt;</span> ],
+                [ <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:a&#64;example.com&gt;</span> ].</pre></li>
+        </ul></li>
+        <li>validating data <b>as-is</b>
+        <ul>
+          <li>normal data doesn't have type arcs discriminating every possible use.</li>
+          <li>don't require modification of the data</li>
+        </ul></li>
+        <li>constraints crossing named graphs.</li>
+        <li>"type annotations"
+        <ul>
+          <li>W3C XML Schema adds "types" to the PSVI</li>
+          <li>Interacts with mutability.</li>
+          <li>Resource Shapes/Shape Expressions don't talk about <code>rdf:type</code><br/>
+          OWL and SPIN do.</li>
+        </ul></li>
+      </ul>
+    </div>
+
+    <div id="regex" class="slide">
+      <h1>Terminology</h1>
+      <ul>
+        <li>context-free<ul>
+          <li>DTD: Person/Title is identical to Book/Title</li>
+        </ul></li>
+        <li>context-sensitive<ul>
+          <li>Person/Title can have an "authority attribute"</li>
+        </ul></li>
+        <li>rexexp vs. Perl Regexp<ul>
+          <li>recursive
+          <pre>&lt;(?:[^&lt;&gt;]++|(?1))*&gt;</pre></li>
+          <li>SPARQL regexps <b>extremely</b> limited</li>
+        </ul></li>
+        <li>unique particle attribution<ul>
+          <li>predictable "regexp capture groups"</li>
+        </ul></li>
+      </ul>
+      <pre></pre>
+    </div>
+
+   <div class="slide">
+      <h1>ShEx deeper dive</h1>
+    <div style="float:left; width:39%;">
+      <p>What is Shape Expressions?</p>
+      <ul>
+        <li>Surface syntax for Resource Shapes</li>
+        <li>+ disjunction</li>
+        <li>+ semantic actions</li>
+        <li>grouping</li>
+        <li>+ negations</li>
+        <li>+ reverse paths</li>
+        <li>arbitrary cardinality: '?', '*', '+' and {M,N} constructs</li>
+        <li>driven by RegEx intuition</li>
+      </ul>
+    </div>
+    <div style="float:left; width:60%">
+        <pre>PREFIX <span class="type">issue:</span> <span class="function-name">&lt;http://ex.example/&gt;</span>
+PREFIX <span class="type">foaf:</span> <span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+PREFIX <span class="type">xsd:</span> <span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#</span>&gt;
+PREFIX <span class="type">myco:</span> <span class="function-name">&lt;http://myco.example/#&gt;</span>
+
+start = <span class="function-name">&lt;IssueShape&gt;</span>
+
+<span class="function-name">&lt;IssueShape&gt;</span> {
+    <span class="status"><span class="type">issue:</span><span class="constant">status</span> (<span class="type">issue:</span><span class="constant">unassigned</span> <span class="type">issue:</span><span class="constant">assigned</span>)</span>,
+    <span class="type">issue:</span><span class="constant">reportedBy</span> @<span class="function-name">&lt;UserShape&gt;</span>,
+    <span class="type">issue:</span><span class="constant">reportedOn</span> <span class="type">xsd:</span><span class="constant">dateTime</span>,
+    ( <span class="type">issue:</span><span class="constant">assignedTo</span> @<span class="function-name">&lt;EmployeeShape&gt;</span>,
+      <span class="type">issue:</span><span class="constant">assignedOn</span> <span class="type">xsd:</span><span class="constant">dateTime</span> )?
+}
+
+<span class="function-name">&lt;UserShape&gt;</span> {
+    (<span class="type">foaf:</span><span class="constant">name</span> LITERAL
+     | <span class="type">foaf:</span><span class="constant">givenName</span> LITERAL+,
+       <span class="type">foaf:</span><span class="constant">familyName</span> LITERAL),
+    <span class="type">foaf:</span><span class="constant">mbox</span> IRI
+}
+
+<span class="function-name">&lt;EmployeeShape&gt;</span> {
+    <span class="page"><span class="type">foaf:</span><span class="constant">page</span> <span class="type">(myco:</span><span class="constant">Employee~</span>)</span>,
+    <span class="type">foaf:</span><span class="constant">givenName</span> LITERAL+,
+    <span class="type">foaf:</span><span class="constant">familyName</span> LITERAL,
+    <span class="type">foaf:</span><span class="constant">phone</span> IRI*,
+    <span class="type">foaf:</span><span class="constant">mbox</span> IRI
+}</pre>
+    </div>
+  </div>
+
+
+   <div class="slide">
+      <h1>User example</h1>
+      <p>What's my user profile look like?</p>
+    <div style="float:left; opacity: 0;">
+      <pre>PREFIX <span class="type">foaf:</span><span class="constant"> </span><span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+
+<span class="function-name">&lt;UserShape&gt;</span> {
+    (<span class="name"><span class="type">foaf:</span><span class="constant">name</span> LITERAL</span>
+     <span class="eitherOr"><span class="eitherOr">|</span></span> <span class="gname"><span class="type">foaf:</span><span class="constant">givenName</span> LITERAL<span class="oneOrMore">+</span></span>,
+       <span class="fname"><span class="type">foaf:</span><span class="constant">familyName</span> LITERAL</span>),
+    <span class="mbox"><span class="type">foaf:</span><span class="constant">mbox</span> IRI</span>
+}</pre>
+    </div>
+    <div style="float:left;">
+      <ul>
+        <li class="name"><span class="eitherOr">either</span> a <span id="name"><span class="type">foaf:</span><span class="constant">name</span></span></li>
+        <li class="gname"><span class="eitherOr">or</span> <span class="oneOrMore" id="oneOrMore">one or more</span> <span id="gname"><span class="type">foaf:</span><span class="constant">givenName</span>s</span></li>
+        <li class="fname">and a <span id="fname"><span class="type">foaf:</span><span class="constant">familyName</span></span></li>
+        <li class="mbox">plus an <span id="mbox"><span class="type">foaf:</span><span class="constant">mbox</span></span></li>
+      </ul>
+    </div>
+    <div style="clear:both;">
+    </div>
+    <script type="text/javascript"><!-- spaces out the <li/>s for the next slide -->
+      <!--
+prepareHighlight(['oneOrMore'], "highlight2", "lowlight2");
+prepareHighlight(['eitherOr'], "highlight2", "lowlight2");
+prepareHighlight(['name', 'fname', 'gname', 'mbox'], "highlight1", "lowlight1");
+      -->
+    </script>
+  </div>
+
+
+   <div class="slide">
+      <h1>User example</h1>
+      <p>What's my user profile look like?</p>
+    <div style="float:left">
+      <pre>PREFIX <span class="type">foaf:</span><span class="constant"> </span><span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+
+<span class="function-name">&lt;UserShape&gt;</span> {
+    (<span class="name"><span class="type">foaf:</span><span class="constant">name</span> LITERAL</span>
+     <span class="eitherOr">|</span> <span class="gname"><span class="type">foaf:</span><span class="constant">givenName</span> LITERAL<span class="oneOrMore">+</span></span>,
+       <span class="fname"><span class="type">foaf:</span><span class="constant">familyName</span> LITERAL</span>),
+    <span class="mbox"><span class="type">foaf:</span><span class="constant">mbox</span> IRI</span>
+}</pre>
+    </div>
+    <div style="float:left;">
+      <ul>
+        <li class="name"><span class="eitherOr">either</span> a <span id="name"><span class="type">foaf:</span><span class="constant">name</span></span></li>
+        <li class="gname"><span class="eitherOr">or</span> <span class="oneOrMore" id="oneOrMore">one or more</span> <span id="gname"><span class="type">foaf:</span><span class="constant">givenName</span>s</span></li>
+        <li class="fname">and a <span id="fname"><span class="type">foaf:</span><span class="constant">familyName</span></span></li>
+        <li class="mbox">plus an <span id="mbox"><span class="type">foaf:</span><span class="constant">mbox</span></span></li>
+      </ul>
+    </div>
+    <script type="text/javascript">
+      <!--
+prepareHighlight(['oneOrMore'], "highlight2", "lowlight2");
+prepareHighlight(['eitherOr'], "highlight2", "lowlight2");
+prepareHighlight(['name', 'fname', 'gname', 'mbox'], "highlight1", "lowlight1");
+      -->
+    </script>
+  </div>
+
+
+   <div class="slide">
+      <h1>User example</h1>
+      <p>What's my user profile look like?</p>
+    <div style="float:left">
+      <pre>PREFIX <span class="type">foaf:</span><span class="constant"> </span><span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+
+<span class="function-name">&lt;UserShape&gt;</span> {
+    (<span class="name"><span class="type">foaf:</span><span class="constant">name</span> LITERAL</span>
+     <span class="eitherOr">|</span> <span class="gname"><span class="type">foaf:</span><span class="constant">givenName</span> LITERAL<span class="oneOrMore">+</span></span>,
+       <span class="fname"><span class="type">foaf:</span><span class="constant">familyName</span> LITERAL</span>),
+    <span class="mbox"><span class="type">foaf:</span><span class="constant">mbox</span> IRI</span>
+}</pre>
+    </div>
+    <div style="float:left;">
+      <ul>
+        <li class="name"><span class="eitherOr">either</span> a <span id="name"><span class="type">foaf:</span><span class="constant">name</span></span></li>
+        <li class="gname"><span class="eitherOr">or</span> <span class="oneOrMore" id="oneOrMore">one or more</span> <span id="gname"><span class="type">foaf:</span><span class="constant">givenName</span>s</span></li>
+        <li class="fname">and a <span id="fname"><span class="type">foaf:</span><span class="constant">familyName</span></span></li>
+        <li class="mbox">plus an <span id="mbox"><span class="type">foaf:</span><span class="constant">mbox</span></span></li>
+      </ul>
+    </div>
+    <div style="clear:both;">
+    <hr/>
+    <p>compare with other schema languages...</p>
+    <div style="float:left">
+      <h3>RelaxNG Compact Syntax</h3>
+      <pre>    (element <span class="name"><span class="type">foaf:</span><span class="constant">name</span> { <span class="type">xsd:</span><span class="constant">string</span></span> }
+     <span class="eitherOr">|</span> (element <span class="gname"><span class="type">foaf:</span><span class="constant">givenName</span> { <span class="type">xsd:</span><span class="constant">string</span> }<span class="oneOrMore">+</span></span>,
+        element <span class="fname"><span class="type">foaf:</span><span class="constant">familyName</span> { <span class="type">xsd:</span><span class="constant">string</span> }</span>)),
+    element <span class="mbox"><span class="type">foaf:</span><span class="constant">mbox</span> { <span class="type">xsd:</span><span class="constant">anyURI</span> }</span></pre>
+
+      <h3>Regex</h3>
+      <pre style="float:left">(<span class="name">N</span><span class="eitherOr">|</span>(<span class="gname">G</span><span class="oneOrMore">+</span><span class="fname">F</span>))<span class="mbox">M</span></pre>
+      <pre class="retext"><span class="name">N</span><span class="mbox">M</span></pre>
+      <pre class="retext"><span class="gname">G</span><span class="fname">F</span><span class="mbox">M</span></pre>
+      <pre class="retext"><span class="gname">G</span><span class="gname">G</span><span class="gname">G</span><span class="fname">F</span><span class="mbox">M</span></pre>
+    </div>
+    <div style="float:left;font-size:80%;">
+      <h3>W3C XML Schema</h3>
+      <pre style="">  <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-prefix">xs</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">complexType</span> <span class="nxml-attribute-local-name">name</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">UserContent</span><span class="nxml-attribute-value-delimiter">"</span><span class="nxml-tag-delimiter">&gt;</span>
+    <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-prefix">xs</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">sequence</span><span class="nxml-tag-delimiter">&gt;</span>
+      <span class="eitherOr"><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-prefix">xs</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">choice</span><span class="nxml-tag-delimiter">&gt;</span></span>
+        <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-prefix">xs</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">element</span> <span class="name"><span class="nxml-attribute-local-name">name</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">name</span><span class="nxml-attribute-value-delimiter">"</span> <span class="nxml-attribute-local-name">type</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">xs:string</span><span class="nxml-attribute-value-delimiter">"</span></span><span class="nxml-tag-slash">/</span><span class="nxml-tag-delimiter">&gt;</span>
+        <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-prefix">xs</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">sequence</span><span class="nxml-tag-delimiter">&gt;</span>
+          <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-prefix">xs</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">element</span> <span class="gname"><span class="oneOrMore"><span class="nxml-attribute-local-name">maxOccurs</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">unbounded</span><span class="nxml-attribute-value-delimiter">"</span></span> <span class="nxml-attribute-local-name">name</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">givenName</span><span class="nxml-attribute-value-delimiter">"</span> <span class="nxml-attribute-local-name">type</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">xs:string</span><span class="nxml-attribute-value-delimiter">"</span></span><span class="nxml-tag-slash">/</span><span class="nxml-tag-delimiter">&gt;</span>
+          <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-prefix">xs</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">element</span> <span class="fname"><span class="nxml-attribute-local-name">name</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">familyName</span><span class="nxml-attribute-value-delimiter">"</span> <span class="nxml-attribute-local-name">type</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">xs:string</span><span class="nxml-attribute-value-delimiter">"</span></span><span class="nxml-tag-slash">/</span><span class="nxml-tag-delimiter">&gt;</span>
+        <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-prefix">xs</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">sequence</span><span class="nxml-tag-delimiter">&gt;</span>
+      <span class="eitherOr"><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-prefix">xs</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">choice</span><span class="nxml-tag-delimiter">&gt;</span></span>
+      <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-prefix">xs</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">element</span> <span class="mbox"><span class="nxml-attribute-local-name">name</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">mbox</span><span class="nxml-attribute-value-delimiter">"</span> <span class="nxml-attribute-local-name">type</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">xs:anyURI</span><span class="nxml-attribute-value-delimiter">"</span></span><span class="nxml-tag-slash">/</span><span class="nxml-tag-delimiter">&gt;</span>
+    <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-prefix">xs</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">sequence</span><span class="nxml-tag-delimiter">&gt;</span>
+  <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-prefix">xs</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">complexType</span><span class="nxml-tag-delimiter">&gt;</span></pre>
+    </div>
+    </div>
+    <script type="text/javascript">
+      <!--
+prepareHighlight(['oneOrMore'], "highlight2", "lowlight2");
+prepareHighlight(['eitherOr'], "highlight2", "lowlight2");
+prepareHighlight(['name', 'fname', 'gname', 'mbox'], "highlight1", "lowlight1");
+      -->
+    </script>
+  </div>
+
+
+   <div class="slide">
+      <h1>User example</h1>
+      <p>Trying it out</p>
+    <div style="float:left">
+      <pre>PREFIX <span class="type">foaf:</span><span class="constant"> </span><span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+
+start = <span class="function-name">&lt;UserShape&gt;</span>
+
+<span class="function-name">&lt;UserShape&gt;</span> {
+    (<span class="name"><span class="type">foaf:</span><span class="constant">name</span> <span class="nameLit">LITERAL</span></span>
+     <span class="eitherOr">|</span> <span class="gname"><span class="type">foaf:</span><span class="constant">givenName</span> <span class="gnameLit">LITERAL</span><span class="oneOrMore">+</span></span>,
+       <span class="fname"><span class="type">foaf:</span><span class="constant">familyName</span> <span class="fnameLit">LITERAL</span></span>),
+    <span class="mbox"><span class="type">foaf:</span><span class="constant">mbox</span> <span class="mboxIRI">IRI</span></span>
+}</pre>
+      <p style="margin-top: 5ex; line-height: 200%;">Try it at <a href="http://www.w3.org/2013/ShEx/FancyShExDemo?schema=PREFIX%20foaf%3A%20%3Chttp%3A%2F%2Fxmlns.com%2Ffoaf%2F%3E%0A%0Astart%20%3D%20%3CUserShape%3E%0A%0A%3CUserShape%3E%20%7B%0A%20%20%20%20(foaf%3Aname%20LITERAL%0A%20%20%20%20%20%7C%20foaf%3AgivenName%20LITERAL%2B%2C%0A%20%20%20%20%20%20%20foaf%3AfamilyName%20LITERAL)%2C%0A%20%20%20%20foaf%3Ambox%20IRI%0A%7D&amp;data=PREFIX%20foaf%3A%20%3Chttp%3A%2F%2Fxmlns.com%2Ffoaf%2F%3E%0A%0A%3CAlice%3E%0A%20%20foaf%3Aname%20%22Alice%22%20%3B%0A%20%20foaf%3Ambox%20%3Cmailto%3Aalice%40example.org%3E%20.%0A%0A%3CBob%3E%0A%20%20foaf%3AgivenName%20%22Robert%22%2C%20%22Edward%22%20%3B%20foaf%3AfamilyName%20%22Smith%22%20%3B%0A%20%20foaf%3Ambox%20%3Cmailto%3Abob%40example.org%3E%20.%0A%0A%3CGene%3E%0A%20%20foaf%3Agivenname%20%22Gene%22%20%3B%20foaf%3AfamilyName%20%22Smith%22%20%3B%0A%20%20foaf%3Ambox%20%3Cmailto%3Agene%40example.org%3E%20.%0A%0A%3CPat%3E%0A%20%20foaf%3AgivenName%20%22Patricia%22%20%3B%20%23%20no%20foaf%3AfamilyName%0A%20%20foaf%3Ambox%20%3Cmailto%3Apat%40example.org%3E%20.%0A%0A%3CEve%3E%0A%20%20foaf%3Aname%20%22Eve%22%20%3B%20%23%20both%20name%20and%20givenName%2FfamilyName%0A%20%20foaf%3AgivenName%20%22Eve%22%20%3B%20foaf%3AfamilyName%20%22%E7%9F%B3%E5%B7%9D%22%20%3B%0A%20%20foaf%3Ambox%20%3Cmailto%3Aeve%40example.org%3E%20.%0A&amp;colorize=true&amp;starting-node=%3CAlice%3E%20%3CBob%3E%20%3CGene%3E%20%3CPat%3E%20%3CEve%3E">ericP's indulgent interface</a><br />
+      or Jose's more correct interface:<br />
+      <a href="http://156.35.82.103:9000/validator?rdf=PREFIX+foaf%3A+%3Chttp%3A%2F%2Fxmlns.com%2Ffoaf%2F%3E%0D%0A%0D%0A%3CAlice%3E%0D%0A++foaf%3Aname+%22Alice%22+%3B%0D%0A++foaf%3Ambox+%3Cmailto%3Aalice%40example.org%3E+.%0D%0A&amp;syntaxRDF=TURTLE&amp;schema=PREFIX+foaf%3A+%3Chttp%3A%2F%2Fxmlns.com%2Ffoaf%2F%3E%0D%0A%0D%0Astart+%3D+%3CUserShape%3E%0D%0A%0D%0A%3CUserShape%3E+{%0D%0A++++%28foaf%3Aname+LITERAL%0D%0A+++++|+foaf%3AgivenName+LITERAL%2B%2C%0D%0A+++++++foaf%3AfamilyName+LITERAL%29%2C%0D%0A++++foaf%3Ambox+IRI%0D%0A}&amp;cut=10">&lt;Alice&gt;</a>, 
+      <a href="http://156.35.82.103:9000/validator?rdf=PREFIX+foaf%3A+%3Chttp%3A%2F%2Fxmlns.com%2Ffoaf%2F%3E%0D%0A%0D%0A%3CBob%3E%0D%0A++foaf%3AgivenName+%22Robert%22%2C+%22Edward%22+%3B+foaf%3AfamilyName+%22Smith%22+%3B%0D%0A++foaf%3Ambox+%3Cmailto%3Abob%40example.org%3E+.%0D%0A&amp;syntaxRDF=TURTLE&amp;schema=PREFIX+foaf%3A+%3Chttp%3A%2F%2Fxmlns.com%2Ffoaf%2F%3E%0D%0A%0D%0Astart+%3D+%3CUserShape%3E%0D%0A%0D%0A%3CUserShape%3E+{%0D%0A++++%28foaf%3Aname+LITERAL%0D%0A+++++|+foaf%3AgivenName+LITERAL%2B%2C%0D%0A+++++++foaf%3AfamilyName+LITERAL%29%2C%0D%0A++++foaf%3Ambox+IRI%0D%0A}&amp;cut=10">&lt;Bob&gt;</a>,
+      <a href="http://156.35.82.103:9000/validator?rdf=PREFIX+foaf%3A+%3Chttp%3A%2F%2Fxmlns.com%2Ffoaf%2F%3E%0D%0A%0D%0A%3CGene%3E%0D%0A++foaf%3Agivenname+%22Gene%22+%3B+foaf%3AfamilyName+%22Smith%22+%3B%0D%0A++foaf%3Ambox+%3Cmailto%3Agene%40example.org%3E+.%0D%0A&amp;syntaxRDF=TURTLE&amp;schema=PREFIX+foaf%3A+%3Chttp%3A%2F%2Fxmlns.com%2Ffoaf%2F%3E%0D%0A%0D%0Astart+%3D+%3CUserShape%3E%0D%0A%0D%0A%3CUserShape%3E+{%0D%0A++++%28foaf%3Aname+LITERAL%0D%0A+++++|+foaf%3AgivenName+LITERAL%2B%2C%0D%0A+++++++foaf%3AfamilyName+LITERAL%29%2C%0D%0A++++foaf%3Ambox+IRI%0D%0A}&amp;cut=10">&lt;Gene&gt;</a>,
+      <a href="http://156.35.82.103:9000/validator?rdf=PREFIX+foaf%3A+%3Chttp%3A%2F%2Fxmlns.com%2Ffoaf%2F%3E%0D%0A%0D%0A%3CPat%3E%0D%0A++foaf%3AgivenName+%22Patricia%22+%3B+%23+no+foaf%3AfamilyName%0D%0A++foaf%3Ambox+%3Cmailto%3Apat%40example.org%3E+.%0D%0A&amp;syntaxRDF=TURTLE&amp;schema=PREFIX+foaf%3A+%3Chttp%3A%2F%2Fxmlns.com%2Ffoaf%2F%3E%0D%0A%0D%0Astart+%3D+%3CUserShape%3E%0D%0A%0D%0A%3CUserShape%3E+{%0D%0A++++%28foaf%3Aname+LITERAL%0D%0A+++++|+foaf%3AgivenName+LITERAL%2B%2C%0D%0A+++++++foaf%3AfamilyName+LITERAL%29%2C%0D%0A++++foaf%3Ambox+IRI%0D%0A}&amp;cut=10">&lt;Pat&gt;</a>,<br />
+      <a href="http://156.35.82.103:9000/validator?rdf=PREFIX+foaf%3A+%3Chttp%3A%2F%2Fxmlns.com%2Ffoaf%2F%3E%0D%0A%0D%0A%3CEve%3E%0D%0A++foaf%3Aname+%22Eve%22+%3B+%23+both+name+and+givenName%2FfamilyName%0D%0A++foaf%3AgivenName+%22Eve%22+%3B+foaf%3AfamilyName+%22%E7%9F%B3%E5%B7%9D%22+%3B%0D%0A++foaf%3Ambox+%3Cmailto%3Aeve%40example.org%3E+.%0D%0A&amp;syntaxRDF=TURTLE&amp;schema=PREFIX+foaf%3A+%3Chttp%3A%2F%2Fxmlns.com%2Ffoaf%2F%3E%0D%0A%0D%0Astart+%3D+%3CUserShape%3E%0D%0A%0D%0A%3CUserShape%3E+{%0D%0A++++%28foaf%3Aname+LITERAL%0D%0A+++++|+foaf%3AgivenName+LITERAL%2B%2C%0D%0A+++++++foaf%3AfamilyName+LITERAL%29%2C%0D%0A++++foaf%3Ambox+IRI%0D%0A}&amp;cut=10">&lt;Eve&gt;</a> (passes, OR is non-exclusive)</p>
+    </div>
+    <div style="float:left;">
+      <pre>PREFIX <span class="type">foaf:</span><span class="constant"> </span><span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+
+<span class="function-name">&lt;Alice&gt;</span>
+  <span class="type">foaf:</span><span class="constant">name</span> <span class="string">"Alice"</span> ;
+  <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:alice&#64;example.org&gt;</span> .
+
+<span class="function-name">&lt;Bob&gt;</span>
+  <span class="type">foaf:</span><span class="constant">givenName</span> <span class="string">"Robert"</span>, <span class="string">"Edward"</span> ; <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Smith"</span> ;
+  <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:bob&#64;example.org&gt;</span> .
+
+<span class="function-name">&lt;Gene&gt;</span>
+  <span class="errorHint gname"><span class="type">foaf:</span><span class="constant">givenname</span></span> <span class="string">"Gene"</span> ; <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Smith"</span> ; <span class="comment"># misspelling
+</span>  <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:gene&#64;example.org&gt;</span> .
+
+<span class="function-name">&lt;Pat&gt;</span>
+  <span class="type">foaf:</span><span class="constant">givenName</span> <span class="string">"Patricia"</span> ; <span class="comment"># <span class="errorHint fname">no foaf:familyName</span>
+</span>  <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:pat&#64;example.org&gt;</span> .
+
+<span class="function-name">&lt;Eve&gt;</span>
+  <span class="errorHint eitherOr"><span class="type">foaf:</span><span class="constant">name</span></span> <span class="string">"Eve"</span> ; <span class="comment"># both name and givenName/familyName</span>
+  <span class="errorHint eitherOr"><span class="type">foaf:</span><span class="constant">givenName</span></span> <span class="string">"Eve"</span> ; <span class="errorHint eitherOr"><span class="type">foaf:</span><span class="constant">familyName</span></span> <span class="string">"&#30707;&#24029;"</span> ;
+  <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:eve&#64;example.org&gt;</span> .</pre>
+    </div>
+    <script type="text/javascript">
+      <!--
+prepareHighlight(['gname', 'fname', 'eitherOr'], "highlightBG2", "lowlightBG2");
+      -->
+    </script>
+  </div>
+
+
+   <div class="slide">
+      <h1>Exercise 1</h1>
+      <p>Fix Gene, Pat and Eve</p>
+    <div style="float:left">
+      <pre>PREFIX <span class="type">foaf:</span><span class="constant"> </span><span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+
+start = <span class="function-name">&lt;UserShape&gt;</span>
+
+<span class="function-name">&lt;UserShape&gt;</span> {
+    (<span class="name"><span class="type">foaf:</span><span class="constant">name</span> <span class="nameLit">LITERAL</span></span>
+     <span class="eitherOr">|</span> <span class="gname"><span class="type">foaf:</span><span class="constant">givenName</span> <span class="gnameLit">LITERAL</span><span class="oneOrMore">+</span></span>,
+       <span class="fname"><span class="type">foaf:</span><span class="constant">familyName</span> <span class="fnameLit">LITERAL</span></span>),
+    <span class="mbox"><span class="type">foaf:</span><span class="constant">mbox</span> <span class="mboxIRI">IRI</span></span>
+}</pre>
+      <p style="margin-top: 5ex; line-height: 200%;">Test at <a href="http://www.w3.org/2013/ShEx/FancyShExDemo?">ericP's</a> or
+      <a href="http://156.35.82.103:9000/validator?rdf=PREFIX+foaf%3A+%3Chttp%3A%2F%2Fxmlns.com%2Ffoaf%2F%3E%0D%0A%0D%0A%3CGene%3E%0D%0A++foaf%3Agivenname+%22Gene%22+%3B+foaf%3AfamilyName+%22Smith%22+%3B%0D%0A++foaf%3Ambox+%3Cmailto%3Agene%40example.org%3E+.%0D%0A&amp;syntaxRDF=TURTLE&amp;schema=PREFIX+foaf%3A+%3Chttp%3A%2F%2Fxmlns.com%2Ffoaf%2F%3E%0D%0A%0D%0Astart+%3D+%3CUserShape%3E%0D%0A%0D%0A%3CUserShape%3E+{%0D%0A++++%28foaf%3Aname+LITERAL%0D%0A+++++|+foaf%3AgivenName+LITERAL%2B%2C%0D%0A+++++++foaf%3AfamilyName+LITERAL%29%2C%0D%0A++++foaf%3Ambox+IRI%0D%0A}&amp;cut=10">Jose's</a> interface</p>
+    </div>
+    <div style="float:left;">
+      <pre>PREFIX <span class="type">foaf:</span><span class="constant"> </span><span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+
+<span class="function-name">&lt;Gene&gt;</span>
+  <span class="errorHint gname"><span class="type">foaf:</span><span class="constant">givenname</span></span> <span class="string">"Gene"</span> ; <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Smith"</span> ;
+  <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:gene&#64;example.org&gt;</span> .
+
+<span class="function-name">&lt;Pat&gt;</span>
+  <span class="type">foaf:</span><span class="constant">givenName</span> <span class="string">"Patricia"</span> ;
+  <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:pat&#64;example.org&gt;</span> .
+
+<span class="function-name">&lt;Eve&gt;</span>
+  <span class="errorHint eitherOr"><span class="type">foaf:</span><span class="constant">name</span></span> <span class="string">"Eve"</span> ;
+  <span class="errorHint eitherOr"><span class="type">foaf:</span><span class="constant">givenName</span></span> <span class="string">"Eve"</span> ; <span class="errorHint eitherOr"><span class="type">foaf:</span><span class="constant">familyName</span></span> <span class="string">"&#30707;&#24029;"</span> ;
+  <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:eve&#64;example.org&gt;</span> .</pre>
+    </div>
+    <p style="clear:both;">Now break it;<br/>
+    it's more fun to demonstrate what validators whine about than what they ignore.</p>
+    <script type="text/javascript">
+      <!--
+      -->
+    </script>
+  </div>
+
+
+   <div class="slide">
+      <h1>Solution 1</h1>
+      <p>Fixed Gene, Pat and Eve</p>
+    <div style="float:left">
+      <pre>PREFIX <span class="type">foaf:</span><span class="constant"> </span><span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+
+start = <span class="function-name">&lt;UserShape&gt;</span>
+
+<span class="function-name">&lt;UserShape&gt;</span> {
+    (<span class="name"><span class="type">foaf:</span><span class="constant">name</span> <span class="nameLit">LITERAL</span></span>
+     <span class="eitherOr">|</span> <span class="gname"><span class="type">foaf:</span><span class="constant">givenName</span> <span class="gnameLit">LITERAL</span><span class="oneOrMore">+</span></span>,
+       <span class="fname"><span class="type">foaf:</span><span class="constant">familyName</span> <span class="fnameLit">LITERAL</span></span>),
+    <span class="mbox"><span class="type">foaf:</span><span class="constant">mbox</span> <span class="mboxIRI">IRI</span></span>
+}</pre>
+      <p style="margin-top: 5ex; line-height: 200%;">Test at <a href="http://www.w3.org/2013/ShEx/FancyShExDemo?">ericP's</a> or
+      <a href="http://156.35.82.103:9000/validator?rdf=PREFIX+foaf%3A+%3Chttp%3A%2F%2Fxmlns.com%2Ffoaf%2F%3E%0D%0A%0D%0A%3CGene%3E%0D%0A++foaf%3AgivenName+%22Gene%22+%3B+foaf%3AfamilyName+%22Smith%22+%3B%0D%0A++foaf%3Ambox+%3Cmailto%3Agene%40example.org%3E+.%0D%0A&amp;syntaxRDF=TURTLE&amp;schema=PREFIX+foaf%3A+%3Chttp%3A%2F%2Fxmlns.com%2Ffoaf%2F%3E%0D%0A%0D%0Astart+%3D+%3CUserShape%3E%0D%0A%0D%0A%3CUserShape%3E+{%0D%0A++++%28foaf%3Aname+LITERAL%0D%0A+++++|+foaf%3AgivenName+LITERAL%2B%2C%0D%0A+++++++foaf%3AfamilyName+LITERAL%29%2C%0D%0A++++foaf%3Ambox+IRI%0D%0A}&amp;cut=10">Jose's</a> interface</p>
+    </div>
+    <div style="float:left;">
+      <pre>PREFIX <span class="type">foaf:</span><span class="constant"> </span><span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+
+<span class="function-name">&lt;Gene&gt;</span>
+  <span class="errorHint gname"><span class="type">foaf:</span><span class="constant">givenName</span></span> <span class="string">"Gene"</span> ; <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Smith"</span> ;
+  <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:gene&#64;example.org&gt;</span> .
+
+<span class="function-name">&lt;Pat&gt;</span>
+  <span class="type">foaf:</span><span class="constant">givenName</span> <span class="string">"Patricia"</span> ; <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Gordon"</span>  ;
+  <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:pat&#64;example.org&gt;</span> .
+
+<span class="function-name">&lt;Eve1&gt;</span>
+  <span class="errorHint eitherOr"><span class="type">foaf:</span><span class="constant">name</span></span> <span class="string">"Eve"</span> ;
+  <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:eve&#64;example.org&gt;</span> .
+
+<span class="function-name">&lt;Eve2&gt;</span>
+  <span class="errorHint eitherOr"><span class="type">foaf:</span><span class="constant">givenName</span></span> <span class="string">"Eve"</span> ; <span class="errorHint eitherOr"><span class="type">foaf:</span><span class="constant">familyName</span></span> <span class="string">"&#30707;&#24029;"</span> ;
+  <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:eve&#64;example.org&gt;</span> .</pre>
+    </div>
+    <script type="text/javascript">
+      <!--
+      -->
+    </script>
+  </div>
+
+
+    <div id="Semantics" class="slide">
+      <h1>Universal constraints</h1>
+      <div style="float:left; width: 55%;">
+          <pre><span class="type">my:</span><span class="constant">name-status</span> <span class="keyword">a</span> <span class="type">rs:</span><span class="constant">ResourceShape</span> ;
+    <span class="type">rs:</span><span class="constant">property</span> [
+        <span class="type">rs:</span><span class="constant">name</span> <span class="string">"name"</span> ;
+        <span class="type">rs:</span><span class="constant">propertyDefinition</span> <span class="type">ex:</span><span class="constant">name</span> ;
+        <span class="type">rs:</span><span class="constant">valueType</span> <span class="type">xsd:</span><span class="constant">string</span> ;
+        <span class="type">rs:</span><span class="constant">occurs</span> <span class="type">rs:</span><span class="constant">Exactly-one</span> ;
+    ] ;
+    <span class="type">rs:</span><span class="constant">property</span> [
+        <span class="type">rs:</span><span class="constant">name</span> <span class="string">"status"</span> ;
+        <span class="type">rs:</span><span class="constant">propertyDefinition</span> <span class="type">ex:</span><span class="constant">status</span> ;
+        <span class="type">rs:</span><span class="constant">allowedValue</span> <span class="type">ex:</span><span class="constant">unassigned</span> , <span class="type">ex:</span><span class="constant">assigned</span> ;
+        <span class="type">rs:</span><span class="constant">occurs</span> <span class="type">rs:</span><span class="constant">Zero-or-one</span> ;
+    ] .</pre>
+          <p>equivalent to</p>
+          <pre><span class="type">my:</span><span class="constant">name-status</span> {
+  <span class="type">ex:</span><span class="constant">name</span> <span class="type">xsd:</span><span class="constant">string</span> ,
+  <span class="type">ex:</span><span class="constant">status</span> ( <span class="type">ex:</span><span class="constant">unassigned</span> <span class="type">ex:</span><span class="constant">assigned</span> )?
+}</pre>
+          <p>universal, non-qualified constraints</p>
+      </div>
+      <div style="float:left; width:44%;">
+          <pre>SELECT ?S {
+    { SELECT ?S (COUNT(*) AS ?S_c0) {
+      ?S <span class="type">ex:</span><span class="constant">name</span> ?o .
+    } GROUP BY ?S}
+    { SELECT ?S (COUNT(*) AS ?S_c1) {
+      ?S <span class="type">ex:</span><span class="constant">name</span> ?o .
+      FILTER(datatype(?o) = <span class="type">xsd:</span><span class="constant">string</span>)
+    } GROUP BY ?S}
+    FILTER (?S_c0 = ?S_c1 &amp;&amp;
+            ?S_c0 = 1)
+    { SELECT ?S (COUNT(*) AS ?S_c2) {
+      ?S <span class="type">ex:</span><span class="constant">status</span> ?o .
+    } GROUP BY ?S}
+    { SELECT ?S (COUNT(*) AS ?S_c3) {
+      ?S <span class="type">ex:</span><span class="constant">status</span> ?o .
+      FILTER ((?o = <span class="type">ex:</span><span class="constant">unassigned</span> ||
+               ?o = <span class="type">ex:</span><span class="constant">assigned</span>))
+    } GROUP BY ?S}
+    FILTER (?S_c2 = ?S_c3 &amp;&amp;
+            (?S_c0 = 0 || ?S_c0 = 1))
+}</pre>
+          <pre><span class="type">Datatype:</span><span class="constant"> xsd:string</span> <span class="type">
+DataProperty:</span><span class="constant"> ex:name</span> <span class="type">
+ObjectProperty:</span><span class="constant"> ex:status</span> 
+    
+<span class="type">Class:</span><span class="constant"> ex:name-status</span> 
+    <span class="type">SubClassOf:</span> 
+        <span class="type">ex:</span><span class="constant">name</span> exactly 1 <span class="type">rdfs:</span><span class="constant">Literal</span> ,
+        <span class="type">ex:</span><span class="constant">status</span> only ({ <span class="type">ex:</span><span class="constant">assigned</span> , <span class="type">ex:</span><span class="constant">unassigned</span> }) ,
+        <span class="type">ex:</span><span class="constant">status</span> max 1 ,
+        <span class="type">ex:</span><span class="constant">status</span> min 0 
+    <span class="type">
+Individual:</span><span class="constant"> ex:assigned</span> <span class="type">
+Individual:</span><span class="constant"> ex:unassigned</span> </pre>
+      </div>
+      <div style="clear:both;"> </div>
+    </div>
+
+
+   <div class="slide">
+      <h1>User example</h1>
+      <p>What's that look like in SPARQL?</p>
+    <div style="float:left">
+      <pre>PREFIX <span class="type">foaf:</span><span class="constant"> </span><span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+
+<span class="function-name">&lt;UserShape&gt;</span> {
+    (<span class="name"><span class="type">foaf:</span><span class="constant">name</span> <span class="nameLit">LITERAL</span></span>
+     <span class="eitherOr">|</span> <span class="gname"><span class="type">foaf:</span><span class="constant">givenName</span> <span class="gnameLit">LITERAL</span><span class="oneOrMore">+</span></span>,
+       <span class="fname"><span class="type">foaf:</span><span class="constant">familyName</span> <span class="fnameLit">LITERAL</span></span>),
+    <span class="mbox"><span class="type">foaf:</span><span class="constant">mbox</span> <span class="mboxIRI">IRI</span></span>
+}</pre>
+    </div>
+    <div style="float:left;">
+      <pre>PREFIX <span class="type">foaf:</span> <span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+ASK {
+    { SELECT ?UserShape WHERE {
+        {
+            <span class="name">{ SELECT ?UserShape {                             </span>
+            <span class="name">  ?UserShape <span class="type">foaf:</span><span class="constant">name</span> ?o .                       </span>
+            <span class="name">} GROUP BY ?UserShape HAVING (COUNT(*)=1)}        </span>
+            <span class="name">{ SELECT ?UserShape {                             </span>
+            <span class="name">  ?UserShape <span class="type">foaf:</span><span class="constant">name</span> ?o . <span class="nameLit">FILTER (isLiteral(?o))</span></span>
+            <span class="name">} GROUP BY ?UserShape HAVING (COUNT(*)=1)}        </span>
+        } <span class="eitherOr">UNION</span> {
+            <span class="gname">{ SELECT ?UserShape (COUNT(*) AS ?UserShape_c0) {      </span>
+            <span class="gname">  ?UserShape <span class="type">foaf:</span><span class="constant">givenName</span> ?o .                       </span>
+            <span class="gname">} GROUP BY ?UserShape <span class="oneOrMore">HAVING (COUNT(*)&gt;=1)</span>}            </span>
+            <span class="gname">{ SELECT ?UserShape (COUNT(*) AS ?UserShape_c1) {      </span>
+            <span class="gname">  ?UserShape <span class="type">foaf:</span><span class="constant">givenName</span> ?o . <span class="gnameLit">FILTER (isLiteral(?o))</span></span>
+            <span class="gname">} GROUP BY ?UserShape <span class="oneOrMore">HAVING (COUNT(*)&gt;=1)</span>}            </span>
+            <span class="gname">FILTER (<span class="oneOrMore">?UserShape_c0 = ?UserShape_c1</span>)                 </span>
+            <span class="fname">{ SELECT ?UserShape {                                   </span>
+            <span class="fname">  ?UserShape <span class="type">foaf:</span><span class="constant">familyName</span> ?o .                       </span>
+            <span class="fname">} GROUP BY ?UserShape HAVING (COUNT(*)=1)}              </span>
+            <span class="fname">{ SELECT ?UserShape {                                   </span>
+            <span class="fname">  ?UserShape <span class="type">foaf:</span><span class="constant">familyName</span> ?o . <span class="fnameLit">FILTER (isLiteral(?o))</span></span>
+            <span class="fname">} GROUP BY ?UserShape HAVING (COUNT(*)=1)}              </span>
+        }
+    } <span class="eitherOr">GROUP BY ?UserShape HAVING (COUNT(*) = 1)</span>}
+    <span class="mbox">{ SELECT ?UserShape {                         </span>
+    <span class="mbox">  ?UserShape <span class="type">foaf:</span><span class="constant">mbox</span> ?o .                   </span>
+    <span class="mbox">} GROUP BY ?UserShape HAVING (COUNT(*)=1)}    </span>
+    <span class="mbox">{ SELECT ?UserShape {                         </span>
+    <span class="mbox">  ?UserShape <span class="type">foaf:</span><span class="constant">mbox</span> ?o . <span class="mboxIRI">FILTER (isIRI(?o))</span></span>
+    <span class="mbox">} GROUP BY ?UserShape HAVING (COUNT(*)=1)}    </span>
+}</pre>
+    </div>
+    <script type="text/javascript">
+      <!--
+prepareHighlight(['oneOrMore', 'eitherOr'], "highlightBG2", "lowlightBG2");
+prepareHighlight(['name', 'fname', 'gname', 'mbox'], "highlightBG1", "lowlightBG1");
+prepareHighlight(['nameLit', 'fnameLit', 'gnameLit', 'mboxIRI'], "highlightBG2", "lowlightBG2");
+      -->
+    </script>
+  </div>
+
+
+    <div class="slide">
+      <h1>ShExC is a grammar</h1>
+<svg style="width:80%" width="31cm" height="7cm" viewBox="99 124 605 122" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g>
+    <rect style="fill: #ffffff" x="100" y="140" width="194.8" height="28"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="100" y="140" width="194.8" height="28"/>
+    <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:700" x="197.4" y="159">Issue</text>
+    <rect style="fill: #ffffff" x="100" y="168" width="194.8" height="36"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="100" y="168" width="194.8" height="36"/>
+    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="103" y="182">+:reportedOn: xsd:date</text>
+    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="103" y="198">+:assignedOn: xsd:date</text>
+    <rect style="fill: #ffffff" x="100" y="204" width="194.8" height="8"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="100" y="204" width="194.8" height="8"/>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="500" y="140" width="202.5" height="28"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="500" y="140" width="202.5" height="28"/>
+    <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:700" x="601.25" y="159">User</text>
+    <rect style="fill: #ffffff" x="500" y="168" width="202.5" height="68"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="500" y="168" width="202.5" height="68"/>
+    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="503" y="182">+foaf:name: LITERAL</text>
+    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="503" y="198">+foaf:givenName: LITERAL</text>
+    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="503" y="214">+foaf:familyName: LITERAL</text>
+    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="503" y="230">+foaf:mbox: IRI</text>
+    <rect style="fill: #ffffff" x="500" y="236" width="202.5" height="8"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="500" y="236" width="202.5" height="8"/>
+  </g>
+  <g>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="294.8,178 340,178 340,140 500,140 "/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="342" y="155">:reportedBy</text>
+    <polygon style="fill: #000000" points="428.7,155 428.7,147 436.7,151 "/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="298.8" y="174">1</text>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:end;font-family:monospace;font-style:normal;font-weight:normal" x="496" y="136">0..*</text>
+  </g>
+  <g>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="294.8,194 340,194 340,192 499,192 "/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="342" y="189">:assignedTo</text>
+    <polygon style="fill: #000000" points="444.1,189 444.1,181 452.1,185 "/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="298.8" y="190">0..*</text>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:end;font-family:monospace;font-style:normal;font-weight:normal" x="495" y="188">0..1</text>
+  </g>
+</svg>
+      <div style="float:left;">
+        <p>ShExC is a BNF for RDF:</p>
+        <pre>Issue: reportedOn
+       reportedBy
+       ( assignedOn
+         assignedTo )?
+
+reportedBy: User
+
+assignedTo: User
+
+User: ( name
+        | givenName+
+          familyName )
+      mbox</pre>
+      </div>
+      <div style="float:left;">
+        <p>example instance</p>
+        <pre><span class="function-name">&lt;Issue1&gt;</span>
+    <span class="type">issue:</span><span class="constant">reportedBy</span> <span class="function-name">&lt;Bob&gt;</span> ;
+    <span class="type">issue:</span><span class="constant">reportedOn</span> <span class="string">"2013-01-23T10:18:00"</span><span class="constant">^^xsd:dateTime</span> .
+
+<span class="function-name">&lt;Bob&gt;</span>
+    <span class="type">foaf:</span><span class="constant">givenName</span> <span class="string">"Robert"</span>, <span class="string">"Edward"</span> ; <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Smith"</span> ;
+    <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:bob&#64;example.org&gt;</span> .</pre>
+      </div>
+    </div>
+
+
+    <div class="slide">
+      <h1>ShExC is a grammar</h1>
+<svg style="width:80%" width="31cm" height="7cm" viewBox="99 124 605 122" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g>
+    <rect style="fill: #ffffff" x="100" y="140" width="194.8" height="28"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="100" y="140" width="194.8" height="28"/>
+    <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:700" x="197.4" y="159">Issue</text>
+    <rect style="fill: #ffffff" x="100" y="168" width="194.8" height="36"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="100" y="168" width="194.8" height="36"/>
+    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="103" y="182">+:reportedOn: xsd:date</text>
+    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="103" y="198">+:assignedOn: xsd:date</text>
+    <rect style="fill: #ffffff" x="100" y="204" width="194.8" height="8"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="100" y="204" width="194.8" height="8"/>
+  </g>
+  <g>
+    <rect style="fill: #ffffff" x="500" y="140" width="202.5" height="28"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="500" y="140" width="202.5" height="28"/>
+    <text font-size="16" style="fill: #000000;text-anchor:middle;font-family:sans-serif;font-style:normal;font-weight:700" x="601.25" y="159">User</text>
+    <rect style="fill: #ffffff" x="500" y="168" width="202.5" height="68"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="500" y="168" width="202.5" height="68"/>
+    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="503" y="182">+foaf:name: LITERAL</text>
+    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="503" y="198">+foaf:givenName: LITERAL</text>
+    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="503" y="214">+foaf:familyName: LITERAL</text>
+    <text font-size="12.8" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="503" y="230">+foaf:mbox: IRI</text>
+    <rect style="fill: #ffffff" x="500" y="236" width="202.5" height="8"/>
+    <rect style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" x="500" y="236" width="202.5" height="8"/>
+  </g>
+  <g>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="294.8,178 340,178 340,140 500,140 "/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="342" y="155">:reportedBy</text>
+    <polygon style="fill: #000000" points="428.7,155 428.7,147 436.7,151 "/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="298.8" y="174">1</text>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:end;font-family:monospace;font-style:normal;font-weight:normal" x="496" y="136">0..*</text>
+  </g>
+  <g>
+    <polyline style="fill: none; fill-opacity:0; stroke-width: 2; stroke: #000000" points="294.8,194 340,194 340,192 499,192 "/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="342" y="189">:assignedTo</text>
+    <polygon style="fill: #000000" points="444.1,189 444.1,181 452.1,185 "/>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:start;font-family:monospace;font-style:normal;font-weight:normal" x="298.8" y="190">0..*</text>
+    <text font-size="12.7998" style="fill: #000000;text-anchor:end;font-family:monospace;font-style:normal;font-weight:normal" x="495" y="188">0..1</text>
+  </g>
+</svg>
+      <div style="float:left;">
+        <p>ShExC is a BNF for RDF:</p>
+        <pre>start = <span class="function-name">&lt;IssueShape&gt;</span>
+
+<span class="function-name">&lt;IssueShape&gt;</span> {
+    <span class="type">issue:</span><span class="constant">reportedBy</span> @<span class="function-name">&lt;UserShape&gt;</span>,
+    <span class="type">issue:</span><span class="constant">reportedOn</span> <span class="type">xsd:</span><span class="constant">dateTime</span>,
+    ( <span class="type">issue:</span><span class="constant">assignedTo</span> @<span class="function-name">&lt;UserShape&gt;</span>,
+      <span class="type">issue:</span><span class="constant">assignedOn</span> <span class="type">xsd:</span><span class="constant">dateTime</span> )?
+}
+
+<span class="function-name">&lt;UserShape&gt;</span> {
+    (<span class="type">foaf:</span><span class="constant">name</span> LITERAL
+     | <span class="type">foaf:</span><span class="constant">givenName</span> LITERAL+,
+       <span class="type">foaf:</span><span class="constant">familyName</span> LITERAL),
+    <span class="type">foaf:</span><span class="constant">mbox</span> IRI
+}</pre>
+      </div>
+      <div style="float:left;">
+        <p>example instance</p>
+        <pre><span class="function-name">&lt;Issue1&gt;</span>
+    <span class="type">issue:</span><span class="constant">reportedBy</span> <span class="function-name">&lt;Bob&gt;</span> ;
+    <span class="type">issue:</span><span class="constant">reportedOn</span> <span class="string">"2013-01-23T10:18:00"</span><span class="constant">^^xsd:dateTime</span> .
+
+<span class="function-name">&lt;Bob&gt;</span>
+    <span class="type">foaf:</span><span class="constant">givenName</span> <span class="string">"Robert"</span>, <span class="string">"Edward"</span> ; <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Smith"</span> ;
+    <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:bob&#64;example.org&gt;</span> .</pre>
+      </div>
+    </div>
+
+
+    <div class="slide">
+      <h1>Exercise 2</h1>
+      <p>Different rules for Users from Employees.</p>
+      <div style="float:left;">
+        <p>Adjust previous example:</p>
+        <pre>PREFIX <span class="type">issue:</span> <span class="function-name">&lt;http://ex.example/&gt;</span>
+PREFIX <span class="type">foaf:</span> <span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+
+
+start = <span class="function-name">&lt;IssueShape&gt;</span>
+
+<span class="function-name">&lt;IssueShape&gt;</span> {
+    <span class="type">issue:</span><span class="constant">reportedBy</span> @<span class="function-name">&lt;UserShape&gt;</span>,
+    <span class="type">issue:</span><span class="constant">reportedOn</span> <span class="type">xsd:</span><span class="constant">dateTime</span>,
+    ( <span class="type">issue:</span><span class="constant">assignedTo</span> @<span class="function-name">&lt;UserShape&gt;</span>,
+      <span class="type">issue:</span><span class="constant">assignedOn</span> <span class="type">xsd:</span><span class="constant">dateTime</span> )?
+}
+
+<span class="function-name">&lt;UserShape&gt;</span> {
+    (<span class="type">foaf:</span><span class="constant">name</span> LITERAL
+     | <span class="type">foaf:</span><span class="constant">givenName</span> LITERAL+,
+       <span class="type">foaf:</span><span class="constant">familyName</span> LITERAL),
+    <span class="type">foaf:</span><span class="constant">mbox</span> IRI
+}</pre>
+        <p>Create a <span class="function-name">&lt;EmployeeShape&gt;</span> distinct from an <span class="function-name">&lt;UserShape&gt;</span>.</p>
+        <ul>
+          <li>foaf:name is not permitted.</li>
+          <li>Any number of foaf:phones are permitted</li>
+        </ul>
+      </div>
+      <div style="float:left;">
+        <p>example instance:</p>
+        <pre>PREFIX <span class="type">ex:</span> <span class="function-name">&lt;http://ex.example/&gt;</span>
+PREFIX <span class="type">foaf:</span> <span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+PREFIX <span class="type">xsd:</span> <span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#&gt;</span>
+
+<span class="function-name">&lt;Issue1&gt;</span>
+    <span class="type">ex:</span><span class="constant">reportedBy</span>   <span class="function-name">&lt;User2&gt;</span> ;
+    <span class="type">ex:</span><span class="constant">reportedOn</span>   <span class="string">"2013-01-23T10:18:00"</span><span class="constant">^^xsd:dateTime</span> ;
+    <span class="type">ex:</span><span class="constant">assignedTo</span> <span class="function-name">&lt;Thompson.J&gt;</span> ;
+    <span class="type">ex:</span><span class="constant">assignedOn</span> <span class="string">"2013-01-23T11:00:00"</span><span class="constant">^^xsd:dateTime</span> .
+
+<span class="function-name">&lt;User2&gt;</span>
+    <span class="type">foaf:</span><span class="constant">givenName</span> <span class="string">"Bob"</span> ;
+    <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Smith"</span> ;
+    <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:bob&#64;example.org&gt;</span> .
+
+<span class="function-name">&lt;Thompson.J&gt;</span>
+    <span class="type">foaf:</span><span class="constant">givenName</span> <span class="string">"Joe"</span>, <span class="string">"Joseph"</span> ;
+    <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Thompson"</span> ;
+    <span class="type">foaf:</span><span class="constant">phone</span> <span class="function-name">&lt;tel:+456&gt;</span> ;
+    <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:joe&#64;example.org&gt;</span> .
+</pre>
+      </div>
+    </div>
+
+
+    <div class="slide">
+      <h1>Solution 2</h1>
+      <p>Different rules for Users from Employees.</p>
+      <div style="float:left;">
+        <p>A solution:</p>
+        <pre>PREFIX <span class="type">issue:</span> <span class="function-name">&lt;http://ex.example/&gt;</span>
+PREFIX <span class="type">foaf:</span> <span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+PREFIX <span class="type">xsd:</span> <span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#</span>&gt;
+
+start = <span class="function-name">&lt;IssueShape&gt;</span>
+
+<span class="function-name">&lt;IssueShape&gt;</span> {
+    <span class="type">issue:</span><span class="constant">reportedBy</span> @<span class="function-name">&lt;UserShape&gt;</span>,
+    <span class="type">issue:</span><span class="constant">reportedOn</span> <span class="type">xsd:</span><span class="constant">dateTime</span>,
+    ( <span class="type">issue:</span><span class="constant">assignedTo</span> @<span class="function-name">&lt;EmployeeShape&gt;</span>,
+      <span class="type">issue:</span><span class="constant">assignedOn</span> <span class="type">xsd:</span><span class="constant">dateTime</span> )?
+}
+
+<span class="function-name">&lt;UserShape&gt;</span> {
+    (<span class="type">foaf:</span><span class="constant">name</span> LITERAL
+     | <span class="type">foaf:</span><span class="constant">givenName</span> LITERAL+,
+       <span class="type">foaf:</span><span class="constant">familyName</span> LITERAL),
+    <span class="type">foaf:</span><span class="constant">mbox</span> IRI
+}
+
+<span class="function-name">&lt;EmployeeShape&gt;</span> {
+    <span class="type">foaf:</span><span class="constant">givenName</span> LITERAL+,
+    <span class="type">foaf:</span><span class="constant">familyName</span> LITERAL,
+    <span class="type">foaf:</span><span class="constant">phone</span> IRI*,
+    <span class="type">foaf:</span><span class="constant">mbox</span> IRI
+}</pre>
+        <p style="opacity: 0;">Create a <span class="function-name">&lt;EmployeeShape&gt;</span> distinct from an <span class="function-name">&lt;UserShape&gt;</span>.</p>
+      </div>
+      <div style="float:left;">
+        <p>example instance:</p>
+        <pre>PREFIX <span class="type">ex:</span> <span class="function-name">&lt;http://ex.example/&gt;</span>
+PREFIX <span class="type">foaf:</span> <span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+PREFIX <span class="type">xsd:</span> <span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#&gt;</span>
+
+<span class="function-name">&lt;Issue1&gt;</span>
+    <span class="type">ex:</span><span class="constant">reportedBy</span>   <span class="function-name">&lt;User2&gt;</span> ;
+    <span class="type">ex:</span><span class="constant">reportedOn</span>   <span class="string">"2013-01-23T10:18:00"</span><span class="constant">^^xsd:dateTime</span> ;
+    <span class="type">ex:</span><span class="constant">assignedTo</span> <span class="function-name">&lt;Thompson.J&gt;</span> ;
+    <span class="type">ex:</span><span class="constant">assignedOn</span> <span class="string">"2013-01-23T11:00:00"</span><span class="constant">^^xsd:dateTime</span> .
+
+<span class="function-name">&lt;User2&gt;</span>
+    <span class="type">foaf:</span><span class="constant">givenName</span> <span class="string">"Bob"</span> ;
+    <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Smith"</span> ;
+    <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:bob&#64;example.org&gt;</span> .
+
+<span class="function-name">&lt;Thompson.J&gt;</span>
+    <span class="type">foaf:</span><span class="constant">givenName</span> <span class="string">"Joe"</span>, <span class="string">"Joseph"</span> ;
+    <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Thompson"</span> ;
+    <span class="type">foaf:</span><span class="constant">phone</span> <span class="function-name">&lt;tel:+456&gt;</span> ;
+    <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:joe&#64;example.org&gt;</span> .
+</pre>
+      </div>
+    </div>
+
+
+    <div class="slide">
+      <h1>Value sets</h1>
+      <p>A value set is a set of possible values.</p>
+      <ul>
+        <li>Value sets appear in ()s in the value (object) position.</li>
+        <li>Values can be literals or IRIs or stems.</li>
+        <li>A stem is any URI form ending with a '~'.<br/>
+        Note, '~' isn't just for value sets.<br/>
+        <pre class="leftPack"><span class="type">issue:</span><span class="constant">assigned~</span></pre>
+        <p class="leftPack">matches</p>
+        <pre class="leftPack"><span class="type">issue:</span><span class="constant">assignedBy</span></pre>
+        <p class="leftPack">,</p>
+        <pre class="leftPack"><span class="type">issue:</span><span class="constant">assignedTo</span></pre>
+        <p class="leftPack">,</p>
+        <pre class="leftPack"><span class="type">issue:</span><span class="constant">assignedOn</span></pre>
+        <p class="leftPack">.</p></li>
+        <li style="clear:both;">A '.' followed by any number of ('-' (stem | IRI)).<br/>
+        Also, also not just for value sets.</li>
+        <li>A singleton value set asserts a required value.</li>
+      </ul>
+      <pre class="leftPack" style="padding-left: 1em;"><span class="type">ex:</span><span class="constant">mood</span> (<span class="string">"happy"</span> <span class="string">"sad"</span> <span class="string">"indigo"</span>)</pre>
+      <pre class="leftPack"><span class="type">ex:</span><span class="constant">mood</span> <span class="type">(mood:</span><span class="constant">happy</span> <span class="type">mood:</span><span class="constant">sad</span> <span class="type">mood:</span><span class="constant">indigo</span>)</pre>
+      <pre class="leftPack"><span class="type">ex:</span><span class="constant">mood</span> <span class="type">(mood:</span><span class="constant">~</span>)</pre>
+    </div>
+
+
+    <div class="slide">
+      <h1>Exercise 3</h1>
+      <ul>
+        <li>Issue status must be unassigned, assigned, or resolved.</li>
+        <li>Users and employees must have foaf:Person type arcs.</li>
+        <li>Employees must have a page starting with <code>&lt;http://myco.example/#Employee&gt;</code>.</li>
+      </ul>
+
+      <div style="float:left;">
+        <p>Extend previous example:</p>
+        <pre>PREFIX <span class="type">issue:</span> <span class="function-name">&lt;http://ex.example/&gt;</span>
+PREFIX <span class="type">foaf:</span> <span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+PREFIX <span class="type">xsd:</span> <span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#</span>&gt;
+
+start = <span class="function-name">&lt;IssueShape&gt;</span>
+
+<span class="function-name">&lt;IssueShape&gt;</span> {
+    <span class="type">issue:</span><span class="constant">reportedBy</span> @<span class="function-name">&lt;UserShape&gt;</span>,
+    <span class="type">issue:</span><span class="constant">reportedOn</span> <span class="type">xsd:</span><span class="constant">dateTime</span>,
+    ( <span class="type">issue:</span><span class="constant">assignedTo</span> @<span class="function-name">&lt;EmployeeShape&gt;</span>,
+      <span class="type">issue:</span><span class="constant">assignedOn</span> <span class="type">xsd:</span><span class="constant">dateTime</span> )?
+}
+
+<span class="function-name">&lt;UserShape&gt;</span> {
+    (<span class="type">foaf:</span><span class="constant">name</span> LITERAL
+     | <span class="type">foaf:</span><span class="constant">givenName</span> LITERAL+,
+       <span class="type">foaf:</span><span class="constant">familyName</span> LITERAL),
+    <span class="type">foaf:</span><span class="constant">mbox</span> IRI
+}
+
+<span class="function-name">&lt;EmployeeShape&gt;</span> {
+    <span class="type">foaf:</span><span class="constant">givenName</span> LITERAL+,
+    <span class="type">foaf:</span><span class="constant">familyName</span> LITERAL,
+    <span class="type">foaf:</span><span class="constant">phone</span> IRI*,
+    <span class="type">foaf:</span><span class="constant">mbox</span> IRI
+}</pre>
+      </div>
+      <div style="float:left;">
+        <p>example instance:</p>
+        <pre>PREFIX <span class="type">issue:</span> <span class="function-name">&lt;http://ex.example/&gt;</span>
+PREFIX <span class="type">foaf:</span> <span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+PREFIX <span class="type">xsd:</span> <span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#&gt;</span>
+PREFIX <span class="type">myco:</span> <span class="function-name">&lt;http://myco.example/#&gt;</span>
+
+<span class="function-name">&lt;Issue1&gt;</span>
+    <span class="type">issue:</span><span class="constant">status</span>     <span class="type">issue:</span><span class="constant">assigned</span> ;
+    <span class="type">issue:</span><span class="constant">reportedBy</span> <span class="function-name">&lt;User2&gt;</span> ;
+    <span class="type">issue:</span><span class="constant">reportedOn</span> <span class="string">"2013-01-23T10:18:00"</span><span class="constant">^^xsd:dateTime</span> ;
+    <span class="type">issue:</span><span class="constant">assignedTo</span> <span class="function-name">&lt;Thompson.J&gt;</span> ;
+    <span class="type">issue:</span><span class="constant">assignedOn</span> <span class="string">"2013-01-23T11:00:00"</span><span class="constant">^^xsd:dateTime</span> .
+
+<span class="function-name">&lt;User2&gt;</span>
+    <span class="keyword">a</span>              <span class="type">foaf:</span><span class="constant">Person</span> ;
+    <span class="type">foaf:</span><span class="constant">givenName</span> <span class="string">"Bob"</span> ;
+    <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Smith"</span> ;
+    <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:bob&#64;example.org&gt;</span> .
+
+<span class="function-name">&lt;Thompson.J&gt;</span>
+    <span class="keyword">a</span>              <span class="type">foaf:</span><span class="constant">Person</span> ;
+    <span class="type">foaf:</span><span class="constant">page</span>      <span class="type">myco:</span><span class="constant">Employee7</span> ;
+    <span class="type">foaf:</span><span class="constant">givenName</span> <span class="string">"Joe"</span>, <span class="string">"Joseph"</span> ;
+    <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Thompson"</span> ;
+    <span class="type">foaf:</span><span class="constant">phone</span> <span class="function-name">&lt;tel:+456&gt;</span> ;
+    <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:joe&#64;example.org&gt;</span> .
+</pre>
+      </div>
+    </div>
+
+
+    <div class="slide">
+      <h1>Solution 3</h1>
+      <div style="float:left;">
+        <pre>PREFIX <span class="type">issue:</span> <span class="function-name">&lt;http://ex.example/&gt;</span>
+PREFIX <span class="type">foaf:</span> <span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+PREFIX <span class="type">xsd:</span> <span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#</span>&gt;
+PREFIX <span class="type">myco:</span> <span class="function-name">&lt;http://myco.example/#&gt;</span>
+
+start = <span class="function-name">&lt;IssueShape&gt;</span>
+
+<span class="function-name">&lt;IssueShape&gt;</span> {
+    <span class="status"><span class="type">issue:</span><span class="constant">status</span> (<span class="type">issue:</span><span class="constant">unassigned</span>
+        <span class="type">issue:</span><span class="constant">assigned</span> <span class="type">issue:</span><span class="constant">resolved</span>)</span>,
+    <span class="type">issue:</span><span class="constant">reportedBy</span> @<span class="function-name">&lt;UserShape&gt;</span>,
+    <span class="type">issue:</span><span class="constant">reportedOn</span> <span class="type">xsd:</span><span class="constant">dateTime</span>,
+    ( <span class="type">issue:</span><span class="constant">assignedTo</span> @<span class="function-name">&lt;EmployeeShape&gt;</span>,
+      <span class="type">issue:</span><span class="constant">assignedOn</span> <span class="type">xsd:</span><span class="constant">dateTime</span> )?
+}
+
+<span class="function-name">&lt;UserShape&gt;</span> {
+    <span class="userPerson"><span class="keyword">a</span> (<span class="type">foaf:</span><span class="constant">Person</span>)</span>,
+    (<span class="type">foaf:</span><span class="constant">name</span> LITERAL
+     | <span class="type">foaf:</span><span class="constant">givenName</span> LITERAL+,
+       <span class="type">foaf:</span><span class="constant">familyName</span> LITERAL),
+    <span class="type">foaf:</span><span class="constant">mbox</span> IRI
+}
+
+<span class="function-name">&lt;EmployeeShape&gt;</span> {
+    <span class="empPerson"><span class="keyword">a</span> (<span class="type">foaf:</span><span class="constant">Person</span>)</span>,
+    <span class="page"><span class="type">foaf:</span><span class="constant">page</span> <span class="type">(myco:</span><span class="constant">Employee~</span>)</span>,
+    <span class="type">foaf:</span><span class="constant">givenName</span> LITERAL+,
+    <span class="type">foaf:</span><span class="constant">familyName</span> LITERAL,
+    <span class="type">foaf:</span><span class="constant">phone</span> IRI*,
+    <span class="type">foaf:</span><span class="constant">mbox</span> IRI
+}</pre>
+      </div>
+      <div style="float:left;">
+        <p>example instance:</p>
+        <pre>PREFIX <span class="type">issue:</span> <span class="function-name">&lt;http://ex.example/&gt;</span>
+PREFIX <span class="type">foaf:</span> <span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+PREFIX <span class="type">xsd:</span> <span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#&gt;</span>
+PREFIX <span class="type">myco:</span> <span class="function-name">&lt;http://myco.example/#&gt;</span>
+
+<span class="function-name">&lt;Issue1&gt;</span>
+    <span class="status"><span class="type">issue:</span><span class="constant">status</span>     <span class="type">issue:</span><span class="constant">assigned</span></span> ;
+    <span class="type">issue:</span><span class="constant">reportedBy</span> <span class="function-name">&lt;User2&gt;</span> ;
+    <span class="type">issue:</span><span class="constant">reportedOn</span> <span class="string">"2013-01-23T10:18:00"</span><span class="constant">^^xsd:dateTime</span> ;
+    <span class="type">issue:</span><span class="constant">assignedTo</span> <span class="function-name">&lt;Thompson.J&gt;</span> ;
+    <span class="type">issue:</span><span class="constant">assignedOn</span> <span class="string">"2013-01-23T11:00:00"</span><span class="constant">^^xsd:dateTime</span> .
+
+<span class="function-name">&lt;User2&gt;</span>
+    <span class="userPerson"><span class="keyword">a</span>              <span class="type">foaf:</span><span class="constant">Person</span></span> ;
+    <span class="type">foaf:</span><span class="constant">givenName</span> <span class="string">"Bob"</span> ;
+    <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Smith"</span> ;
+    <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:bob&#64;example.org&gt;</span> .
+
+<span class="function-name">&lt;Thompson.J&gt;</span>
+    <span class="empPerson"><span class="keyword">a</span>              <span class="type">foaf:</span><span class="constant">Person</span></span> ;
+    <span class="page"><span class="type">foaf:</span><span class="constant">page</span>      <span class="type">myco:</span><span class="constant">Employee7</span></span> ;
+    <span class="type">foaf:</span><span class="constant">givenName</span> <span class="string">"Joe"</span>, <span class="string">"Joseph"</span> ;
+    <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Thompson"</span> ;
+    <span class="type">foaf:</span><span class="constant">phone</span> <span class="function-name">&lt;tel:+456&gt;</span> ;
+    <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:joe&#64;example.org&gt;</span> .
+</pre>
+      </div>
+    <script type="text/javascript">
+      <!--
+prepareHighlight(['status', 'userPerson', 'empPerson', 'page'], "highlightBG1", "lowlightBG1");
+      -->
+    </script>
+    </div>
+
+
+    <div class="slide">
+      <h1>Complex business logic</h1>
+      <div style="float:left; opacity: 0;">
+        <pre>PREFIX <span class="type">issue:</span> <span class="function-name">&lt;http://ex.example/&gt;</span>
+PREFIX <span class="type">foaf:</span> <span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+PREFIX <span class="type">xsd:</span> <span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#</span>&gt;
+
+start = <span class="function-name">&lt;IssueShape&gt;</span>
+
+<span class="function-name">&lt;IssueShape&gt;</span> {
+    <span class="status"><span class="type">issue:</span><span class="constant">status</span> (<span class="type">issue:</span><span class="constant">unassigned</span>
+        <span class="type">issue:</span><span class="constant">assigned</span> <span class="type">issue:</span><span class="constant">resolved</span>)</span>,
+    <span class="type">issue:</span><span class="constant">reportedBy</span> @<span class="function-name">&lt;UserShape&gt;</span>,
+    <span class="type">issue:</span><span class="constant">reportedOn</span> <span class="type">xsd:</span><span class="constant">dateTime</span>,
+    ( <span class="type">issue:</span><span class="constant">assignedTo</span> @<span class="function-name">&lt;EmployeeShape&gt;</span>,
+      <span class="type">issue:</span><span class="constant">assignedOn</span> <span class="type">xsd:</span><span class="constant">dateTime</span> )?
+}</pre>
+      </div>
+      <div style="float:left;">
+        <p>What's wrong with this picture?</p>
+        <pre>PREFIX <span class="type">issue:</span> <span class="function-name">&lt;http://ex.example/&gt;</span>
+PREFIX <span class="type">foaf:</span> <span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+PREFIX <span class="type">xsd:</span> <span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#&gt;</span>
+
+<span class="function-name">&lt;Issue1&gt;</span>
+    <span class="status"><span class="type">issue:</span><span class="constant">status</span>     <span class="unassigned"><span class="type">issue:</span><span class="constant">unassigned</span></span></span> ;
+    <span class="type">issue:</span><span class="constant">reportedBy</span> <span class="function-name">&lt;User2&gt;</span> ;
+    <span class="type">issue:</span><span class="constant">reportedOn</span> <span class="string">"2013-01-23T10:18:00"</span><span class="constant">^^xsd:dateTime</span> ;
+    <span class="unassigned"><span class="type">issue:</span><span class="constant">assignedTo</span></span> <span class="function-name">&lt;Thompson.J&gt;</span> ;
+    <span class="unassigned"><span class="type">issue:</span><span class="constant">assignedOn</span></span> <span class="string">"2013-01-23T11:00:00"</span><span class="constant">^^xsd:dateTime</span> .
+
+<span class="function-name">&lt;User2&gt;</span>
+    <span class="userPerson"><span class="keyword">a</span>              <span class="type">foaf:</span><span class="constant">Person</span></span> ;
+    <span class="type">foaf:</span><span class="constant">givenName</span> <span class="string">"Bob"</span> ;
+    <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Smith"</span> ;
+    <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:bob&#64;example.org&gt;</span> .
+
+<span class="function-name">&lt;Thompson.J&gt;</span>
+    <span class="empPerson"><span class="keyword">a</span>              <span class="type">foaf:</span><span class="constant">Person</span></span> ;
+    <span class="page"><span class="type">foaf:</span><span class="constant">page</span>      <span class="type">myco:</span><span class="constant">Employee7</span></span> ;
+    <span class="type">foaf:</span><span class="constant">givenName</span> <span class="string">"Joe"</span>, <span class="string">"Joseph"</span> ;
+    <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Thompson"</span> ;
+    <span class="type">foaf:</span><span class="constant">phone</span> <span class="function-name">&lt;tel:+456&gt;</span> ;
+    <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:joe&#64;example.org&gt;</span> .
+</pre>
+      </div>
+      <p style="clear:both">How much can we capture?</p>
+      <p>Not a lot, but we can improve the free-for-all in the previous example</p>
+      <script type="text/javascript">
+      <!--
+prepareHighlight(['unassigned'], "highlightBG1", "lowlightBG1");
+      -->
+      </script>
+    </div>
+
+
+    <div class="slide">
+      <h1>Exercise 4</h1>
+      <div style="float:left;">
+        <pre>PREFIX <span class="type">issue:</span> <span class="function-name">&lt;http://ex.example/&gt;</span>
+PREFIX <span class="type">foaf:</span> <span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+PREFIX <span class="type">xsd:</span> <span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#</span>&gt;
+
+start = <span class="function-name">&lt;IssueShape&gt;</span>
+
+<span class="function-name">&lt;IssueShape&gt;</span> {
+    <span class="status"><span class="type">issue:</span><span class="constant">status</span> (<span class="type">issue:</span><span class="constant">unassigned</span>
+        <span class="type">issue:</span><span class="constant">assigned</span> <span class="type">issue:</span><span class="constant">resolved</span>)</span>,
+    <span class="type">issue:</span><span class="constant">reportedBy</span> @<span class="function-name">&lt;UserShape&gt;</span>,
+    <span class="type">issue:</span><span class="constant">reportedOn</span> <span class="type">xsd:</span><span class="constant">dateTime</span>,
+    ( <span class="type">issue:</span><span class="constant">assignedTo</span> @<span class="function-name">&lt;UserShape&gt;</span>,
+      <span class="type">issue:</span><span class="constant">assignedOn</span> <span class="type">xsd:</span><span class="constant">dateTime</span> )?
+}
+
+<span class="function-name">&lt;UserShape&gt;</span> {
+    <span class="type">foaf:</span><span class="constant">givenName</span> LITERAL+,
+    <span class="type">foaf:</span><span class="constant">familyName</span> LITERAL,
+    <span class="type">foaf:</span><span class="constant">mbox</span> IRI
+}</pre>
+      </div>
+      <div style="float:left;">
+        <p>example instance:</p>
+        <pre>PREFIX <span class="type">issue:</span> <span class="function-name">&lt;http://ex.example/&gt;</span>
+PREFIX <span class="type">foaf:</span> <span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+PREFIX <span class="type">xsd:</span> <span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#&gt;</span>
+
+<span class="function-name">&lt;Issue1&gt;</span>
+    <span class="status"><span class="type">issue:</span><span class="constant">status</span>     <span class="type">issue:</span><span class="constant">assigned</span></span> ;
+    <span class="type">issue:</span><span class="constant">reportedBy</span> <span class="function-name">&lt;User2&gt;</span> ;
+    <span class="type">issue:</span><span class="constant">reportedOn</span> <span class="string">"2013-01-23T10:18:00"</span><span class="constant">^^xsd:dateTime</span> ;
+    <span class="type">issue:</span><span class="constant">assignedTo</span> <span class="function-name">&lt;Thompson.J&gt;</span> ;
+    <span class="type">issue:</span><span class="constant">assignedOn</span> <span class="string">"2013-01-23T11:00:00"</span><span class="constant">^^xsd:dateTime</span> .
+
+<span class="function-name">&lt;User2&gt;</span>
+    <span class="type">foaf:</span><span class="constant">givenName</span> <span class="string">"Bob"</span> ;
+    <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Smith"</span> ;
+    <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:bob&#64;example.org&gt;</span> .
+
+<span class="function-name">&lt;Thompson.J&gt;</span>
+    <span class="type">foaf:</span><span class="constant">givenName</span> <span class="string">"Joe"</span>, <span class="string">"Joseph"</span> ;
+    <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Thompson"</span> ;
+    <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:joe&#64;example.org&gt;</span> .
+</pre>
+      </div>
+      <p style="clear:both;">You will need to use '!' to negate a rule</p>
+    <script type="text/javascript">
+      <!--
+prepareHighlight(['status', 'userPerson', 'empPerson', 'page'], "highlightBG1", "lowlightBG1");
+      -->
+    </script>
+    </div>
+
+
+    <div class="slide">
+      <h1>Solution 4</h1>
+      <div style="float:left;">
+        <pre>PREFIX <span class="type">issue:</span> <span class="function-name">&lt;http://ex.example/&gt;</span>
+PREFIX <span class="type">foaf:</span> <span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+PREFIX <span class="type">xsd:</span> <span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#</span>&gt;
+
+start = <span class="function-name">&lt;IssueShape&gt;</span>
+
+<span class="function-name">&lt;IssueShape&gt;</span> {
+    <span class="type">issue:</span><span class="constant">reportedBy</span> @<span class="function-name">&lt;UserShape&gt;</span>,
+    <span class="type">issue:</span><span class="constant">reportedOn</span> <span class="type">xsd:</span><span class="constant">dateTime</span>,
+    (  <span class="type">issue:</span><span class="constant">status</span> (<span class="type">issue:</span><span class="constant">unassigned</span>),
+      !<span class="type">issue:</span><span class="constant">assignedTo</span> .,
+      !<span class="type">issue:</span><span class="constant">assignedOn</span> .
+     | <span class="type">issue:</span><span class="constant">status</span>
+         (<span class="type">issue:</span><span class="constant">assigned</span> <span class="type">issue:</span><span class="constant">resolved</span>),
+       <span class="type">issue:</span><span class="constant">assignedTo</span> @<span class="function-name">&lt;UserShape&gt;</span>,
+       <span class="type">issue:</span><span class="constant">assignedOn</span> <span class="type">xsd:</span><span class="constant">dateTime</span>
+    )
+}
+
+<span class="function-name">&lt;UserShape&gt;</span> {
+    <span class="type">foaf:</span><span class="constant">givenName</span> LITERAL+,
+    <span class="type">foaf:</span><span class="constant">familyName</span> LITERAL,
+    <span class="type">foaf:</span><span class="constant">mbox</span> IRI
+}</pre>
+      </div>
+      <div style="float:left;">
+        <p>example instance:</p>
+        <pre>PREFIX <span class="type">issue:</span> <span class="function-name">&lt;http://ex.example/&gt;</span>
+PREFIX <span class="type">foaf:</span> <span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+PREFIX <span class="type">xsd:</span> <span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#&gt;</span>
+
+<span class="function-name">&lt;Issue1&gt;</span>
+    <span class="status"><span class="type">issue:</span><span class="constant">status</span>     <span class="type">issue:</span><span class="constant">assigned</span></span> ;
+    <span class="type">issue:</span><span class="constant">reportedBy</span> <span class="function-name">&lt;User2&gt;</span> ;
+    <span class="type">issue:</span><span class="constant">reportedOn</span> <span class="string">"2013-01-23T10:18:00"</span><span class="constant">^^xsd:dateTime</span> ;
+    <span class="type">issue:</span><span class="constant">assignedTo</span> <span class="function-name">&lt;Thompson.J&gt;</span> ;
+    <span class="type">issue:</span><span class="constant">assignedOn</span> <span class="string">"2013-01-23T11:00:00"</span><span class="constant">^^xsd:dateTime</span> .
+
+<span class="function-name">&lt;User2&gt;</span>
+    <span class="type">foaf:</span><span class="constant">givenName</span> <span class="string">"Bob"</span> ;
+    <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Smith"</span> ;
+    <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:bob&#64;example.org&gt;</span> .
+
+<span class="function-name">&lt;Thompson.J&gt;</span>
+    <span class="type">foaf:</span><span class="constant">givenName</span> <span class="string">"Joe"</span>, <span class="string">"Joseph"</span> ;
+    <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Thompson"</span> ;
+    <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:joe&#64;example.org&gt;</span> .
+</pre>
+      </div>
+    <script type="text/javascript">
+      <!--
+prepareHighlight(['status', 'userPerson', 'empPerson', 'page'], "highlightBG1", "lowlightBG1");
+      -->
+    </script>
+    </div>
+
+
+    <div class="slide">
+      <h1>IRI stems and exclusions</h1>
+      <p>IRIs in predicates and value sets can have:</p>
+      <ul>
+        <li>stem markers — matching anything starting with that IRI</li>
+        <li>exclusions — IRI stem minus certain IRIs.</li>
+      </ul>
+      <div style="float:left;">
+        <pre>PREFIX <span class="type">annot:</span><span class="constant"> </span><span class="function-name">http://www.w3.org/annotea/ns#</span>&gt;
+PREFIX <span class="type">dc:</span><span class="constant"> </span><span class="function-name">&lt;http://purl.org/dc/elements/1.1/&gt;</span>
+
+start={
+  <span class="context"><span class="type">annot:</span><span class="constant">context</span> LITERAL</span>,
+  <span class="abstract audience description"><span class="type">dc:</span><span class="constant">~</span> - <span class="type">dc:</span><span class="constant">author</span> - <span class="type">dc:</span><span class="constant">creator</span> <span class="type">.</span></span>*
+}</pre>
+      </div>
+      <div style="float:left;">
+        <pre>PREFIX <span class="type">annot:</span><span class="constant"> </span><span class="function-name">http://www.w3.org/annotea/ns#</span>&gt;
+PREFIX <span class="type">dc:</span><span class="constant"> </span><span class="function-name">&lt;http://purl.org/dc/elements/1.1/&gt;</span>
+
+<span class="function-name">&lt;Annot1&gt;</span>
+  <span class="context"><span class="type">annot:</span><span class="constant">context</span> <span class="string">"xpath..."</span></span>;
+  <span class="abstract"><span class="type">dc:</span><span class="constant">abstract</span> <span class="string">"stuff"</span></span> ;
+  <span class="audience"><span class="type">dc:</span><span class="constant">audience</span> <span class="string">"9606"</span></span> ;
+  <span class="description"><span class="type">dc:</span><span class="constant">description</span> <span class="string">"""some
+long
+description"""</span></span> .</pre>
+      </div>
+    <script type="text/javascript">
+      <!--
+prepareHighlight(['context', 'abstract', 'audience', 'description'], "highlightBG1", "lowlightBG1");
+      -->
+    </script>
+    </div>
+
+
+    <div class="slide">
+      <h1>Reverse arcs</h1>
+      <p>Test arcs coming into an object.</p>
+      <div style="float:left;">
+        <pre>PREFIX <span class="type">issue:</span><span class="constant"> </span><span class="function-name">&lt;http://ex.example/&gt;</span>
+PREFIX <span class="type">xsd:</span><span class="constant"> </span><span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#&gt;</span>
+
+start = <span class="function-name">&lt;IssueShape&gt;</span>
+
+<span class="function-name">&lt;IssueShape&gt;</span> {
+    <span class="type">issue:</span><span class="constant">status</span> <span class="type">(issue:</span><span class="constant">assigned</span> <span class="type">issue:</span><span class="constant">resolved</span> ),
+    <span class="type">issue:</span><span class="constant">reportedOn</span> <span class="type">xsd:</span><span class="constant">dateTime</span>,
+    <span class="type">issue:</span><span class="constant">assignedOn</span> <span class="type">xsd:</span><span class="constant">dateTime</span>,
+    <span class="type">issue:</span><span class="constant">related</span> @<span class="function-name">&lt;RefdIssueShape&gt;</span>
+}
+
+<span class="function-name">&lt;RefdIssueShape&gt;</span> {
+    <span class="type">issue:</span><span class="constant">name</span> LITERAL,
+    <span class="type">^issue:</span><span class="constant">related</span> <span class="function-name">&lt;IssueShape&gt;</span>
+}</pre>
+      </div>
+      <div style="float:left;">
+        <pre>PREFIX <span class="type">issue:</span><span class="constant"> </span><span class="function-name">&lt;http://ex.example/&gt;</span>
+PREFIX <span class="type">xsd:</span><span class="constant"> </span><span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#&gt;</span>
+
+<span class="function-name">&lt;Issue1&gt;</span>
+    <span class="type">issue:</span><span class="constant">status</span>     <span class="type">issue:</span><span class="constant">assigned</span> ;
+    <span class="type">issue:</span><span class="constant">reportedOn</span> <span class="string">"2013-01-23T10:18:00"</span><span class="constant">^^xsd:dateTime</span> ;
+    <span class="type">issue:</span><span class="constant">assignedOn</span> <span class="string">"2013-01-23T11:00:00"</span><span class="constant">^^xsd:dateTime</span> ;
+    <span class="type">issue:</span><span class="constant">related</span>    <span class="function-name">&lt;Issue3&gt;</span> .
+
+<span class="function-name">&lt;Issue3&gt;</span>
+    <span class="type">issue:</span><span class="constant">name</span> <span class="string">"smokey"</span> .</pre>
+      </div>
+    <script type="text/javascript">
+      <!--
+prepareHighlight(['context', 'abstract', 'audience', 'description'], "highlightBG1", "lowlightBG1");
+      -->
+    </script>
+    </div>
+
+
+    <div class="slide">
+      <h1>Closed shapes</h1>
+      <p>Use case: storing application data in a</p>
+      <ul>
+        <li>conventional (normalized) relational database.</li>
+        <li>controlled triple store</li>
+        <li>physical state (e.g. a lightswich on the wall)</li>
+      </ul>
+      <p>"If I tell you X, will you understand it?"</p>
+      <ul>
+        <li>Not everything is a triple store.</li>
+        <li>No service could understand everything you might send it.</li>
+      </ul>
+    </div>
+
+
+    <div class="slide">
+      <h1>Closed shapes</h1>
+      <p>What about re-used nodes?</p>
+      <div style="float:left;">
+        <p>Closed shapes:</p>
+        <pre>PREFIX <span class="type">issue:</span> <span class="function-name">&lt;http://ex.example/&gt;</span>
+PREFIX <span class="type">foaf:</span> <span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+PREFIX <span class="type">xsd:</span> <span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#</span>&gt;
+
+start = <span class="function-name">&lt;IssueShape&gt;</span>
+
+<span class="function-name">&lt;IssueShape&gt;</span> {
+    <span class="type">issue:</span><span class="constant">reportedBy</span> @<span class="function-name">&lt;UserShape&gt;</span>,
+    <span class="type">issue:</span><span class="constant">assignedTo</span> @<span class="function-name">&lt;EmployeeShape&gt;</span>?
+}
+
+<span class="User2"><span class="function-name">&lt;UserShape&gt;</span></span> {
+    <span class="type">foaf:</span><span class="constant">name</span> LITERAL
+    <span class="type">foaf:</span><span class="constant">mbox</span> IRI
+}
+
+<span class="User2"><span class="function-name">&lt;EmployeeShape&gt;</span></span> {
+    <span class="type">foaf:</span><span class="constant">givenName</span> LITERAL+,
+    <span class="type">foaf:</span><span class="constant">familyName</span> LITERAL,
+    <span class="type">foaf:</span><span class="constant">mbox</span> IRI
+}</pre>
+      </div>
+      <div style="float:left;">
+        <p><span class="User2"><span class="function-name">&lt;User2&gt;</span></span> fits multiple shapes:</p>
+        <pre>PREFIX <span class="type">ex:</span> <span class="function-name">&lt;http://ex.example/&gt;</span>
+PREFIX <span class="type">foaf:</span> <span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+PREFIX <span class="type">xsd:</span> <span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#&gt;</span>
+
+<span class="function-name">&lt;Issue1&gt;</span>
+    <span class="type">ex:</span><span class="constant">reportedBy</span>   <span class="function-name">&lt;User2&gt;</span> ;
+    <span class="type">ex:</span><span class="constant">assignedTo</span>   <span class="function-name">&lt;User2&gt;</span> ;
+
+<span class="User2"><span class="function-name">&lt;User2&gt;</span></span>
+    <span class="type">foaf:</span><span class="constant">name</span> <span class="string">"Bob Smith"</span> ;
+    <span class="type">foaf:</span><span class="constant">givenName</span> <span class="string">"Bob"</span> ;
+    <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Smith"</span> ;
+    <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mailto:bob&#64;example.org&gt;</span> .</pre>
+      </div>
+    <script type="text/javascript">
+      <!--
+prepareHighlight(['User2'], "highlight1", "lowlight1");
+      -->
+    </script>
+    </div>
+
+
+    <div class="slide">
+      <h1>Semantic actions</h1>
+      <p>For extensibility:</p>
+      <ul>
+        <li>Languages like RelaxNG, W3C XML Schema, etc.</li>
+        <li>annotations provide place to add more functionality<br/>
+        e.g. compare dates, test string structure</li>
+      </ul>
+      <p>For actions:</p>
+      <ul>
+        <li>Languages like yacc, ANTLR, etc</li>
+        <li>do something useful with the parsed tokens</li>
+      </ul>
+    </div>
+
+
+    <div class="slide">
+      <h1>API-native</h1>
+      <p>Provides purpose-fit expressivity with minimal implementation cost.</p>
+      <p>Can count on order.</p>
+      <p>Javascript API actions embedded in <span class="js">%js{ … %}</span>.</p>
+      <div style="float:left;">
+        <pre>PREFIX <span class="type">issue:</span> <span class="function-name">&lt;http://ex.example/&gt;</span>
+PREFIX <span class="type">foaf:</span> <span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+PREFIX <span class="type">xsd:</span> <span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#</span>&gt;
+
+start = <span class="function-name">&lt;IssueShape&gt;</span>
+
+<span class="function-name">&lt;IssueShape&gt;</span> {
+    <span class="type">issue:</span><span class="constant">state</span> <span class="type">(issue:</span><span class="constant">unassigned</span> <span class="type">issue:</span><span class="constant">assigned</span>),
+    <span class="type">issue:</span><span class="constant">reportedBy</span> @<span class="function-name">&lt;UserShape&gt;</span>,
+    <span class="type">issue:</span><span class="constant">reportedOn</span> <span class="type">xsd:</span>dateTime
+        <span class="js">%js{ report = _.o; return true; %}</span>,
+    <span class="type">(issue:</span><span class="constant">reproducedBy</span> @<span class="function-name">&lt;EmployeeShape&gt;</span>,
+     <span class="type">issue:</span><span class="constant">reproducedOn</span> <span class="type">xsd:</span>dateTime
+        <span class="js">%js{ return _.o.lex &gt; report.lex; %}</span>
+    ),
+    <span class="type">issue:</span><span class="constant">related</span> @<span class="function-name">&lt;IssueShape&gt;</span>*
+}
+
+<span class="function-name">&lt;UserShape&gt;</span> {
+    <span class="type">(foaf:</span><span class="constant">name</span> <span class="type">xsd:</span>string
+     | <span class="type">foaf:</span><span class="constant">givenName</span> <span class="type">xsd:</span>string+,
+       <span class="type">foaf:</span><span class="constant">familyName</span> <span class="type">xsd:</span>string),
+    <span class="type">foaf:</span><span class="constant">mbox</span> IRI
+}
+
+<span class="function-name">&lt;EmployeeShape&gt;</span> {
+    <span class="type">foaf:</span><span class="constant">givenName</span> <span class="type">xsd:</span>string+,
+    <span class="type">foaf:</span><span class="constant">familyName</span> <span class="type">xsd:</span>string,
+    <span class="type">foaf:</span><span class="constant">phone</span> IRI*,
+    <span class="type">foaf:</span><span class="constant">mbox</span> IRI
+}</pre>
+      </div>
+      <div style="float:left;">
+        <pre>PREFIX <span class="type">issue:</span> <span class="function-name">&lt;http://ex.example/&gt;</span>
+PREFIX <span class="type">foaf:</span> <span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+PREFIX <span class="type">xsd:</span> <span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#</span>&gt;
+
+<span class="function-name">&lt;Issue1&gt;</span>
+    <span class="type">ex:</span><span class="constant">state</span>        <span class="type">ex:</span><span class="constant">unassigned</span> ;
+    <span class="type">ex:</span><span class="constant">reportedBy</span>   <span class="function-name">&lt;User2&gt;</span> ;
+    <span class="type">ex:</span><span class="constant">reportedOn</span>   <span class="string">"2013-01-23T10:18:00"</span><span class="constant">^^xsd:dateTime</span> ;
+    <span class="type">ex:</span><span class="constant">reproducedBy</span> <span class="function-name">&lt;Thompson.J&gt;</span> ;
+    <span class="type">ex:</span><span class="constant">reproducedOn</span> <span class="string">"2013-01-23T10:00:00"</span><span class="constant">^^xsd:dateTime</span> .
+
+<span class="function-name">&lt;User2&gt;</span>
+    <span class="type">foaf:</span><span class="constant">givenName</span> <span class="string">"Bob"</span> ;
+    <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Smith"</span> ;
+    <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mail:bob@example.org&gt;</span> .
+
+<span class="function-name">&lt;Thompson.J&gt;</span>
+    <span class="type">foaf:</span><span class="constant">givenName</span> <span class="string">"Joe"</span>, <span class="string">"Joseph"</span> ;
+    <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Thompson"</span> ;
+    <span class="type">foaf:</span><span class="constant">phone</span> <span class="function-name">&lt;tel:+456&gt;</span> ;
+    <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mail:joe@example.org&gt;</span> .</pre>
+      </div>
+    <script type="text/javascript">
+      <!--
+prepareHighlight(['js'], "highlightBG1", "lowlightBG1");
+      -->
+    </script>
+    </div>
+
+
+    <div class="slide">
+      <h1>SPARQL</h1>
+      <p>Isn't there an RDF query language?</p>
+      <p><code class="sparql">%sparql{ … %}</code> can complement our <span class="js">%js{ … %}</span> actions.</p>
+      <div style="float:left;">
+        <pre>PREFIX <span class="type">issue:</span> <span class="function-name">&lt;http://ex.example/&gt;</span>
+PREFIX <span class="type">foaf:</span> <span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+PREFIX <span class="type">xsd:</span> <span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#</span>&gt;
+
+start = <span class="function-name">&lt;IssueShape&gt;</span>
+
+<span class="function-name">&lt;IssueShape&gt;</span> {
+    <span class="type">issue:</span><span class="constant">state</span> <span class="type">(issue:</span><span class="constant">unassigned</span> <span class="type">issue:</span><span class="constant">assigned</span>),
+    <span class="type">issue:</span><span class="constant">reportedBy</span> @<span class="function-name">&lt;UserShape&gt;</span>,
+    <span class="type">issue:</span><span class="constant">reportedOn</span> <span class="type">xsd:</span>dateTime
+        <span class="js">%js{ report = _.o; return true; %}</span>,
+    <span class="type">(issue:</span><span class="constant">reproducedBy</span> @<span class="function-name">&lt;EmployeeShape&gt;</span>,
+     <span class="type">issue:</span><span class="constant">reproducedOn</span> <span class="type">xsd:</span>dateTime
+        <span class="js">%js{ return _.o.lex &gt; report.lex; %}</span>
+        <span class="sparql">%sparql{ ?s issue:reportedOn ?rpt . FILTER (?o &gt; ?rpt) %}</span>
+    ),
+    <span class="type">issue:</span><span class="constant">related</span> @<span class="function-name">&lt;IssueShape&gt;</span>*
+}
+
+<span class="function-name">&lt;UserShape&gt;</span> {
+    <span class="type">(foaf:</span><span class="constant">name</span> <span class="type">xsd:</span>string
+     | <span class="type">foaf:</span><span class="constant">givenName</span> <span class="type">xsd:</span>string+,
+       <span class="type">foaf:</span><span class="constant">familyName</span> <span class="type">xsd:</span>string),
+    <span class="type">foaf:</span><span class="constant">mbox</span> IRI
+}
+
+<span class="function-name">&lt;EmployeeShape&gt;</span> {
+    <span class="type">foaf:</span><span class="constant">givenName</span> <span class="type">xsd:</span>string+,
+    <span class="type">foaf:</span><span class="constant">familyName</span> <span class="type">xsd:</span>string,
+    <span class="type">foaf:</span><span class="constant">phone</span> IRI*,
+    <span class="type">foaf:</span><span class="constant">mbox</span> IRI
+}</pre>
+      </div>
+      <div style="float:left;">
+        <pre>PREFIX <span class="type">issue:</span> <span class="function-name">&lt;http://ex.example/&gt;</span>
+PREFIX <span class="type">foaf:</span> <span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+PREFIX <span class="type">xsd:</span> <span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#</span>&gt;
+
+<span class="function-name">&lt;Issue1&gt;</span>
+    <span class="type">ex:</span><span class="constant">state</span>        <span class="type">ex:</span><span class="constant">unassigned</span> ;
+    <span class="type">ex:</span><span class="constant">reportedBy</span>   <span class="function-name">&lt;User2&gt;</span> ;
+    <span class="type">ex:</span><span class="constant">reportedOn</span>   <span class="string">"2013-01-23T10:18:00"</span><span class="constant">^^xsd:dateTime</span> ;
+    <span class="type">ex:</span><span class="constant">reproducedBy</span> <span class="function-name">&lt;Thompson.J&gt;</span> ;
+    <span class="type">ex:</span><span class="constant">reproducedOn</span> <span class="string">"2013-01-23T10:00:00"</span><span class="constant">^^xsd:dateTime</span> .
+
+<span class="function-name">&lt;User2&gt;</span>
+    <span class="type">foaf:</span><span class="constant">givenName</span> <span class="string">"Bob"</span> ;
+    <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Smith"</span> ;
+    <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mail:bob@example.org&gt;</span> .
+
+<span class="function-name">&lt;Thompson.J&gt;</span>
+    <span class="type">foaf:</span><span class="constant">givenName</span> <span class="string">"Joe"</span>, <span class="string">"Joseph"</span> ;
+    <span class="type">foaf:</span><span class="constant">familyName</span> <span class="string">"Thompson"</span> ;
+    <span class="type">foaf:</span><span class="constant">phone</span> <span class="function-name">&lt;tel:+456&gt;</span> ;
+    <span class="type">foaf:</span><span class="constant">mbox</span> <span class="function-name">&lt;mail:joe@example.org&gt;</span> .</pre>
+      </div>
+    <script type="text/javascript">
+      <!--
+prepareHighlight(['sparql', 'js'], "highlightBG1", "lowlightBG1");
+      -->
+    </script>
+    </div>
+
+
+    <div class="slide">
+      <h1>Generators</h1>
+      <p>Semantic actions can have side-effects.</p>
+      <div style="float:left;width=49%;">
+        <pre>PREFIX <span class="type">ex:</span><span class="constant"> </span><span class="function-name">&lt;http://ex.example/#&gt;</span>
+PREFIX <span class="type">foaf:</span><span class="constant"> </span><span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+PREFIX <span class="type">xsd:</span><span class="constant"> </span><span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#&gt;</span>
+PREFIX <span class="type">rdf:</span><span class="constant"> </span><span class="function-name">&lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;</span>
+
+      <span class="js Issue">%js{</span>
+      <span class="js Issue">     action.arguments[1].message(<span class="string">"in init"</span>);</span>
+      <span class="js Issue">     doc = document.implementation.createDocument</span>
+      <span class="js Issue">             <span class="type">(</span><span class="string">"http://ex.example/xml"</span>, <span class="string">"Issue"</span>, undefined);</span>
+      <span class="js Issue">     issue = doc.childNodes[0];</span>
+      <span class="js Issue">%}</span>
+
+start = <span class="function-name">&lt;IssueShape&gt;</span>
+
+<span class="function-name">&lt;IssueShape&gt;</span> {
+    <span class="type">ex:</span><span class="constant">state</span> <span class="type">(ex:</span><span class="constant">unassigned</span> <span class="type">ex:</span><span class="constant">assigned</span>)
+      <span class="js id">%js{ issue.setAttribute(<span class="string">"id"</span>, _.s.lex);</span>
+           <span class="js state">issue.setAttribute(<span class="string">"state"</span>, _.o.lex.substr(19));</span>
+           <span class="js Reported">person = user = doc.createElement(<span class="string">"Reported"</span>);</span>
+      <span class="js id">%}</span>,
+    <span class="type">ex:</span><span class="constant">reportedBy</span> @<span class="function-name">&lt;Person&gt;</span>
+      <span class="js reportedBy">%js{{ issue.appendChild(user); %}</span>,
+    <span class="type">ex:</span><span class="constant">reportedOn</span> <span class="type">xsd:</span>dateTime
+      <span class="js reportedOn">%js{{ user.setAttribute(<span class="string">"reportedOn"</span>, _.o.lex);</span>
+      <span class="js reportedOn">     person = reproducer = doc.createElement(<span class="string">"Reproduced"</span>);</span>
+      <span class="js reportedOn">%}</span>,
+    (<span class="type">ex:</span><span class="constant">reproducedBy</span> @<span class="function-name">&lt;EmployeeShape&gt;</span>
+      <span class="js">%js{{ issue.appendChild(person);%}</span>,
+     <span class="type">ex:</span><span class="constant">reproducedOn</span> <span class="type">xsd:</span>dateTime
+      <span class="js">%js{{ reproducer.setAttribute(<span class="string">"reportedOn"</span>, _.o.lex);
+      %}</span>)?,
+    <span class="type">ex:</span><span class="constant">related</span> @<span class="function-name">&lt;IssueShape&gt;</span>*
+} <span class="js">%js{ <span class="type">
+window.open(</span><span class="string">"data:application/xml;charset=utf-8;base64,"</span>
+  + Base64.encode((new XMLSerializer()).serializeToString(doc)),
+  <span class="string">"toy"</span>);
+ %}</span>
+VIRTUAL <span class="function-name">&lt;Person&gt;</span> {
+    <span class="type">(foaf:</span><span class="constant">name</span> <span class="type">xsd:</span>string
+     | <span class="type">foaf:</span><span class="constant">givenName</span> <span class="type">xsd:</span>string+
+      <span class="js gname">%js{ gn = doc.createElement(<span class="string">"GivenName"</span>);</span>
+      <span class="js gname">     gn.appendChild(doc.createTextNode(_.o.lex));</span>
+      <span class="js gname">     person.appendChild(gn);</span>
+      <span class="js gname">%}</span>,
+       <span class="type">foaf:</span><span class="constant">familyName</span> <span class="type">xsd:</span>string
+      <span class="js">%js{ fn = doc.createElement(<span class="string">"FamilyName"</span>);
+           fn.appendChild(doc.createTextNode(_.o.lex));
+           person.appendChild(fn);
+      %}</span>
+    ),
+    <span class="type">foaf:</span><span class="constant">mbox</span> IRI
+      <span class="js">%js{ fn = doc.createElement(<span class="string">"Email-address"</span>);
+           fn.appendChild(doc.createTextNode(_.o.lex));
+           person.appendChild(fn);
+      %}</span>
+}
+<span class="function-name">&lt;UserShape&gt;</span> &amp; <span class="function-name">&lt;Person&gt;</span> {
+}
+<span class="function-name">&lt;EmployeeShape&gt;</span> {
+    &amp; <span class="function-name">&lt;Person&gt;</span>,
+    <span class="type">foaf:</span><span class="constant">phone</span> IRI+
+      %js{ fn = doc.createElement(<span class="string">"Telephone-Number"</span>);
+           fn.appendChild(doc.createTextNode(_.o.lex));
+           person.appendChild(fn);
+      %}
+}</pre>
+      </div>
+      <div style="float:left; width:49%;">
+        <pre><span class="nxml-tag-delimiter">&lt;</span><span class="Issue"><span class="nxml-element-local-name">Issue</span> <span class="nxml-namespace-attribute-xmlns">xmlns</span>=<span class="nxml-namespace-attribute-value-delimiter">"</span><span class="nxml-namespace-attribute-value">http://ex.example/xml</span><span class="nxml-namespace-attribute-value-delimiter">"</span></span> <span class="id"><span class="nxml-attribute-local-name">id</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">Issue1</span><span class="nxml-attribute-value-delimiter">"</span></span> <span class="state"><span class="nxml-attribute-local-name">state</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">unassigned</span><span class="nxml-attribute-value-delimiter">"</span></span><span class="nxml-tag-delimiter">&gt;</span>
+  <span class="nxml-tag-delimiter">&lt;</span><span class="Reported"><span class="nxml-element-local-name">Reported</span></span> <span class="reportedOn"><span class="nxml-attribute-local-name">reportedOn</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">2013-01-23T10:18:00</span><span class="nxml-attribute-value-delimiter">"</span></span><span class="nxml-tag-delimiter">&gt;</span>
+    <span class="gname"><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-local-name">GivenName</span><span class="nxml-tag-delimiter">&gt;</span><span class="nxml-text">Bob</span><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-local-name">GivenName</span><span class="nxml-tag-delimiter">&gt;</span></span>
+    <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-local-name">FamilyName</span><span class="nxml-tag-delimiter">&gt;</span><span class="nxml-text">Smith</span><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-local-name">FamilyName</span><span class="nxml-tag-delimiter">&gt;</span>
+    <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-local-name">Email-address</span><span class="nxml-tag-delimiter">&gt;</span><span class="nxml-text">mailto:bob@example.org</span><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-local-name">Email-address</span><span class="nxml-tag-delimiter">&gt;</span>
+  <span class="nxml-tag-delimiter">&lt;</span><span class="Reported"><span class="nxml-tag-slash">/</span><span class="nxml-element-local-name">Reported</span></span><span class="nxml-tag-delimiter">&gt;</span>
+  <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-local-name">Reproduced</span> <span class="nxml-attribute-local-name">reportedOn</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">2013-01-23T11:00:00</span><span class="nxml-attribute-value-delimiter">"</span><span class="nxml-tag-delimiter">&gt;</span>
+    <span class="gname"><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-local-name">GivenName</span><span class="nxml-tag-delimiter">&gt;</span><span class="nxml-text">Joe</span><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-local-name">GivenName</span><span class="nxml-tag-delimiter">&gt;</span></span>
+    <span class="gname"><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-local-name">GivenName</span><span class="nxml-tag-delimiter">&gt;</span><span class="nxml-text">Joseph</span><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-local-name">GivenName</span><span class="nxml-tag-delimiter">&gt;</span></span>
+    <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-local-name">FamilyName</span><span class="nxml-tag-delimiter">&gt;</span><span class="nxml-text">Thompson</span><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-local-name">FamilyName</span><span class="nxml-tag-delimiter">&gt;</span>
+    <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-local-name">Email-address</span><span class="nxml-tag-delimiter">&gt;</span><span class="nxml-text">mailto:joe@example.org</span><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-local-name">Email-address</span><span class="nxml-tag-delimiter">&gt;</span>
+    <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-local-name">Telephone-Number</span><span class="nxml-tag-delimiter">&gt;</span><span class="nxml-text">tel:+456</span><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-local-name">Telephone-Number</span><span class="nxml-tag-delimiter">&gt;</span>
+  <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-local-name">Reproduced</span><span class="nxml-tag-delimiter">&gt;</span>
+<span class="Issue"><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-local-name">Issue</span><span class="nxml-tag-delimiter">&gt;</span></span></pre>
+      </div>
+    <script type="text/javascript">
+      <!--
+prepareHighlight(['Issue', 'id', 'state', 'Reported', 'reportedBy', 'reportedOn', 'gname', 'fname', 'mbox', 'phone'], "highlightBG1", "lowlightBG1");
+      -->
+    </script>
+    </div>
+
+
+    <div class="slide">
+      <h1>GenX</h1>
+      <p>GenX details.</p>
+      <p><code>=&lt;function&gt;?</code>, <code>$&lt;namespace&gt;</code>, <code>!debugger</code></p>
+      <div style="float:left;width=49%;">
+        <pre>PREFIX <span class="type">ex:</span><span class="constant"> </span><span class="function-name">&lt;http://ex.example/#&gt;</span>
+PREFIX <span class="type">foaf:</span><span class="constant"> </span><span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+PREFIX <span class="type">xsd:</span><span class="constant"> </span><span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#&gt;
+</span>
+                            %GenX{ issue <span class="type">$http:</span><span class="constant">//ex</span>.example/xml %}
+
+start = <span class="function-name">&lt;IssueShape&gt;</span>
+
+<span class="function-name">&lt;IssueShape&gt;</span> {
+    <span class="type">ex:</span><span class="constant">state</span> <span class="type">(ex:</span><span class="constant">unassigned</span> <span class="type">ex:</span><span class="constant">assigned)</span> %GenX{ @state =substr(19) %},
+    <span class="type">ex:</span><span class="constant">reportedBy</span> @<span class="function-name">&lt;Person&gt;</span>              %GenX{ reported = %},
+    <span class="type">ex:</span><span class="constant">reportedOn</span> <span class="type">xsd:</span><span class="constant">dateTime</span>           %GenX{ [-1]@date %},
+    <span class="type">(ex:</span><span class="constant">reproducedBy</span> @<span class="function-name">&lt;EmployeeShape&gt;</span>    ,
+     <span class="type">ex:</span><span class="constant">reproducedOn</span> <span class="type">xsd:</span><span class="constant">dateTime</span>        %GenX{ @date %}
+    )?                                   %GenX{ reproduced = %},
+    <span class="type">ex:</span><span class="constant">related</span> @<span class="function-name">&lt;IssueShape&gt;</span>*
+}                                        %GenX{ @id %}
+VIRTUAL <span class="function-name">&lt;Person&gt;</span> {
+    <span class="type">(foaf:</span><span class="constant">name</span> <span class="type">xsd:</span><span class="constant">string</span>                %GenX{ full-name %}
+     | <span class="type">foaf:</span><span class="constant">givenName</span> <span class="type">xsd:</span><span class="constant">string+</span>        %GenX{ given-name %},
+       <span class="type">foaf:</span><span class="constant">familyName</span> <span class="type">xsd:</span><span class="constant">string</span>        %GenX{ family-name %}
+    ),
+    <span class="type">foaf:</span><span class="constant">mbox</span> IRI               %GenX{ email-addr %}
+}
+<span class="function-name">&lt;UserShape&gt;</span> &amp; <span class="function-name">&lt;Person&gt;</span> {
+}
+<span class="function-name">&lt;EmployeeShape&gt;</span> {
+    &amp; <span class="function-name">&lt;Person&gt;</span>,
+    <span class="type">foaf:</span><span class="constant">phone</span> IRI+             %GenX{ tel-number %}
+}</pre>
+      </div>
+      <div style="float:left; width:49%;">
+        <pre><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-local-name">Issue</span> <span class="nxml-namespace-attribute-xmlns">xmlns</span>=<span class="nxml-namespace-attribute-value-delimiter">"</span><span class="nxml-namespace-attribute-value">http://ex.example/xml</span><span class="nxml-namespace-attribute-value-delimiter">"</span> <span class="nxml-attribute-local-name">id</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">Issue1</span><span class="nxml-attribute-value-delimiter">"</span> <span class="nxml-attribute-local-name">state</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">unassigned</span><span class="nxml-attribute-value-delimiter">"</span><span class="nxml-tag-delimiter">&gt;</span>
+  <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-local-name">Reported</span> <span class="nxml-attribute-local-name">reportedOn</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">2013-01-23T10:18:00</span><span class="nxml-attribute-value-delimiter">"</span><span class="nxml-tag-delimiter">&gt;</span>
+    <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-local-name">GivenName</span><span class="nxml-tag-delimiter">&gt;</span><span class="nxml-text">Bob</span><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-local-name">GivenName</span><span class="nxml-tag-delimiter">&gt;</span>
+    <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-local-name">FamilyName</span><span class="nxml-tag-delimiter">&gt;</span><span class="nxml-text">Smith</span><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-local-name">FamilyName</span><span class="nxml-tag-delimiter">&gt;</span>
+    <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-local-name">Email-address</span><span class="nxml-tag-delimiter">&gt;</span><span class="nxml-text">mailto:bob@example.org</span><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-local-name">Email-address</span><span class="nxml-tag-delimiter">&gt;</span>
+  <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-local-name">Reported</span><span class="nxml-tag-delimiter">&gt;</span>
+  <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-local-name">Reproduced</span> <span class="nxml-attribute-local-name">reportedOn</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">2013-01-23T11:00:00</span><span class="nxml-attribute-value-delimiter">"</span><span class="nxml-tag-delimiter">&gt;</span>
+    <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-local-name">GivenName</span><span class="nxml-tag-delimiter">&gt;</span><span class="nxml-text">Joe</span><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-local-name">GivenName</span><span class="nxml-tag-delimiter">&gt;</span>
+    <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-local-name">GivenName</span><span class="nxml-tag-delimiter">&gt;</span><span class="nxml-text">Joseph</span><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-local-name">GivenName</span><span class="nxml-tag-delimiter">&gt;</span>
+    <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-local-name">FamilyName</span><span class="nxml-tag-delimiter">&gt;</span><span class="nxml-text">Thompson</span><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-local-name">FamilyName</span><span class="nxml-tag-delimiter">&gt;</span>
+    <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-local-name">Email-address</span><span class="nxml-tag-delimiter">&gt;</span><span class="nxml-text">mailto:joe@example.org</span><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-local-name">Email-address</span><span class="nxml-tag-delimiter">&gt;</span>
+    <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-local-name">Telephone-Number</span><span class="nxml-tag-delimiter">&gt;</span><span class="nxml-text">tel:+456</span><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-local-name">Telephone-Number</span><span class="nxml-tag-delimiter">&gt;</span>
+  <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-local-name">Reproduced</span><span class="nxml-tag-delimiter">&gt;</span>
+<span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-local-name">Issue</span><span class="nxml-tag-delimiter">&gt;</span></pre>
+      </div>
+    <script type="text/javascript">
+      <!--
+prepareHighlight(['sparql', 'js'], "highlightBG1", "lowlightBG1");
+      -->
+    </script>
+    </div>
+
+
+    <div class="slide">
+      <h1>GenJ</h1>
+      <p>GenJ is GenX's JSON counterpart.</p>
+      <div style="float:left;width=49%;">
+        <pre>PREFIX <span class="type">ex:</span><span class="constant"> </span><span class="function-name">&lt;http://ex.example/#&gt;</span>
+PREFIX <span class="type">foaf:</span><span class="constant"> </span><span class="function-name">&lt;http://xmlns.com/foaf/&gt;</span>
+PREFIX <span class="type">xsd:</span><span class="constant"> </span><span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#&gt;</span
+>
+                                         %GenJ{ @id %}
+
+start = <span class="function-name">&lt;IssueShape&gt;</span>
+
+<span class="function-name">&lt;IssueShape&gt;</span> {
+    <span class="type">ex:</span><span class="constant">state</span> <span class="type">(ex:</span><span class="constant">unassigned</span> <span class="type">ex:</span><span class="constant">assigned)</span> %GenJ{ state %},
+    <span class="type">ex:</span><span class="constant">reportedBy</span> @<span class="function-name">&lt;User&gt;</span>                %GenJ{ rprtBy @id %},
+    <span class="type">ex:</span><span class="constant">reportedOn</span> <span class="type">xsd:</span><span class="constant">dateTime</span>           %GenJ{ rprtOn %},
+    <span class="type">(ex:</span><span class="constant">reproducedBy</span> @<span class="function-name">&lt;User&gt;</span>             %GenJ{ rpdcBy @id %},
+     <span class="type">ex:</span><span class="constant">reproducedOn</span> <span class="type">xsd:</span><span class="constant">dateTime</span>        %GenJ{ rpdcOn %}
+    )?,
+    <span class="type">ex:</span><span class="constant">related</span> @<span class="function-name">&lt;IssueShape&gt;</span>*
+}
+<span class="function-name">&lt;User&gt;</span> {
+    <span class="type">(foaf:</span><span class="constant">name</span> <span class="type">xsd:</span><span class="constant">string</span>                %GenJ{ name %}
+     | <span class="type">foaf:</span><span class="constant">givenName</span> <span class="type">xsd:</span><span class="constant">string+</span>        %GenJ{ fname %},
+       <span class="type">foaf:</span><span class="constant">familyName</span> <span class="type">xsd:</span><span class="constant">string</span>        %GenJ{ lname %}
+    ),
+    <span class="type">foaf:</span><span class="constant">mbox</span> IRI                        %GenJ{ email %},
+    <span class="type">foaf:</span><span class="constant">phone</span> IRI?                      %GenJ{ tel %}
+}</pre>
+      </div>
+      <div style="float:left; width:49%;">
+        <pre>{"@context":
+ {"ns0":"http://ex.example/#", "state":"ns0:state",
+  "rprtBy":"ns0:reportedBy", "ns1":"http://xmlns.com/foaf/",
+  "fname":"ns1:givenName", "lname":"ns1:familyName",
+  "email":"ns1:mbox", "ns2":"http://www.w3.org/2001/XMLSchema#",
+  "rprtOn":{
+      "@id":"ns0:reportedOn", "@type":"ns2:dateTime" },
+  "rpdcBy":"ns0:reproducedBy",
+  "tel":"ns1:phone",
+  "rpdcOn":{
+      "@id":"ns0:reproducedOn", "@type":"ns2:dateTime" } },
+ "@id":"Issue1",
+ "state":"http://ex.example/#unassigned",
+ "rprtBy":{
+     "@id":"User2", "fname":"Bob", "lname":"Smith",
+     "email":"mailto:bob@example.org" },
+ "rprtOn":"2013-01-23T10:18:00",
+ "rpdcBy":{
+     "@id":"Thompson.J", "fname":["Joe","Joseph"], "lname":"Thompson",
+     "email":"mailto:joe@example.org", "tel":"tel:+456"
+ },
+ "rpdcOn":"2013-01-23T11:00:00"
+}</pre>
+      </div>
+    <script type="text/javascript">
+      <!--
+prepareHighlight(['sparql', 'js'], "highlightBG1", "lowlightBG1");
+      -->
+    </script>
+    </div>
+
+
+    <div class="slide">
+      <h1>GenR</h1>
+      <p>GenR is GenJ's RDF counterpart.</p>
+      <p>Generate RDF from RDF?!?</p>
+      <div style="float:left;">
+        <pre>PREFIX <span class="type">ex:</span><span class="constant"> </span><span class="function-name">&lt;http://ex.example/#&gt;</span>
+PREFIX <span class="type">my:</span><span class="constant"> </span><span class="function-name">&lt;http://my.example/#&gt;</span>
+PREFIX <span class="type">xsd:</span><span class="constant"> </span><span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#&gt;</span>
+
+                                         %GenR{ %}
+start = <span class="function-name">&lt;IssueShape&gt;</span>
+
+<span class="function-name">&lt;IssueShape&gt;</span> {
+    <span class="type"><span class="_state">ex:</span></span><span class="constant"><span class="_state">state</span></span> <span class="type">(<span class="unassigned">ex:</span></span><span class="constant"><span class="unassigned">unassigned</span></span> <span class="type">ex:</span><span class="constant">assigned</span> )
+    <span class="genr">%GenR{</span> <span class="issue">ISSUE = </span>IRI(CONCAT(<span class="issue1">STR(s)</span>, <span class="string mymark">"/myMark"</span>)) .
+           <span class="state">STATE = </span>SUBSTR(<span class="unassigned">STR(o)</span>, 19) .
+           <span class="t_status"><span class="issue">ISSUE</span> <span class="type"><span class="status">my:</span></span><span class="constant"><span class="status">status</span></span> <span class="state">STATE</span></span> <span class="genr">%}</span>,
+    <span class="type">ex:</span><span class="constant">reportedOn</span> <span class="type">xsd:</span><span class="constant">dateTime</span> 
+          <span class="genr">%GenR{</span> ON = BNODE(<span class="string">"on"</span>) .
+                 <span class="t_on_">ISSUE <span class="type">my:</span><span class="constant">on</span> ON</span> .
+                 DATE=CONCAT(YEAR(o),'-'MONTH(o),'-',DAY(o)) .
+                 TIME=CONCAT(HOURS(o),':'MINUTES(o),':',SECONDS(o),TZ(o)) .
+                 <span class="t_date">ON <span class="type">ex:</span><span class="constant">date</span> STRDT(DATE, <span class="type">xsd:</span><span class="constant">date)</span></span> .
+                 <span class="t_time">ON <span class="type">ex:</span><span class="constant">time</span> STRDT(TIME, <span class="type">xsd:</span><span class="constant">time)</span></span> <span class="genr">%}</span>
+}</pre>
+      </div>
+      <div style="float:left;">
+        <pre>PREFIX <span class="type">ex:</span><span class="constant"> </span><span class="function-name">&lt;http://ex.example/#&gt;</span>
+PREFIX <span class="type">xsd:</span><span class="constant"> </span><span class="function-name">&lt;http://www.w3.org/2001/XMLSchema#&gt;</span>
+
+<span class="function-name issue1">&lt;Issue1&gt;</span>
+    <span class="type"><span class="_state">ex:</span></span><span class="constant"><span class="_state">state</span></span>        <span class="type"><span class="unassigned">ex:</span></span><span class="constant"><span class="unassigned unassigned">unassigned</span></span> ;
+    <span class="type">ex:</span><span class="constant">reportedOn</span>   <span class="string">"2013-01-23T10:18:12Z"</span><span class="constant">^^xsd:dateTime</span> .</pre>
+
+    <pre><span class="function-name issue">&lt;<span class="issue1">Issue1</span><span class="mymark">/myMark</span>&gt;</span> <span class="t_status"><span class="type"><span class="status">my:</span><span class="constant"><span class="status">status</span></span></span> <span class="string"><span class="unassigned state">"unassigned"</span></span></span> ;
+  <span class="t_on_"><span class="type">my:</span><span class="constant">on</span> [</span>
+    <span class="t_date"><span class="type">my:</span><span class="constant">date</span> <span class="string">"2013-01-23"</span><span class="type">^^xsd:</span><span class="constant">date</span></span> ;
+    <span class="t_time"><span class="type">my:</span><span class="constant">time</span> <span class="string">"10:18:12Z"</span><span class="constant">^^xsd:time</span></span>
+  ] .</pre>
+      </div>
+    <script type="text/javascript">
+      <!--
+prepareHighlight(["mymark", "issue1", "issue", "status", "state", "_state", "t_status", "_unassigned", "unassigned", "t_on_", "t_date", "t_time"], "highlightBG1", "lowlightBG1");
+      -->
+    </script>
+      <p style="clear:both;"><a href="http://www.w3.org/2013/ShEx/FancyShExDemo?starting-node=%3CIssue1%3E&amp;schema=PREFIX%20ex%3A%20%3Chttp%3A%2F%2Fex.example%2F%23%3E%0APREFIX%20my%3A%20%3Chttp%3A%2F%2Fmy.example%2F%23%3E%0APREFIX%20foaf%3A%20%3Chttp%3A%2F%2Fxmlns.com%2Ffoaf%2F%3E%0APREFIX%20xsd%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema%23%3E%0APREFIX%20rdf%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F1999%2F02%2F22-rdf-syntax-ns%23%3E%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%25GenR%7B%20%25%7D%0Astart%20%3D%20%3CIssueShape%3E%0A%0A%3CIssueShape%3E%20%7B%0A%20%20%20%20ex%3Astate%20(ex%3Aunassigned%20ex%3Aassigned)%20%25GenR%7B%0AISSUE%20%3D%20IRI(CONCAT(STR(s)%2C%20%22%2FmyMark%22))%20.%20%0ASTATE%3DSUBSTR(STR(o)%2C%2019)%20.%0AISSUE%20my%3Astatus%20STATE%20%25%7D%2C%0A%20%20%20%20ex%3AreportedOn%20xsd%3AdateTime%20%20%20%20%20%20%20%20%20%20%20%25GenR%7B%0AON%20%3D%20BNODE(%22on%22)%20.%0AISSUE%20my%3Aon%20ON%20.%0ADATE%3DCONCAT(YEAR(o)%2C%27-%27MONTH(o)%2C%27-%27%2CDAY(o))%20.%0ATIME%3DCONCAT(HOURS(o)%2C%27%3A%27MINUTES(o)%2C%27%3A%27%2CSECONDS(o)%2CTZ(o))%20.%0AON%20ex%3Adate%20STRDT(DATE%2C%20xsd%3Adate)%20.%0AON%20ex%3Atime%20STRDT(TIME%2C%20xsd%3Atime)%20%25%7D%0A%7D%0A&amp;data=%23BASE%20%3Chttp%3A%2F%2Fbase.example%2F%23%3E%0APREFIX%20ex%3A%20%3Chttp%3A%2F%2Fex.example%2F%23%3E%0APREFIX%20foaf%3A%20%3Chttp%3A%2F%2Fxmlns.com%2Ffoaf%2F%3E%0APREFIX%20xsd%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema%23%3E%0A%0A%3CIssue1%3E%0A%20%20%20%20ex%3Astate%20%20%20%20%20%20%20%20ex%3Aunassigned%20%3B%0A%20%20%20%20ex%3AreportedOn%20%20%20%222013-01-23T10%3A18%3A12Z%22%5E%5Exsd%3AdateTime%20.%0A">this example</a></p>
+      <p>example <a href="http://www.w3.org/2013/ShEx/FancyShExDemo?schemaURL=test/O-RIM-to-FHIR-Patient/schema.shex&amp;dataURL=test/O-RIM-to-FHIR-Patient/pass-IJ.ttl">converting between clinical data schemas</a></p>
+    </div>
+
+
+    <div class="slide">
+      <h1>GenN</h1>
+      <p>Normalize RDF.</p>
+      <p>Limited use:</p>
+      <ul>
+        <li>Normalize for very simple parsers.<br/>
+        Produce a sub-langauge of RDF.<br/>
+        Avoid the 2nd-level application parse of an RDF graph.</li>
+        <li>Consistent examples in documentation.</li>
+        <li>Canonicalize for diffing.</li>
+      </ul>
+      <pre style="float:left;">%GenN{ %}</pre>
+      <p style="clear:both;"><a href="http://www.w3.org/2013/ShEx/FancyShExDemo?schema=%23BASE%20%3Chttp%3A%2F%2Fbase.example%2F%23%3E%0APREFIX%20ex%3A%20%3Chttp%3A%2F%2Fex.example%2F%23%3E%0APREFIX%20foaf%3A%20%3Chttp%3A%2F%2Fxmlns.com%2Ffoaf%2F%3E%0APREFIX%20xsd%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema%23%3E%0APREFIX%20rdf%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F1999%2F02%2F22-rdf-syntax-ns%23%3E%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%25GenJ%7B%20%40id%20%25%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%25GenN%7B%20%25%7D%0Astart%20%3D%20%3CIssueShape%3E%0A%0A%3CIssueShape%3E%20%7B%0A%20%20%20%20ex%3Astate%20(ex%3Aunassigned%20ex%3Aassigned)%20%25GenJ%7B%20state%20%25%7D%2C%0A%20%20%20%20ex%3AreportedBy%20%40%3CUser%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%25GenJ%7B%20rprtBy%20%40id%20%25%7D%2C%0A%20%20%20%20ex%3AreportedOn%20xsd%3AdateTime%20%20%20%20%20%20%20%20%20%20%20%25GenJ%7B%20rprtOn%20%25%7D%2C%0A%20%20%20%20(ex%3AreproducedBy%20%40%3CUser%3E%20%20%20%20%20%20%20%20%20%20%20%20%20%25GenJ%7B%20rpdcBy%20%40id%20%25%7D%2C%0A%20%20%20%20%20ex%3AreproducedOn%20xsd%3AdateTime%20%20%20%20%20%20%20%20%25GenJ%7B%20rpdcOn%20%25%7D%0A%20%20%20%20)%3F%2C%0A%20%20%20%20ex%3Arelated%20%40%3CIssueShape%3E*%0A%7D%0A%3CUser%3E%20%7B%0A%20%20%20%20(foaf%3Aname%20xsd%3Astring%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%25GenJ%7B%20name%20%25%7D%0A%20%20%20%20%20%7C%20foaf%3AgivenName%20xsd%3Astring%2B%20%20%20%20%20%20%20%20%25GenJ%7B%20fname%20%25%7D%2C%0A%20%20%20%20%20%20%20foaf%3AfamilyName%20xsd%3Astring%20%20%20%20%20%20%20%20%25GenJ%7B%20lname%20%25%7D%0A%20%20%20%20)%2C%0A%20%20%20%20foaf%3Ambox%20IRI%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%25GenJ%7B%20email%20%25%7D%2C%0A%20%20%20%20foaf%3Aphone%20IRI%3F%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%25GenJ%7B%20tel%20%25%7D%0A%7D%0A&amp;data=%23BASE%20%3Chttp%3A%2F%2Fbase.example%2F%23%3E%0APREFIX%20ex%3A%20%3Chttp%3A%2F%2Fex.example%2F%23%3E%0APREFIX%20foaf%3A%20%3Chttp%3A%2F%2Fxmlns.com%2Ffoaf%2F%3E%0APREFIX%20xsd%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2001%2FXMLSchema%23%3E%0A%0A%3CIssue1%3E%0A%20%20%20%20ex%3Astate%20%20%20%20%20%20%20%20ex%3Aunassigned%20%3B%0A%20%20%20%20ex%3AreportedBy%20%20%20%3CUser2%3E%20%3B%0A%20%20%20%20ex%3AreportedOn%20%20%20%222013-01-23T10%3A18%3A00%22%5E%5Exsd%3AdateTime%20%3B%0A%20%20%20%20ex%3AreproducedBy%20%3CThompson.J%3E%20%3B%0A%20%20%20%20ex%3AreproducedOn%20%222013-01-23T11%3A00%3A00%22%5E%5Exsd%3AdateTime%20%3B%0A%23%20%20%20%20ex%3Arelated%20%20%20%20%20%20%3CIssue2%3E%2C%20%3CIssue3%3E%20%0A.%0A%0A%3CUser2%3E%0A%20%20%20%20foaf%3AgivenName%20%22Bob%22%20%3B%0A%20%20%20%20foaf%3AfamilyName%20%22Smith%22%20%3B%0A%20%20%20%20foaf%3Ambox%20%3Cmailto%3Abob%40example.org%3E%0A.%0A%0A%3CThompson.J%3E%0A%20%20%20%20foaf%3AgivenName%20%22Joe%22%2C%20%22Joseph%22%20%3B%0A%20%20%20%20foaf%3AfamilyName%20%22Thompson%22%20%3B%0A%20%20%20%20foaf%3Aphone%20%3Ctel%3A%2B456%3E%20%3B%0A%20%20%20%20foaf%3Ambox%20%3Cmailto%3Ajoe%40example.org%3E%0A.%0A%0A&amp;starting-node=%3CIssue1%3E">example</a></p>
+    </div>
+
+
+    <div class="slide">
+      <h1>Issues:</h1>
+      <ul>
+        <li>ordering:
+        <ul>
+          <li>useful for
+          <ul>
+              <li>simplifying semantic actions</li>
+              <li>enabling e.g. predictable transformation</li>
+          </ul></li>
+          <li>some resistance</li>
+        </ul></li>
+        <li>semantics of reverse arcs and negation</li>
+        <li>labeling looks like more line noise: <code>$my:id</code></li>
+      </ul>
+    </div>
+
+    <div id="Requirements" class="slide">
+      <h1>Standardization process</h1>
+      <div style="float:left;">
+      <ul>
+        <li>10 User stories</li>
+        <li>20 Requirements<br/>
+        <span style="color: #FFF;">20 </span>e.g. <a href="http://www.w3.org/2014/10/rdfvalreqs/?+GDCAP-small#reqs">"small" requirements group</a>.
+        </li>
+        <li>30 langage fitness test</li>
+        <li>40 specification</li>
+        <li>50 test definition</li>
+        <li>60 implementation feedback</li>
+        <li>70 GOTO 40</li>
+      </ul>
+      </div>
+      <div style="float:left;">
+        <img src="http://wp.patheos.com.s3.amazonaws.com/blogs/standingonmyhead/files/2012/04/boys-fighting.jpg" alt="boys fighting"/>
+      </div>
+    </div>
+
+    <div class="slide">
+      <h1>Resources</h1>
+      <ul>
+        <li>ShEx wiki https://www.w3.org/2001/sw/wiki/ShEx</li>
+        <li>Definition as <a href="http://www.w3.org/2013/ShEx/Definition">set notation</a>, <a href="https://www.w3.org/2014/03/ShEx-subm/Definition">Z-notation</a></li>
+        <li><a href="http://www.w3.org/2013/ShEx/Primer">Primer</a></li>
+        <li><a href="http://www.w3.org/2013/ShEx/FancyShExDemo?schemaURL=test/Issue-js-test-date-triple.shex&amp;dataURL=test/Issue-fail-date.ttl&amp;colorize=1">Demo</a></li>
+        <li><a href="http://www.w3.org/2013/ShEx/EvaluationLogic.html#tests">algebra tests</a>, <a href="http://www.w3.org/2013/ShEx/test/">general tests</a></li>
+        <li><a href="https://github.com/hsolbrig/ShEx">python impl (Mayo)</a></li>
+        <li><a href="http://www.slideshare.net/jelabra/semantics-2014">http://www.slideshare.net/jelabra/semantics-2014</a></li>
+      </ul>
+    </div>
+
+
+  </body>
+</html>
