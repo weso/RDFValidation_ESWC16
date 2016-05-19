@@ -1,0 +1,34 @@
+<rdf:RDF
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://example.org/"
+  xmlns:dbo="http://dbpedia.org/ontology/"
+  xmlns:dbr="http://dbpedia.org/resource/"
+  xmlns:foaf="http://xmlns.com/foaf/0.1/"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+ <rdf:Description rdf:about="http://example.org/alice">
+  <foaf:knows>
+   <rdf:Description rdf:about="http://example.org/bob">
+     <dbo:birthDate 
+        rdf:datatype="http://www.w3.org/2001/XMLSchema#date"
+     >1990-02-03</dbo:birthDate>
+     <foaf:name>Robert</foaf:name>
+     <foaf:age rdf:datatype="http://www.w3.org/2001/XMLSchema#integer"
+     >25</foaf:age>
+     <foaf:knows rdf:parseType="Resource">
+       <foaf:age 
+        rdf:datatype="http://www.w3.org/2001/XMLSchema#integer"
+       >34</foaf:age>
+     </foaf:knows>
+     <foaf:knows>
+       <rdf:Description rdf:about="http://example.org/carol">
+         <foaf:knows 
+           rdf:resource="http://example.org/alice"/>
+         <dbo:birthPlace 
+           rdf:resource="http://dbpedia.org/resource/Oviedo"/>
+       </rdf:Description>
+     </foaf:knows>
+   </rdf:Description>
+  </foaf:knows>
+  <dbo:birthPlace rdf:resource="http://dbpedia.org/resource/Oviedo"/>
+ </rdf:Description>
+</rdf:RDF>

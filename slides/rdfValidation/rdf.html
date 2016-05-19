@@ -72,6 +72,59 @@ span.comment a { color: #b22222;  font-family: DejaVu Sans Mono;  font-stretch: 
 
 .leftPack     { float:left; margin: .1em; border-left-width: thin; }
 
+      .nxml-attribute-colon {
+      }
+      .nxml-attribute-local-name {
+        /* nxml-attribute-local-name */
+        color: #a0522d;
+      }
+      .nxml-attribute-prefix {
+        /* nxml-attribute-prefix */
+        color: #483d8b;
+      }
+      .nxml-attribute-value {
+        /* nxml-attribute-value */
+        color: #8b2252;
+      }
+      .nxml-attribute-value-delimiter {
+        /* nxml-attribute-value-delimiter */
+        color: #8b2252;
+      }
+      .nxml-element-colon {
+      }
+      .nxml-element-local-name {
+        /* nxml-element-local-name */
+        color: #0000ff;
+      }
+      .nxml-element-prefix {
+        /* nxml-element-prefix */
+        color: #483d8b;
+      }
+      .nxml-namespace-attribute-colon {
+      }
+      .nxml-namespace-attribute-prefix {
+        /* nxml-namespace-attribute-prefix */
+        color: #a0522d;
+      }
+      .nxml-namespace-attribute-value {
+        /* nxml-namespace-attribute-value */
+        color: #8b2252;
+      }
+      .nxml-namespace-attribute-value-delimiter {
+        /* nxml-namespace-attribute-value-delimiter */
+        color: #8b2252;
+      }
+      .nxml-namespace-attribute-xmlns {
+        /* nxml-namespace-attribute-xmlns */
+        color: #483d8b;
+      }
+      .nxml-tag-delimiter {
+      }
+      .nxml-tag-slash {
+      }
+      .nxml-text {
+      }
+
 /*]]>
 */</style>
 
@@ -164,6 +217,7 @@ function prepareHighlight (highlightables, onClass, offClass, slide) {
 &lt;http://example.org/carol&gt; &lt;http://xmlns.com/foaf/0.1/knows&gt; &lt;http://example.org/alice&gt; .
 &lt;http://example.org/alice&gt; &lt;http://dbpedia.org/ontology/birthPlace&gt; &lt;http://dbpedia.org/resource/Oviedo&gt; .
 &lt;http://example.org/carol&gt; &lt;http://dbpedia.org/ontology/birthPlace&gt; &lt;http://dbpedia.org/resource/Oviedo">&lt; .
+</pre>
 </div>
 
 <div class="slide">
@@ -186,6 +240,86 @@ function prepareHighlight (highlightables, onClass, offClass, slide) {
 <span class="type">:</span><span class="constant">carol</span>  <span class="type">dbo:</span><span class="constant">birthPlace</span>  <span class="type">dbr:</span><span class="constant">Oviedo</span> ;
         <span class="type">foaf:</span><span class="constant">knows</span>      <span class="type">:</span><span class="constant">alice</span> <span class="keyword">.</span>
 </pre>
+</div>
+
+<div class="slide">
+<h1>Blank nodes &amp; literals</h1>
+<ul>
+<li>Literals represent terminal values: integers, strings, etc.
+<ul>
+<li>Literals can appear in object positions</li>
+<li>Example: <em>Bob has age 34</em>
+</ul>
+</li>
+<li>Blank nodes can represent resources with not URI known
+<ul>
+<li>Blank nodes can appear in subject and object positions</li>
+<li>Example: <em>Bob knows someone whose age is 23</em>
+</ul>
+</li>
+</ul>
+<!-- TODO: add a graph... -->
+<pre>
+<span class="type">:</span><span class="constant">bob</span>    <span class="type">foaf:</span><span class="constant">knows</span>  <span class="function-name">_:1</span> ;
+        <span class="type">foaf:</span><span class="constant">age</span> 25 ;
+        <span class="type">foaf:</span><span class="constant">name</span> <span class="string">"Robert"</span> ;
+        <span class="type">dbo:</span><span class="constant">birthDate</span> <span class="string">"1990-02-03"</span>^^<span class="type">xsd:</span><span class="constant">date</span> <span class="keyword">.</span>
+<span class="function-name">_:1</span>     <span class="type">foaf:</span><span class="constant">age</span> 34 <span class="keyword">.</span>
+</pre>
+</div>
+
+<div class="slide">
+<h1>Concrete syntaxes for RDF</h1>
+<ul>
+<li>The RDF data model can be represented in several ways</li>
+<li>
+ <a href="https://www.w3.org/TR/rdf-syntax-grammar/">RDF/XML</a>, 
+ <a href="http://www.w3.org/TR/turtle/">Turtle</a>, 
+ <a href="http://www.w3.org/TR/n-triples/">N-Triples</a>,...</li>
+</ul>
+</div>
+
+<div class="slide">
+<h1>RDF/XML</h1>
+<ul>
+<li>Example in RDF/XML</li>
+    <pre>
+<span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-prefix">rdf</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">RDF</span>
+  <span class="nxml-namespace-attribute-xmlns">xmlns</span><span class="nxml-namespace-attribute-colon">:</span><span class="nxml-namespace-attribute-prefix">rdf</span>=<span class="nxml-namespace-attribute-value-delimiter">"</span><span class="nxml-namespace-attribute-value">http://www.w3.org/1999/02/22-rdf-syntax-ns#</span><span class="nxml-namespace-attribute-value-delimiter">"</span>
+  <span class="nxml-namespace-attribute-xmlns">xmlns</span>=<span class="nxml-namespace-attribute-value-delimiter">"</span><span class="nxml-namespace-attribute-value">http://example.org/</span><span class="nxml-namespace-attribute-value-delimiter">"</span>
+  <span class="nxml-namespace-attribute-xmlns">xmlns</span><span class="nxml-namespace-attribute-colon">:</span><span class="nxml-namespace-attribute-prefix">dbo</span>=<span class="nxml-namespace-attribute-value-delimiter">"</span><span class="nxml-namespace-attribute-value">http://dbpedia.org/ontology/</span><span class="nxml-namespace-attribute-value-delimiter">"</span>
+  <span class="nxml-namespace-attribute-xmlns">xmlns</span><span class="nxml-namespace-attribute-colon">:</span><span class="nxml-namespace-attribute-prefix">dbr</span>=<span class="nxml-namespace-attribute-value-delimiter">"</span><span class="nxml-namespace-attribute-value">http://dbpedia.org/resource/</span><span class="nxml-namespace-attribute-value-delimiter">"</span>
+  <span class="nxml-namespace-attribute-xmlns">xmlns</span><span class="nxml-namespace-attribute-colon">:</span><span class="nxml-namespace-attribute-prefix">foaf</span>=<span class="nxml-namespace-attribute-value-delimiter">"</span><span class="nxml-namespace-attribute-value">http://xmlns.com/foaf/0.1/</span><span class="nxml-namespace-attribute-value-delimiter">"</span>
+  <span class="nxml-namespace-attribute-xmlns">xmlns</span><span class="nxml-namespace-attribute-colon">:</span><span class="nxml-namespace-attribute-prefix">xsd</span>=<span class="nxml-namespace-attribute-value-delimiter">"</span><span class="nxml-namespace-attribute-value">http://www.w3.org/2001/XMLSchema#</span><span class="nxml-namespace-attribute-value-delimiter">"</span><span class="nxml-tag-delimiter">&gt;</span>
+ <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-prefix">rdf</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">Description</span> <span class="nxml-attribute-prefix">rdf</span><span class="nxml-attribute-colon">:</span><span class="nxml-attribute-local-name">about</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">http://example.org/alice</span><span class="nxml-attribute-value-delimiter">"</span><span class="nxml-tag-delimiter">&gt;</span>
+  <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-prefix">foaf</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">knows</span><span class="nxml-tag-delimiter">&gt;</span>
+   <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-prefix">rdf</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">Description</span> <span class="nxml-attribute-prefix">rdf</span><span class="nxml-attribute-colon">:</span><span class="nxml-attribute-local-name">about</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">http://example.org/bob</span><span class="nxml-attribute-value-delimiter">"</span><span class="nxml-tag-delimiter">&gt;</span>
+     <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-prefix">dbo</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">birthDate</span> 
+        <span class="nxml-attribute-prefix">rdf</span><span class="nxml-attribute-colon">:</span><span class="nxml-attribute-local-name">datatype</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">http://www.w3.org/2001/XMLSchema#date</span><span class="nxml-attribute-value-delimiter">"</span>
+     <span class="nxml-tag-delimiter">&gt;</span><span class="nxml-text">1990-02-03</span><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-prefix">dbo</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">birthDate</span><span class="nxml-tag-delimiter">&gt;</span>
+     <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-prefix">foaf</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">name</span><span class="nxml-tag-delimiter">&gt;</span><span class="nxml-text">Robert</span><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-prefix">foaf</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">name</span><span class="nxml-tag-delimiter">&gt;</span>
+     <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-prefix">foaf</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">age</span> <span class="nxml-attribute-prefix">rdf</span><span class="nxml-attribute-colon">:</span><span class="nxml-attribute-local-name">datatype</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">http://www.w3.org/2001/XMLSchema#integer</span><span class="nxml-attribute-value-delimiter">"</span>
+     <span class="nxml-tag-delimiter">&gt;</span><span class="nxml-text">25</span><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-prefix">foaf</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">age</span><span class="nxml-tag-delimiter">&gt;</span>
+     <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-prefix">foaf</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">knows</span> <span class="nxml-attribute-prefix">rdf</span><span class="nxml-attribute-colon">:</span><span class="nxml-attribute-local-name">parseType</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">Resource</span><span class="nxml-attribute-value-delimiter">"</span><span class="nxml-tag-delimiter">&gt;</span>
+       <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-prefix">foaf</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">age</span> 
+        <span class="nxml-attribute-prefix">rdf</span><span class="nxml-attribute-colon">:</span><span class="nxml-attribute-local-name">datatype</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">http://www.w3.org/2001/XMLSchema#integer</span><span class="nxml-attribute-value-delimiter">"</span>
+       <span class="nxml-tag-delimiter">&gt;</span><span class="nxml-text">34</span><span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-prefix">foaf</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">age</span><span class="nxml-tag-delimiter">&gt;</span>
+     <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-prefix">foaf</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">knows</span><span class="nxml-tag-delimiter">&gt;</span>
+     <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-prefix">foaf</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">knows</span><span class="nxml-tag-delimiter">&gt;</span>
+       <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-prefix">rdf</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">Description</span> <span class="nxml-attribute-prefix">rdf</span><span class="nxml-attribute-colon">:</span><span class="nxml-attribute-local-name">about</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">http://example.org/carol</span><span class="nxml-attribute-value-delimiter">"</span><span class="nxml-tag-delimiter">&gt;</span>
+         <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-prefix">foaf</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">knows</span> 
+           <span class="nxml-attribute-prefix">rdf</span><span class="nxml-attribute-colon">:</span><span class="nxml-attribute-local-name">resource</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">http://example.org/alice</span><span class="nxml-attribute-value-delimiter">"</span><span class="nxml-tag-slash">/</span><span class="nxml-tag-delimiter">&gt;</span>
+         <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-prefix">dbo</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">birthPlace</span> 
+           <span class="nxml-attribute-prefix">rdf</span><span class="nxml-attribute-colon">:</span><span class="nxml-attribute-local-name">resource</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">http://dbpedia.org/resource/Oviedo</span><span class="nxml-attribute-value-delimiter">"</span><span class="nxml-tag-slash">/</span><span class="nxml-tag-delimiter">&gt;</span>
+       <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-prefix">rdf</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">Description</span><span class="nxml-tag-delimiter">&gt;</span>
+     <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-prefix">foaf</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">knows</span><span class="nxml-tag-delimiter">&gt;</span>
+   <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-prefix">rdf</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">Description</span><span class="nxml-tag-delimiter">&gt;</span>
+  <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-prefix">foaf</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">knows</span><span class="nxml-tag-delimiter">&gt;</span>
+  <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-element-prefix">dbo</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">birthPlace</span> <span class="nxml-attribute-prefix">rdf</span><span class="nxml-attribute-colon">:</span><span class="nxml-attribute-local-name">resource</span>=<span class="nxml-attribute-value-delimiter">"</span><span class="nxml-attribute-value">http://dbpedia.org/resource/Oviedo</span><span class="nxml-attribute-value-delimiter">"</span><span class="nxml-tag-slash">/</span><span class="nxml-tag-delimiter">&gt;</span>
+ <span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-prefix">rdf</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">Description</span><span class="nxml-tag-delimiter">&gt;</span>
+<span class="nxml-tag-delimiter">&lt;</span><span class="nxml-tag-slash">/</span><span class="nxml-element-prefix">rdf</span><span class="nxml-element-colon">:</span><span class="nxml-element-local-name">RDF</span><span class="nxml-tag-delimiter">&gt;</span>
+</pre>
+</ul>
 </div>
 
 </body>

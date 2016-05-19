@@ -1,0 +1,8 @@
+:bob    foaf:knows  _:1 ;
+        foaf:age 25 ;
+        foaf:name "Robert" ;
+        dbo:birthDate "1990-02-03"^^xsd:date .
+
+_:1     foaf:age 34 .
+
+
