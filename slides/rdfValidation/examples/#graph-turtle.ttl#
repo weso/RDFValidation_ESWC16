@@ -1,0 +1,12 @@
+prefix dbo:   <http://dbpedia.org/ontology/> 
+prefix :      <http://example.org/> 
+prefix dbr:   <http://dbpedia.org/resource/> 
+prefix foaf:  <http://xmlns.com/foaf/0.1/> 
+     
+:alice  dbo:birthPlace  dbr:Oviedo ;
+        foaf:knows      :bob .
+
+:bob    foaf:knows  :carol .
+
+:carol  dbo:birthPlace  dbr:Oviedo ;
+        foaf:knows      :alice .

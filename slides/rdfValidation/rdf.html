@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-US">
+  <head>
+    <title>RDF Validation Tutorial</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="copyright" content=
+	  "Copyright &#169; 2005-2010 W3C (MIT, ERCIM, Keio)" />
+    <meta name="duration" content="5" />
+    <meta name="font-size-adjustment" content="-2" />
+    <link rel="stylesheet" href="../../Slidy2/styles/slidy.css" type="text/css" />
+    <link rel="stylesheet" href="../../Slidy2/styles/w3c-blue.css" type="text/css" />
+    <script src="../../Slidy2/scripts/slidy.js" charset="utf-8" type="text/javascript">
+    </script>
+    <script src="../../scripts/jquery.min.js" type= "text/javascript"></script>
+<!--  <link rel="stylesheet" type="text/css" href="local.css"/ -->
+  <style type="text/css">
+/*<![CDATA[*/
+.todo { border: medium solid red; }
+table { border-collapse: collapse }
+table, td, th { border: 1px solid black; }
+tbody tr:nth-child(odd)		{ background-color:#eee; }
+tbody tr:nth-child(even)		{ background-color:#fff; }
+
+.underlined {text-decoration:underline}
+.old {color: #333;}
+.new {color: #181;}
+.bold { font-size: 1.5em; font-weight:bold; }
+.bad { color: #700; }
+
+body { font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: #000000;  }
+span.default   { font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: #000000;  }
+span.default a { font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  color: #000000;  background: #ffffff; text-decoration: underline; }
+span.function-name   { color: #0000ff;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  }
+span.function-name a { color: #0000ff;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  background: #ffffff; text-decoration: underline; }
+span.keyword   { color: #a020f0;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  }
+span.keyword a { color: #a020f0;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  background: #ffffff; text-decoration: underline; }
+span.string   { color: #8b2252;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  }
+span.string a { color: #8b2252;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  background: #ffffff; text-decoration: underline; }
+span.constant   { color: #008b8b;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  }
+span.constant a { color: #008b8b;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  background: #ffffff; text-decoration: underline; }
+span.type   { color: #228b22;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  }
+span.type a { color: #228b22;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  background: #ffffff; text-decoration: underline; }
+span.comment   { color: #b22222;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  }
+span.comment a { color: #b22222;  font-family: DejaVu Sans Mono;  font-stretch: normal;  font-weight: 500;  font-style: normal;  background: #ffffff; text-decoration: underline; }
+
+.sparql { color:#58a; }
+.js { color:#5a8; }
+.genr { color:#a28; }
+
+.error { background-color: #f77; }
+
+.plus         { color: #171;  }
+.minus        { color: #711;  }
+.plus:before  { content: "+" }
+.minus:before { content: "-" }
+
+.highlight1    { border: 5px solid #bb0; font-weight: bold; }
+.lowlight1     { border: 5px solid transparent; font-weight: normal; }
+.highlight2    { color: #b00; border: 5px solid #f00; font-weight: bold; }
+.lowlight2     { border: 5px solid transparent; font-weight: normal; }
+.highlightBG1   { /* border: 5px solid transparent; */ background-color: #bb0; font-weight: bold; }
+.lowlightBG1    { /* border: 5px solid transparent; */ font-weight: normal; }
+.highlightBG2   { /* border: 5px solid transparent; */ background-color: #b00; font-weight: bold; }
+.lowlightBG2    { /* border: 5px solid transparent; */ font-weight: normal; }
+
+.errorHint.lowlightBG2    { background-color: #f4d5d7 }
+.errorHint.highlightBG2    { color: #000; }
+
+.retext       { float:left; border: thin solid #95D0AB; padding-left: .2em; padding-right: .2em; margin-left: .2em; margin-right: .2em; }
+
+.leftPack     { float:left; margin: .1em; border-left-width: thin; }
+
+/*]]>
+*/</style>
+
+    <script type="text/javascript"><!--
+function prepareHighlight (highlightables, onClass, offClass, slide) {
+  if (slide === undefined)
+    slide = $("body").find("> div").last();
+  $.each( highlightables, function( index, value ){
+    var elts = slide.find( "."+value );
+    elts
+  	.mouseenter(function() {
+  	    elts.removeClass(offClass).addClass(onClass);
+  	})
+  	.mouseleave(function() {
+  	    elts.removeClass(onClass).addClass(offClass);
+  	})
+    .addClass(offClass);
+  })
+}
+--> </script>
+  </head>
+  <body>
+    <!--<div class="background"><img alt="" id="head-icon"
+    src="../../Slidy2/graphics/icon-blue.png" /><object id="head-logo"
+    data="../../Slidy2/graphics/w3c-logo-white.svg" type="image/svg+xml"
+    title="W3C logo"><a href="http://www.w3.org/"><img
+    alt="W3C logo" id="head-logo-fallback"
+    src="../../Slidy2/graphics/w3c-logo-white.gif" /></a></object></div> -->
+
+<div class="background">
+      <!--Labra: remove w3c logo <img src="../../Slidy2/graphics/w3c-logo-slanted.jpg" alt="slanted W3C logo" />-->
+      <!-- hidden style graphics to ensure they are saved with other content -->
+      <img class="hidden" src="../../Slidy2/graphics/bullet.png" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/fold.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/unfold.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/fold-dim.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/nofold-dim.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/unfold-dim.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/bullet-fold.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/bullet-unfold.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/bullet-fold-dim.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/bullet-nofold-dim.gif" alt="" />
+      <img class="hidden" src="../../Slidy2/graphics/bullet-unfold-dim.gif" alt="" />
+</div>
+    
+<div class="slide cover">
+<div class="header">
+ <h1>RDF Data Model</h1>
+ <h2><a href="index.html">RDF Validation Tutorial</a></h2>
+ <h3><a href="http://2016.eswc-conferences.org/">ESWC Tutorial</a>, 30th May 2016</h3>
+ <p>Slides: <a href="http://weso.github.io/RDFValidation_ESWC16/slides/rdfValidation">http://weso.github.io/RDFValidation_ESWC16/slides/rdfValidation</a></p> 
+ <ul>
+  <li>
+   <a href="http://di002.edv.uniovi.es/~labra/">Jose Emilio Labra Gayo</a>, <a href="http://www.uniovi.es">University of Oviedo</a>
+  </li>
+  <li>
+	<a href="http://www.w3.org/People/Eric/">Eric Prud'hommeaux</a>, W3C
+  </li>
+  <li>
+	<a href="http://www.mayo.edu/research/faculty/solbrig-harold-r-m-s/bio-20022700">Harold Solbrig</a>, Mayo Clinic, USA
+  </li>
+  <li>
+	<a href="http://www.lifl.fr/~boneva/">Iovka Boneva</a>, Associate Professor at University of Lille, France
+  </li>
+ </ul>
+</div>
+</div>
+
+<div class="slide">
+<h1>RDF Data Model</h1>
+<ul>
+<li>Basic Unit of information: Statement</li>
+<li>Statement = triple (Subject, Predicate, Object)</li>
+</ul>
+<p><img src="images/triple.png" alt="example of a triple"/></p>
+<pre>
+<span class="function-name"><a href="http://example.org/alice&gt; &lt;http://xmlns.com/foaf/0.1/knows&gt; &lt;http://example.org/bob">&lt;http://example.org/alice&gt;</a></span><a href="http://example.org/alice&gt; &lt;http://xmlns.com/foaf/0.1/knows&gt; &lt;http://example.org/bob"> </a><span class="function-name"><a href="http://example.org/alice&gt; &lt;http://xmlns.com/foaf/0.1/knows&gt; &lt;http://example.org/bob">&lt;http://xmlns.com/foaf/0.1/knows&gt;</a></span><a href="http://example.org/alice&gt; &lt;http://xmlns.com/foaf/0.1/knows&gt; &lt;http://example.org/bob"> </a><span class="function-name"><a href="http://example.org/alice&gt; &lt;http://xmlns.com/foaf/0.1/knows&gt; &lt;http://example.org/bob">&lt;http://example.org/bob&gt;</a></span> <span class="keyword">.</span>
+</pre>
+</div>
+
+<div class="slide">
+<h1>RDF Graph</h1>
+<ul>
+<li>RDF Graph = collection of triples</li>
+</ul>
+<p><img src="images/graph.png" alt="example of a RDF graph"/></p>
+<pre>
+<a href="http://example.org/alice&gt; &lt;http://xmlns.com/foaf/0.1/knows&gt; &lt;http://example.org/bob&gt; .
+&lt;http://example.org/bob&gt; &lt;http://xmlns.com/foaf/0.1/knows&gt; &lt;http://example.org/carol&gt; .
+&lt;http://example.org/carol&gt; &lt;http://xmlns.com/foaf/0.1/knows&gt; &lt;http://example.org/alice&gt; .
+&lt;http://example.org/alice&gt; &lt;http://dbpedia.org/ontology/birthPlace&gt; &lt;http://dbpedia.org/resource/Oviedo&gt; .
+&lt;http://example.org/carol&gt; &lt;http://dbpedia.org/ontology/birthPlace&gt; &lt;http://dbpedia.org/resource/Oviedo">&lt;http://example.org/alice&gt; &lt;http://xmlns.com/foaf/0.1/knows&gt; &lt;http://example.org/bob&gt; .
+&lt;http://example.org/bob&gt; &lt;http://xmlns.com/foaf/0.1/knows&gt; &lt;http://example.org/carol&gt; .
+&lt;http://example.org/carol&gt; &lt;http://xmlns.com/foaf/0.1/knows&gt; &lt;http://example.org/alice&gt; .
+&lt;http://example.org/alice&gt; &lt;http://dbpedia.org/ontology/birthPlace&gt; &lt;http://dbpedia.org/resource/Oviedo&gt; .
+&lt;http://example.org/carol&gt; &lt;http://dbpedia.org/ontology/birthPlace&gt; &lt;http://dbpedia.org/resource/Oviedo&gt;</a> .</pre>
+</div>
+
+<div class="slide">
+<h1>Turtle Syntax</h1>
+<ul>
+<li>Goal: Human-readable syntax for RDF</li>
+<li>Several simplifications</li>
+</ul>
+<pre>
+<span class="keyword">prefix</span> dbo:   <span class="function-name"><a href="http://dbpedia.org/ontology/&gt; 
+prefix :      &lt;http://example.org/&gt; 
+prefix dbr:   &lt;http://dbpedia.org/resource/&gt; 
+prefix foaf:  &lt;http://xmlns.com/foaf/0.1/">&lt;http://dbpedia.org/ontology/&gt;</a></span><a href="http://dbpedia.org/ontology/&gt; 
+prefix :      &lt;http://example.org/&gt; 
+prefix dbr:   &lt;http://dbpedia.org/resource/&gt; 
+prefix foaf:  &lt;http://xmlns.com/foaf/0.1/"> 
+</a><span class="keyword"><a href="http://dbpedia.org/ontology/&gt; 
+prefix :      &lt;http://example.org/&gt; 
+prefix dbr:   &lt;http://dbpedia.org/resource/&gt; 
+prefix foaf:  &lt;http://xmlns.com/foaf/0.1/">prefix</a></span><a href="http://dbpedia.org/ontology/&gt; 
+prefix :      &lt;http://example.org/&gt; 
+prefix dbr:   &lt;http://dbpedia.org/resource/&gt; 
+prefix foaf:  &lt;http://xmlns.com/foaf/0.1/"> :      </a><span class="function-name"><a href="http://dbpedia.org/ontology/&gt; 
+prefix :      &lt;http://example.org/&gt; 
+prefix dbr:   &lt;http://dbpedia.org/resource/&gt; 
+prefix foaf:  &lt;http://xmlns.com/foaf/0.1/">&lt;http://example.org/&gt;</a></span><a href="http://dbpedia.org/ontology/&gt; 
+prefix :      &lt;http://example.org/&gt; 
+prefix dbr:   &lt;http://dbpedia.org/resource/&gt; 
+prefix foaf:  &lt;http://xmlns.com/foaf/0.1/"> 
+</a><span class="keyword"><a href="http://dbpedia.org/ontology/&gt; 
+prefix :      &lt;http://example.org/&gt; 
+prefix dbr:   &lt;http://dbpedia.org/resource/&gt; 
+prefix foaf:  &lt;http://xmlns.com/foaf/0.1/">prefix</a></span><a href="http://dbpedia.org/ontology/&gt; 
+prefix :      &lt;http://example.org/&gt; 
+prefix dbr:   &lt;http://dbpedia.org/resource/&gt; 
+prefix foaf:  &lt;http://xmlns.com/foaf/0.1/"> dbr:   </a><span class="function-name"><a href="http://dbpedia.org/ontology/&gt; 
+prefix :      &lt;http://example.org/&gt; 
+prefix dbr:   &lt;http://dbpedia.org/resource/&gt; 
+prefix foaf:  &lt;http://xmlns.com/foaf/0.1/">&lt;http://dbpedia.org/resource/&gt;</a></span><a href="http://dbpedia.org/ontology/&gt; 
+prefix :      &lt;http://example.org/&gt; 
+prefix dbr:   &lt;http://dbpedia.org/resource/&gt; 
+prefix foaf:  &lt;http://xmlns.com/foaf/0.1/"> 
+</a><span class="keyword"><a href="http://dbpedia.org/ontology/&gt; 
+prefix :      &lt;http://example.org/&gt; 
+prefix dbr:   &lt;http://dbpedia.org/resource/&gt; 
+prefix foaf:  &lt;http://xmlns.com/foaf/0.1/">prefix</a></span><a href="http://dbpedia.org/ontology/&gt; 
+prefix :      &lt;http://example.org/&gt; 
+prefix dbr:   &lt;http://dbpedia.org/resource/&gt; 
+prefix foaf:  &lt;http://xmlns.com/foaf/0.1/"> foaf:  </a><span class="function-name"><a href="http://dbpedia.org/ontology/&gt; 
+prefix :      &lt;http://example.org/&gt; 
+prefix dbr:   &lt;http://dbpedia.org/resource/&gt; 
+prefix foaf:  &lt;http://xmlns.com/foaf/0.1/">&lt;http://xmlns.com/foaf/0.1/&gt;</a></span> 
+     
+<span class="type">:</span><span class="constant">alice</span>  <span class="type">dbo:</span><span class="constant">birthPlace</span>  <span class="type">dbr:</span><span class="constant">Oviedo</span> ;
+        <span class="type">foaf:</span><span class="constant">knows</span>      <span class="type">:</span><span class="constant">bob</span> <span class="keyword">.</span>
+
+<span class="type">:</span><span class="constant">bob</span>    <span class="type">foaf:</span><span class="constant">knows</span>  <span class="type">:</span><span class="constant">carol</span> <span class="keyword">.</span>
+
+<span class="type">:</span><span class="constant">carol</span>  <span class="type">dbo:</span><span class="constant">birthPlace</span>  <span class="type">dbr:</span><span class="constant">Oviedo</span> ;
+        <span class="type">foaf:</span><span class="constant">knows</span>      <span class="type">:</span><span class="constant">alice</span> <span class="keyword">.</span>
+</pre>
+</div>
+
+</body>
+</html>
