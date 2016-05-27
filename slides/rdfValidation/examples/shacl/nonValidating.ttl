@@ -1,0 +1,59 @@
+prefix : <http://example.org/> 
+prefix sh: <http://www.w3.org/ns/shacl#> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix schema: <http://schema.org/>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix foaf: <http://xmlns.com/foaf/0.1/>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+:User a sh:Shape ;
+ sh:property [
+  sh:predicate schema:url ;
+  sh:name "URL";
+  sh:description "User URL";
+  sh:order 1 ;
+  sh:group :userDetails 
+];
+ sh:property [
+  sh:predicate schema:name ;
+  sh:name "Name";
+  sh:description "User name";
+  sh:order 2 ;
+  sh:group :userDetails 
+];
+sh:property [
+  sh:predicate schema:address ;
+  sh:name "Address";
+  sh:description "Address";
+  sh:order 3 ;
+  sh:group :location 
+];
+sh:property [
+  sh:predicate schema:country ;
+  sh:name "Country";
+  sh:description "Country";
+  sh:order 4 ;
+  sh:group :location
+] .
+
+:userDetails a sh:PropertyGroup ;
+  sh:order 0 ;
+  rdfs:label "User details" .
+
+:location a sh:PropertyGroup ;
+  sh:order 0 ;
+  rdfs:label "Location" .
+  
+
+:alice a schema:Person ;
+ schema:worksFor :OurCompany ;
+ schema:url <http://ourcompany.org/alice> .
+
+:bob a schema:Person ;
+ schema:worksFor :OurCompany ;
+ schema:url <http://othercompany.org/bob> .
+
+:carol a schema:Person ;
+ schema:worksFor :OtherCompany ;
+ schema:url <http://othercompany.org/carol> .
+

@@ -1,0 +1,34 @@
+prefix : <http://example.org/> 
+prefix sh: <http://www.w3.org/ns/shacl#> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix schema: <http://schema.org/>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix foaf: <http://xmlns.com/foaf/0.1/>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+:User a sh:Shape ;
+ sh:scopeClass schema:Person ;
+ sh:filterShape [
+  a sh:Shape ; # Optional triple
+  sh:property [
+   sh:predicate schema:worksFor ;
+   sh:hasValue :OurCompany ;
+  ]
+ ] ;
+ sh:property [
+  sh:predicate schema:url ;
+  sh:stem "http://ourcompany.org/" ;
+] .
+
+:alice a schema:Person ;
+ schema:worksFor :OurCompany ;
+ schema:url <http://ourcompany.org/alice> .
+
+:bob a schema:Person ;
+ schema:worksFor :OurCompany ;
+ schema:url <http://othercompany.org/bob> .
+
+:carol a schema:Person ;
+ schema:worksFor :OtherCompany ;
+ schema:url <http://othercompany.org/carol> .
+

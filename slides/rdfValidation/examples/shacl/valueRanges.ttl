@@ -1,0 +1,30 @@
+prefix : <http://example.org/> 
+prefix sh: <http://www.w3.org/ns/shacl#> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix schema: <http://schema.org/>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix foaf: <http://xmlns.com/foaf/0.1/>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+
+:Rating
+ a sh:Shape ;
+ sh:property [
+   sh:predicate schema:ratingValue ;
+   sh:minInclusive 1 ;
+   sh:maxInclusive 1 ;
+   sh:datatype xsd:integer
+ ] .         
+
+:bad schema:ratingValue 1 .
+:average schema:ratingValue 3 .
+:veryGood  schema:ratingValue 5 .
+:zero schema:ratingValue 0 .
+:incredible schema:ratingValue 100 .
+
+:Rating sh:scopeNode 
+  :bad, 
+  :average, 
+  :veryGood, 
+  :zero, 
+  :incredible .

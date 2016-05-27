@@ -1,0 +1,33 @@
+prefix : <http://example.org/> 
+prefix sh: <http://www.w3.org/ns/shacl#> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix foaf: <http://xmlns.com/foaf/0.1/>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+         
+:User a sh:Shape, rdfs:Class ;
+   sh:property [
+    sh:predicate foaf:age ; 
+    sh:datatype xsd:integer
+  ];
+   sh:property [
+    sh:predicate rdfs:label ; 
+    sh:datatypeIn (xsd:string rdf:langString)
+  ];
+  sh:property [
+   sh:predicate foaf:knows ;
+   sh:class :User
+  ] .
+  
+:alice a :User;
+       rdfs:label "John", "Juan"@es ;
+       foaf:age 23 ;
+       foaf:knows :bob, :carol .
+	   
+:bob   a :User ;
+       foaf:age "23" ; rdfs:label 23 ;
+       foaf:knows :alice .
+
+:carol a :User;
+       foaf:knows :alice, :bob, :carol, :dave .
+

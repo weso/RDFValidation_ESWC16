@@ -1,0 +1,42 @@
+Tareas
+
+RDF Data model
+- Unificar ejemplos RDF Data model...sobre alice, bob, etc.
+- Ejemplos de serialización JSON-LD
+
+RDF Validation approaches
+- Ejemplos en SPIN, OSLC, OWL ICV, SPARQL
+
+ShEx by Example
+
+SHACL by Example
+
+ShEx vs SHACL
+
+
+
+Notes about SHACL
+
+- Terminology:
+
+A constraint component represents a part of a constraint that is determined by the values <of> one or more ...
+
+- minCount, maxCount
+
+Would it be possible to generalize them to node constraints?
+
+Example:
+
+# there must be between 5 and 10 people
+:Person a sh:Shape ;
+  sh:constraint [
+   sh:minCount 5 ;
+   sh:maxCount 10 
+  ] 
+
+- datatypeIn the table uses datatype instead of datatypeIn
+
+- sh:name is only available for property constraints? 
+    and not about inverse property constraints? or about shapes?
+	
+

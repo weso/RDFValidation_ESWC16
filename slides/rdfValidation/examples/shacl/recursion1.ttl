@@ -1,0 +1,30 @@
+prefix : <http://example.org/> 
+prefix sh: <http://www.w3.org/ns/shacl#> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix schema: <http://schema.org/>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+:User a sh:Shape ;
+  sh:property [
+   sh:predicate schema:worksFor ; 
+   sh:valueShape :Company ;
+  ] .
+
+:Company a sh:Shape ;
+  sh:property [
+   sh:predicate schema:name ; 
+   sh:datatype xsd:string ;
+  ] ;
+ sh:property [
+   sh:predicate schema:employee ; 
+   sh:valueShape :User ;
+ ]  .
+         
+:alice schema:worksFor :OneCompany .
+:bob schema:worksFor :OneCompany .
+:carol schema:worksFor :OneCompany .
+
+:OneCompany schema:name "One" ;
+  schema:employee :alice, :bob, :carol .
+
+:User sh:scopeNode :alice, :bob, :carol .

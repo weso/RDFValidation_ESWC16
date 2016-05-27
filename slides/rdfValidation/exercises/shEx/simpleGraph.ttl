@@ -1,0 +1,25 @@
+prefix dbr:   <http://dbpedia.org/resource/> 
+prefix dbo:   <http://dbpedia.org/ontology/> 
+prefix foaf:  <http://xmlns.com/foaf/0.1/> 
+prefix xsd:   <http://www.w3.org/2001/XMLSchema#> 
+prefix :      <http://example.org/>
+prefix sh: <http://www.w3.org/ns/shacl#>
+     
+:alice  foaf:knows  :bob ;
+        foaf:age    23 ; 
+		foaf:name   "Alice Cooper" .
+
+:bob    foaf:knows     :carol, _:1, _:2 ;
+        foaf:firstName "Bob" , "Robert" ;
+		foaf:lastName  "Smith" .
+
+_:1     foaf:age 21;
+        foaf:knows :carol .
+		
+_:2     dbo:birthPlace dbr:Oviedo .
+
+:carol  dbo:birthPlace  dbr:Oviedo ;
+        foaf:age 25 ;
+        foaf:knows      :alice .
+		
+:UserShape sh:scopeNode :alice, :bob, :carol .
