@@ -1,0 +1,27 @@
+prefix : <http://example.org/> 
+prefix sh: <http://www.w3.org/ns/shacl#> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix foaf: <http://xmlns.com/foaf/0.1/>
+         
+:UserShape a sh:Shape ;
+   sh:scopeNode :alice, :bob, :carol ;
+   sh:property [
+    sh:predicate foaf:name ; 
+    sh:minCount 1; 
+    sh:datatype xsd:string ;
+  ] ;
+  sh:property [
+   sh:predicate foaf:mbox ; 
+   sh:minCount 1; 
+   sh:nodeKind sh:IRI ;
+  ] .
+  
+:alice foaf:name "Alice Cooper" ;
+       foaf:mbox <mailto:alice@mail.org> .
+	   
+:bob   foaf:firstName "Bob" ;
+       foaf:mbox <mailto:bob@mail.org> .
+	   
+:carol foaf:name "Carol" ;
+       foaf:mbox "carol@mail.org" .
+  

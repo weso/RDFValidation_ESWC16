@@ -1,0 +1,21 @@
+prefix : <http://example.org/> 
+prefix sh: <http://www.w3.org/ns/shacl#> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix schema: <http://schema.org/>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix foaf: <http://xmlns.com/foaf/0.1/>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+
+:W3People
+ a sh:Shape ;
+ sh:property [
+		sh:predicate schema:url ;
+		sh:stem "https://www.w3.org/People/" ;
+	] .        
+
+:eric  schema:url <https://www.w3.org/People/Eric> .
+:timbl schema:url <https://www.w3.org/People/Berners-Lee> .
+:alice schema:url <https://www.example.org/bob> .
+
+:W3People sh:scopeNode :eric, :timbl, :alice .

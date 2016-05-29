@@ -1,0 +1,5 @@
+<http://example.org/alice> <http://xmlns.com/foaf/0.1/knows> <http://example.org/bob> .
+<http://example.org/bob> <http://xmlns.com/foaf/0.1/knows> <http://example.org/carol> .
+<http://example.org/carol> <http://xmlns.com/foaf/0.1/knows> <http://example.org/alice> .
+<http://example.org/alice> <http://dbpedia.org/ontology/birthPlace> <http://dbpedia.org/resource/Oviedo> .
+<http://example.org/carol> <http://dbpedia.org/ontology/birthPlace> <http://dbpedia.org/resource/Oviedo> .

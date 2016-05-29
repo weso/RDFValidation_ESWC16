@@ -1,0 +1,19 @@
+prefix : <http://example.org/> 
+prefix sh: <http://www.w3.org/ns/shacl#> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix schema: <http://schema.org/>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix foaf: <http://xmlns.com/foaf/0.1/>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+:alice schema:name  "Alice";
+       foaf:age     10 ;
+       schema:phone "123-456-555" .
+ 
+:bob   schema:name "Robert Smith" ;
+       foaf:age    45 ;
+       schema:phone "333-444-555" .
+
+:carol schema:name  "Carol" ;
+       foaf:age     23 ;
+       schema:phone "+34-123-456-555" .

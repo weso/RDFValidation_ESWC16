@@ -1,0 +1,31 @@
+prefix : <http://example.org/> 
+prefix sh: <http://www.w3.org/ns/shacl#> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix foaf: <http://xmlns.com/foaf/0.1/>
+         
+:User a sh:Shape, rdfs:Class ;
+  sh:property [
+   sh:predicate foaf:name ; 
+   sh:nodeKind sh:Literal ;
+  ];
+  sh:property [
+   sh:predicate foaf:knows ; 
+   sh:nodeKind sh:BlankNodeOrIRI 
+  ];
+  sh:constraint [
+   sh:nodeKind sh:IRI
+  ] .
+  
+:alice a :User;
+       foaf:name _:Alice ;
+       foaf:knows :bob .
+	   
+:bob   a :User;
+       foaf:name "Robert";
+       foaf:knows [ foaf:name "Dave" ] .
+	   
+:carol a :User;
+       foaf:name "Carol" ;
+       foaf:knows "Dave" .
+	   
+_:1 a :User .

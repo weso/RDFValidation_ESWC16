@@ -1,0 +1,26 @@
+prefix : <http://example.org/> 
+prefix sh: <http://www.w3.org/ns/shacl#> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix schema: <http://schema.org/>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix foaf: <http://xmlns.com/foaf/0.1/>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+<http://www.w3.org/2000/01/rdf-schema#> sh:prefix "rdfs" .
+
+:SpanishLabelsShape a sh:Shape ;
+ sh:constraint [
+  a sh:SPARQLConstraint ;
+  sh:message "Values must be literals with Spanish language tag." ;
+  sh:sparql """
+   SELECT $this ($this AS ?subject) (rdfs:label AS ?predicate) (?value AS ?object)
+   WHERE {
+    $this rdfs:label ?value .
+    FILTER (!isLiteral(?value) || !langMatches(lang(?value), "es"))
+  }""" ;
+] .
+
+:spain rdfs:label "España"@es .
+:france rdfs:label "France"@en .
+	
+:SpanishLabelsShape sh:scopeNode :spain, :france .

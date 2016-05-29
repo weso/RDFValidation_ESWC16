@@ -1,0 +1,33 @@
+prefix : <http://example.org/> 
+prefix sh: <http://www.w3.org/ns/shacl#> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix foaf: <http://xmlns.com/foaf/0.1/>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+prefix schema: <http://schema.org/>
+         
+prefix : <http://example.org/> 
+prefix sh: <http://www.w3.org/ns/shacl#> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix schema: <http://schema.org/>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+         
+:User a sh:Shape ;
+   sh:property [
+    sh:predicate schema:birthDate ; 
+    sh:datatype xsd:date ;
+  ];
+  sh:property [
+    sh:predicate schema:jobTitle ; 
+    sh:datatypeIn (xsd:string rdf:langString) ;
+  ];  .
+
+:alice schema:birthDate "1985-08-20"^^xsd:date;
+       schema:jobTitle "CEO", "Director"@es .
+	   
+:bob   schema:birthDate "2007-08-20"^^xsd:date;
+       schema:jobTitle :unknown .
+
+:carol schema:birthDate 1990 ;
+       schema:jobTitle "CTO" .
+
+:User sh:scopeNode :alice, :bob, :carol .

@@ -1,0 +1,26 @@
+prefix :      <http://example.org/> 
+prefix foaf:  <http://xmlns.com/foaf/0.1/> 
+prefix dbo:   <http://dbpedia.org/ontology/> 
+prefix dbr:   <http://dbpedia.org/resource/> 
+     
+:alice  dbo:birthPlace  dbr:Oviedo ;
+        foaf:knows      :bob .
+
+:bob    foaf:knows      :carol .
+
+:carol  dbo:birthPlace  dbr:Oviedo ;
+        foaf:knows      :alice .
+
+
+:bob foaf:name "Robert" ;
+     foaf:knows _:1 .
+_:1	 foaf:age 23  .
+		
+:bob foaf:name "Robert" ;
+     foaf:knows [ 
+	   foaf:age 23
+	 ] .
+	 
+:spain rdfs:label "Spain"@en ;
+       rdfs:label "España"@es .	 
+	 

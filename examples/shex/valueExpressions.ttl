@@ -1,0 +1,30 @@
+prefix : <http://example.org/> 
+prefix sh: <http://www.w3.org/ns/shacl#> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix schema: <http://schema.org/>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix foaf: <http://xmlns.com/foaf/0.1/>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+:alice      schema:name     "Alice";
+            schema:follows  :bob;
+            schema:worksFor :OurCompany .
+
+:bob        schema:name     "Roberto"@es ;
+            schema:worksFor [ 
+             schema:Founder "Frank" ;
+             schema:employee :carol ;
+	    ] .
+:carol      schema:name     "Carol" ;
+            schema:follows  [ 
+              schema:name     "Emily" ;
+	    ] .
+:OurCompany schema:founder :dave ;
+            schema:employee :alice, :bob .
+			
+
+
+
+
+
+			

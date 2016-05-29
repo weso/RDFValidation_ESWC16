@@ -1,0 +1,23 @@
+prefix : <http://example.org/> 
+prefix sh: <http://www.w3.org/ns/shacl#> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix schema: <http://schema.org/>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix foaf: <http://xmlns.com/foaf/0.1/>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+
+:Product
+ a sh:Shape ;
+ sh:property [
+   sh:predicate schema:productID ;
+   sh:pattern "^P\\d{3,4}" ;
+   sh:flags "i" ;
+ ] .         
+
+:car   schema:productID "P2345" .
+:bus   schema:productID "p567" .
+:truck schema:productID "P12" .
+:bike  schema:productID "B123" .
+
+:Product sh:scopeNode :car, :bus, :truck, :bike .

@@ -1,0 +1,21 @@
+prefix dbo:   <http://dbpedia.org/ontology/> 
+prefix :      <http://example.org/> 
+prefix dbr:   <http://dbpedia.org/resource/> 
+prefix foaf:  <http://xmlns.com/foaf/0.1/> 
+prefix xsd:   <http://www.w3.org/2001/XMLSchema#> 
+     
+:alice  dbo:birthPlace  dbr:Oviedo ;
+        foaf:knows      :bob .
+
+:bob    foaf:knows  :carol .
+
+:bob    foaf:knows  _:1 ;
+        foaf:age 25 ;
+        foaf:name "Robert" ;
+        dbo:birthDate "1990-02-03"^^xsd:date .
+
+_:1     foaf:age 34 .
+
+:carol  dbo:birthPlace  dbr:Oviedo ;
+        foaf:knows      :alice .
+

@@ -1,4 +1,10 @@
 # RDFValidation_ESWC16
 
-RDF and Linked Data Validation - ESWC 2016 Tutorial
+This repository contains material for the RDF Validation Tutorial. 
+
+See folder examples for several examples.
+
+* [Web page](http://weso.github.io/RDFValidation_ESWC16/)
+
+
 

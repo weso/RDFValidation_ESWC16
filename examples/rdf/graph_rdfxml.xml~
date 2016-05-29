@@ -1,0 +1,20 @@
+<rdf:RDF
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns:uni="http://uni.org/"
+ xmlns:foaf="http://xmlns.com/foaf/0.1/" > 
+ <rdf:Description rdf:about="http://uni.org/luis">
+  <foaf:knows rdf:resource="http://uni.org/ana"/>
+  <foaf:name>John Smith</foaf:name>
+ </rdf:Description>
+ <rdf:Description rdf:nodeID="A0">
+   <foaf:age 
+     rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">23
+   </foaf:age>
+   </rdf:Description>
+ <rdf:Description rdf:about="http://uni.org/Chemistry">
+   <uni:author rdf:resource="http://uni.org/luis"/>
+ </rdf:Description>
+ <rdf:Description rdf:about="http://uni.org/ana">
+  <foaf:knows rdf:nodeID="A0"/>
+ </rdf:Description>
+</rdf:RDF>

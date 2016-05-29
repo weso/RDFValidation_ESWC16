@@ -1,0 +1,15 @@
+{ "type": "Schema",
+  "shapes": {
+    "User": {
+    "type": "Shape", 
+      "expression" : {
+        "type": "TripleConstraint",
+        "predicate": "http://schema.org/name",
+        "valueExpr": {
+          "type": "ValueClass",
+          "datatype": "http://www.w3.org/2001/XMLSchema#string"
+        }
+      }
+    }
+ }
+} 
