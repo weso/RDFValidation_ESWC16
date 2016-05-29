@@ -1,0 +1,15 @@
+prefix : <http://example.org/>
+
+prefix codes: <http://example.codes/>
+prefix other: <http://other.codes/>
+
+
+:x1 :status codes:resolved .
+
+:x2 :status other:done.
+
+:x3 :status <http://example.codes/pending> .
+
+:x4 :status codes:deleted .
+
+:x5 :status codes:active .

@@ -1,0 +1,12 @@
+prefix : <http://example.org/>
+prefix schema: <http://schema.org/> 
+prefix xsd:  <http://www.w3.org/2001/XMLSchema#>
+
+:alice schema:name "Alice" .
+
+:bob schema:name "Bob", "Robert" .
+
+:carol schema:name "Carol" ;
+       schema:email <mailto:carol@example.org> .
+
+:dave schema:name 234 .

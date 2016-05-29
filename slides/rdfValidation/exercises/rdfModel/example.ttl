@@ -1,0 +1,43 @@
+prefix : <http://example.org/> 
+prefix sh: <http://www.w3.org/ns/shacl#> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix schema: <http://schema.org/>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+prefix foaf: <http://xmlns.com/foaf/0.1/>
+prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+:alice schema:name      "Alice Cooper";
+       schema:birthDate "1980-06-09"^^xsd:date ;
+	   schema:knows  :bob ;
+	   schema:worksFor :OurCompany .
+ 
+:bob   schema:firstName "Robert", "Bob" ;
+       schema:lastName  "Smith" ;
+	   schema:knows [ foaf:age 21 ] .
+
+:carol foaf:age 25 ;
+       schema:worksFor :OurCompany .
+	   
+	   
+:alice schema:name "Alice";
+       schema:knows :bob .
+<User> { 
+  schema:name xsd:string ;
+  schema:knows @<User> 
+}
+
+schema:knows a owl:ObjectProperty ;
+ rdfs:domain schema:Person ;
+ rdfs:range  schema:Person .
+
+:book schema:productID "isbn:123-456-789";
+      schema:productID "code456" .
+	  
+:book schema:creator "Cervantes" ,
+      [ a schema:Person ;
+	     schema:name "Cervantes" ] .
+
+       
+ 
+	   
+	   

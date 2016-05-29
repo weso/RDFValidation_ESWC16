@@ -1,0 +1,33 @@
+prefix : <http://example.org/> 
+prefix sh: <http://www.w3.org/ns/shacl#> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix schema: <http://schema.org/>
+prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+prefix : <http://example.org/> 
+prefix sh: <http://www.w3.org/ns/shacl#> 
+prefix xsd: <http://www.w3.org/2001/XMLSchema#>
+prefix schema: <http://schema.org/>
+         
+:Book a sh:Shape ;
+   sh:property [
+    sh:predicate schema:productID ;
+    sh:minCount 1; 
+    sh:datatype xsd:string ;
+    sh:pattern "^isbn"
+  ];
+  sh:property [
+    sh:predicate schema:productID ; 
+    sh:minCount 1; 
+    sh:datatype xsd:string ;
+    sh:pattern "^code"
+  ] .
+
+:NotBook a :sh:Shape ;
+  sh:constraint [ sh:not :Book ].
+  
+:b1 schema:productID "isbn:123-456-789" ;
+    schema:productID "code234" .
+
+:Book sh:scopeNode :b1 .
+:NotBook sh:scopeNode :b1 .

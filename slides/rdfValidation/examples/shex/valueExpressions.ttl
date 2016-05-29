@@ -21,3 +21,10 @@ prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 	    ] .
 :OurCompany schema:founder :dave ;
             schema:employee :alice, :bob .
+			
+
+
+
+
+
+			
