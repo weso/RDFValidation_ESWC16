@@ -39,4 +39,8 @@ Example:
 - sh:name is only available for property constraints? 
     and not about inverse property constraints? or about shapes?
 	
+Questions to Eric
+
+- Combined value constraints in Primer, does it work in ShExDemo?
+
 

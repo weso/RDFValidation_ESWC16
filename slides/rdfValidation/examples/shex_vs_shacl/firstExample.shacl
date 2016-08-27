@@ -10,3 +10,8 @@ prefix schema: <http://schema.org/>
     sh:datatype xsd:string ;
   ] .
   
+:alice schema:givenName "Alice" ;
+       schema:lastName "Cooper" .
+  
+:bob schema:givenName "Bob", "Robert" ;
+     schema:lastName "Smith", "Dylan" ;
